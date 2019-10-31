@@ -1,7 +1,21 @@
 
 function pacnam() {
 
-  // ===== VARIABLES/ARRAYS =====
+  // ===== CREATE STARTING VALUES =====
+
+  const boardWidth = 10
+  const boardSize = boardWidth ** 2
+  const cells = [] //declare so can push cell ids to it
+
+  const cellId = 0 //setup so we can find the id and use it in various places
+  let cellName = ''
+  let cellLocation = 0 //setup so we can push the id of the cell we're looking for to it
+
+  const playerHome = boardSize - 1 //get bottom right most cell
+  let playerLocation = 0 //so we can find and move them
+
+
+
   // WALLS
   //create array of objects to say which borders have walls
   const walls = [
@@ -116,16 +130,18 @@ function pacnam() {
     { cellId: 99, top: false, right: true, bottom: true, left: false }
   ]
 
+
+
   // ===== FUNCTIONS =====
 
-  // GAME BOARD
+  // FIND THE CELL TO DO SOMETHING WITH
+
+
+  // GAME BOARD 
   function createBoard() {
-    const boardWidth = 10
-    const boardSize = boardWidth ** 2
     //get element from html for where board is to be created
     const grid = document.querySelector('#grid')
     //create the cells, append, and store in array
-    const cells = []
     for (let i = 0; i < boardSize; i++) {
       const cell = document.createElement('div')
       cell.classList.add('cell')
@@ -133,16 +149,17 @@ function pacnam() {
       grid.appendChild(cell)
       cells.push(cell)
     }
+    makeWalls()
+  }
 
+  // MAKE WALLS
+  // called by createBoard
+  function makeWalls() {
     for (let i = 0; i < walls.length; i++) {
-      //REFACTOR ================================================================================================
-      //better way to get the cell as I have them in array above
-      const cellId = '#cell' + walls[i].cellId
-      const cellLocation = document.querySelector(cellId)
-      // console.log(cellLocation)
-      //REFACTOR ================================================================================================ 
-
-      //check and add borders
+      //get the cell ID so we can assign things to it
+      cellName = '#cell' + walls[i].cellId
+      cellLocation = document.querySelector(cellName)
+      //check the array to see what borders are needed and add them
       if (walls[i].top === true) {
         cellLocation.classList.add('wall-top')
       }
@@ -158,11 +175,49 @@ function pacnam() {
     }
   }
 
+  function changePlayerLocation(newCellId) {
+    // console.log(cellName)
+    // console.log(cellId)
+    // console.log(newCellId)
+    cellLocation = document.querySelector(cellName)
+    cellLocation.classList.remove('player')
+
+    cellName = '#cell' + newCellId
+    cellLocation = document.querySelector(cellName)
+    cellLocation.classList.add('player')
+    playerLocation = newCellId
+    console.log(playerLocation)
+    return playerLocation
+  }
+
+  function sendPlayerHome() {
+    changePlayerLocation(playerHome)
+  }
 
 
+  // ===== CONTROLS =====
+  //start button
+  const startGame = document.querySelector('#start')
+  startGame.addEventListener('click', () => {
+    sendPlayerHome()
+  })
 
+  //player movement
+  //allow for players to move
+  document.addEventListener('keyup', (e) => {
+    //what key was pressed & what should we do
+    switch (e.key) {
+      case 'w': {
+        console.log('player' + playerLocation)
+        console.log(boardWidth)
+        const sendCellMove = (playerLocation - boardWidth)
+        changePlayerLocation(sendCellMove)
+      }
+    }
+  })
 
-createBoard()
+  // ===== CREATE! =====
+  createBoard()
 
 
 

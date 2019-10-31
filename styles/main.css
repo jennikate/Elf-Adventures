@@ -39,3 +39,7 @@ main {
 .wall-bottom {
   border-bottom: 2px solid green;
 }
+
+.player {
+  background-color: purple;
+}
