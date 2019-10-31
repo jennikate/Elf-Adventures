@@ -14,7 +14,6 @@ main {
 
 #grid {
   margin-top: 30px;
-  border: 1px solid white;
   display: flex;
   align-content: center;
   justify-content: center;
@@ -36,4 +35,7 @@ main {
 }
 .wall-right {
   border-right: 2px solid green;
+}
+.wall-bottom {
+  border-bottom: 2px solid green;
 }

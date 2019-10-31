@@ -73,7 +73,23 @@ function pacnam() {
     const cellLocation = document.querySelector(cellId)
     cellLocation.classList.add('wall-right')
   }
-
+  //create wall array for index of bottom walls (class wall-bottom, sets border-bottom)
+  const wallsBottom = [
+    1,3,6,8,
+    11,13,16,18,
+    21,24,25,28,
+    30,31,33,36,38,39,
+    40,41,48,49,
+    54,55,
+    64,65,
+    71,73,76,78,
+    84,85,
+    90,91,92,93,94,95,96,97,98,99]
+  for (let i = 0; i < wallsBottom.length; i++) {
+    const cellId = '#cell' + wallsBottom[i]
+    const cellLocation = document.querySelector(cellId)
+    cellLocation.classList.add('wall-bottom')
+  }
 
   //(create game board)
   // set width to level number * 5 [might change 5 to another number later]
