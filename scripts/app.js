@@ -176,7 +176,7 @@ function pacnam() {
     }
   }
 
-  
+
 
   function changePlayerLocation(newCellId) {
     //called by sendPlayerHome, player movement
@@ -211,49 +211,41 @@ function pacnam() {
       case 'w': {
         // if there is a wall in the direction I'm trying to move, don't let me move
         if (playerClasses.contains('wall-top')) {
-          console.log('blocked')
           return
         } else {
-          console.log('move')
+          const cellMoveDirection = (playerLocation - boardWidth)
+          changePlayerLocation(cellMoveDirection)
         }
-        const cellMoveDirection = (playerLocation - boardWidth)
-        changePlayerLocation(cellMoveDirection)
         break
       }
       case 'd': {
         // if there is a wall in the direction I'm trying to move, don't let me move
         if (playerClasses.contains('wall-right')) {
-          console.log('blocked')
           return
         } else {
-          console.log('move')
+          const cellMoveDirection = (playerLocation + 1)
+          changePlayerLocation(cellMoveDirection)
         }
-        const cellMoveDirection = (playerLocation + 1)
-        changePlayerLocation(cellMoveDirection)
         break
       }
       case 's': {
         // if there is a wall in the direction I'm trying to move, don't let me move
         if (playerClasses.contains('wall-bottom')) {
-          console.log('blocked')
           return
         } else {
-          console.log('move')
+          const cellMoveDirection = (playerLocation + boardWidth)
+          changePlayerLocation(cellMoveDirection)
         }
-        const cellMoveDirection = (playerLocation + boardWidth)
-        changePlayerLocation(cellMoveDirection)
         break
       }
       case 'a': {
         // if there is a wall in the direction I'm trying to move, don't let me move
         if (playerClasses.contains('wall-left')) {
-          console.log('blocked')
           return
         } else {
-          console.log('move')
+          const cellMoveDirection = (playerLocation - 1)
+          changePlayerLocation(cellMoveDirection)
         }
-        const cellMoveDirection = (playerLocation - 1 )
-        changePlayerLocation(cellMoveDirection)
         break
       }
     }
