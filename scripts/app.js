@@ -13,6 +13,7 @@ function pacnam() {
 
   const playerHome = boardSize - 1 //get bottom right most cell
   let playerLocation = 0 //so we can find and move them
+  let playerClasses = ''
 
 
 
@@ -175,18 +176,20 @@ function pacnam() {
     }
   }
 
+  
+
   function changePlayerLocation(newCellId) {
-    // console.log(cellName)
-    // console.log(cellId)
-    // console.log(newCellId)
+    //called by sendPlayerHome, player movement
     cellLocation = document.querySelector(cellName)
     cellLocation.classList.remove('player')
+    playerClasses = ''
 
     cellName = '#cell' + newCellId
     cellLocation = document.querySelector(cellName)
     cellLocation.classList.add('player')
     playerLocation = newCellId
-    // console.log(playerLocation)
+    playerClasses = document.querySelector(cellName).classList
+
     return playerLocation
   }
 
@@ -206,78 +209,50 @@ function pacnam() {
   document.addEventListener('keyup', (e) => {
     switch (e.key) {
       case 'w': {
-        //get classes from the cell I'm in
-        const classesCurrentCell = document.querySelector(cellName).classList
-        console.log(classesCurrentCell)
         // if there is a wall in the direction I'm trying to move, don't let me move
-        if (classesCurrentCell.contains('wall-top')) {
+        if (playerClasses.contains('wall-top')) {
           console.log('blocked')
           return
         } else {
           console.log('move')
         }
-        //get the cell I'm trying to move into (for other collisons)
-        // const classesNewCell = document.querySelector(cellName).classList
-        //move the player
         const cellMoveDirection = (playerLocation - boardWidth)
-        console.log(cellMoveDirection)
         changePlayerLocation(cellMoveDirection)
         break
       }
       case 'd': {
-        //get classes from the cell I'm in
-        const classesCurrentCell = document.querySelector(cellName).classList
-        console.log(classesCurrentCell)
         // if there is a wall in the direction I'm trying to move, don't let me move
-        if (classesCurrentCell.contains('wall-right')) {
+        if (playerClasses.contains('wall-right')) {
           console.log('blocked')
           return
         } else {
           console.log('move')
         }
-        //get the cell I'm trying to move into (for other collisons)
-        // const classesNewCell = document.querySelector(cellName).classList
-        //move the player
         const cellMoveDirection = (playerLocation + 1)
-        console.log(cellMoveDirection)
         changePlayerLocation(cellMoveDirection)
         break
       }
       case 's': {
-        //get classes from the cell I'm in
-        const classesCurrentCell = document.querySelector(cellName).classList
-        console.log(classesCurrentCell)
         // if there is a wall in the direction I'm trying to move, don't let me move
-        if (classesCurrentCell.contains('wall-bottom')) {
+        if (playerClasses.contains('wall-bottom')) {
           console.log('blocked')
           return
         } else {
           console.log('move')
         }
-        //get the cell I'm trying to move into (for other collisons)
-        // const classesNewCell = document.querySelector(cellName).classList
-        //move the player
         const cellMoveDirection = (playerLocation + boardWidth)
-        console.log(cellMoveDirection)
         changePlayerLocation(cellMoveDirection)
         break
       }
       case 'a': {
-        //get classes from the cell I'm in
-        const classesCurrentCell = document.querySelector(cellName).classList
-        console.log(classesCurrentCell)
         // if there is a wall in the direction I'm trying to move, don't let me move
-        if (classesCurrentCell.contains('wall-left')) {
+        if (playerClasses.contains('wall-left')) {
           console.log('blocked')
           return
         } else {
           console.log('move')
         }
-        //get the cell I'm trying to move into (for other collisons)
-        // const classesNewCell = document.querySelector(cellName).classList
-        //move the player
-        const cellMoveDirection = (playerLocation -1 )
-        console.log(cellMoveDirection)
+        const cellMoveDirection = (playerLocation - 1 )
         changePlayerLocation(cellMoveDirection)
         break
       }
