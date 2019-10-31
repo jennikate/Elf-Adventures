@@ -78,27 +78,27 @@ function pacnam() {
     { cellId: 48,  top: true, right: false, bottom: true, left: true },
     { cellId: 49,  top: true, right: true, bottom: true, left: false },
 
-    { cellId: 50,  top: true, right: false, bottom: false, left: false },
-    { cellId: 51,  top: true, right: false, bottom: false, left: false },
+    { cellId: 50,  top: true, right: false, bottom: true, left: false },
+    { cellId: 51,  top: true, right: false, bottom: true, left: false },
     { cellId: 52,  top: false, right: false, bottom: false, left: false },
     { cellId: 53,  top: false, right: true, bottom: false, left: false },
     { cellId: 54,  top: false, right: false, bottom: true, left: true },
     { cellId: 55,  top: false, right: true, bottom: true, left: false },
     { cellId: 56,  top: false, right: false, bottom: false, left: true },
     { cellId: 57,  top: false, right: false, bottom: false, left: false },
-    { cellId: 58,  top: true, right: false, bottom: false, left: false },
-    { cellId: 59,  top: true, right: false, bottom: false, left: false },
+    { cellId: 58,  top: true, right: false, bottom: true, left: false },
+    { cellId: 59,  top: true, right: false, bottom: true, left: false },
 
-    { cellId: 60,  top: false, right: false, bottom: false, left: true },
-    { cellId: 61,  top: false, right: false, bottom: false, left: false },
+    { cellId: 60,  top: true, right: false, bottom: false, left: true },
+    { cellId: 61,  top: true, right: false, bottom: false, left: false },
     { cellId: 62,  top: false, right: true, bottom: false, left: false },
     { cellId: 63,  top: false, right: false, bottom: false, left: true },
     { cellId: 64,  top: true, right: false, bottom: true, left: false },
     { cellId: 65,  top: true, right: false, bottom: true, left: false },
     { cellId: 66,  top: false, right: true, bottom: false, left: false },
     { cellId: 67,  top: false, right: false, bottom: false, left: true },
-    { cellId: 68,  top: false, right: false, bottom: false, left: false },
-    { cellId: 69,  top: false, right: true, bottom: false, left: false },
+    { cellId: 68,  top: true, right: false, bottom: false, left: false },
+    { cellId: 69,  top: true, right: true, bottom: false, left: false },
 
     { cellId: 70,  top: false, right: false, bottom: false, left: true },
     { cellId: 71,  top: false, right: false, bottom: true, left: false },
@@ -122,6 +122,16 @@ function pacnam() {
     { cellId: 88,  top: true, right: false, bottom: false, left: true },
     { cellId: 89,  top: false, right: true, bottom: false, left: false },
 
+    { cellId: 90,  top: false, right: false, bottom: true, left: true },
+    { cellId: 91,  top: false, right: false, bottom: true, left: false },
+    { cellId: 92,  top: false, right: false, bottom: true, left: false },
+    { cellId: 93,  top: false, right: false, bottom: true, left: false },
+    { cellId: 94,  top: true, right: false, bottom: true, left: false },
+    { cellId: 95,  top: true, right: false, bottom: true, left: false },
+    { cellId: 96,  top: false, right: false, bottom: true, left: false },
+    { cellId: 97,  top: false, right: false, bottom: true, left: false },
+    { cellId: 98,  top: false, right: false, bottom: true, left: false },
+    { cellId: 99,  top: false, right: true, bottom: true, left: false }
   ]
 
   for (let i = 0; i < walls.length; i++) {
