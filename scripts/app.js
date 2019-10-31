@@ -111,6 +111,17 @@ function pacnam() {
     { cellId: 78,  top: false, right: false, bottom: true, left: false },
     { cellId: 79,  top: false, right: true, bottom: false, left: false },
 
+    { cellId: 80,  top: false, right: false, bottom: false, left: true },
+    { cellId: 81,  top: true, right: true, bottom: false, left: false },
+    { cellId: 82,  top: false, right: false, bottom: false, left: true },
+    { cellId: 83,  top: true, right: false, bottom: false, left: false },
+    { cellId: 84,  top: false, right: false, bottom: true, left: false },
+    { cellId: 85,  top: false, right: false, bottom: true, left: false },
+    { cellId: 86,  top: true, right: false, bottom: false, left: false },
+    { cellId: 87,  top: false, right: true, bottom: false, left: false },
+    { cellId: 88,  top: true, right: false, bottom: false, left: true },
+    { cellId: 89,  top: false, right: true, bottom: false, left: false },
+
   ]
 
   for (let i = 0; i < walls.length; i++) {
