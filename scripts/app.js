@@ -45,6 +45,39 @@ function pacnam() {
     { cellId: 18,  top: true, right: true, bottom: true, left: true },
     { cellId: 19,  top: false, right: true, bottom: false, left: true },
 
+    { cellId: 20,  top: false, right: false, bottom: false, left: true },
+    { cellId: 21,  top: true, right: false, bottom: true, left: false },
+    { cellId: 22,  top: false, right: false, bottom: false, left: false },
+    { cellId: 23,  top: true, right: false, bottom: false, left: false },
+    { cellId: 24,  top: false, right: false, bottom: true, left: false },
+    { cellId: 25,  top: false, right: false, bottom: true, left: false },
+    { cellId: 26,  top: true, right: false, bottom: false, left: false },
+    { cellId: 27,  top: false, right: false, bottom: false, left: false },
+    { cellId: 28,  top: true, right: false, bottom: true, left: false },
+    { cellId: 29,  top: false, right: true, bottom: false, left: false },
+
+    { cellId: 30,  top: false, right: false, bottom: true, left: true },
+    { cellId: 31,  top: true, right: false, bottom: true, left: false },
+    { cellId: 32,  top: false, right: true, bottom: false, left: false },
+    { cellId: 33,  top: false, right: false, bottom: true, left: true },
+    { cellId: 34,  top: true, right: true, bottom: false, left: false },
+    { cellId: 35,  top: true, right: false, bottom: false, left: true },
+    { cellId: 36,  top: false, right: true, bottom: true, left: false },
+    { cellId: 37,  top: false, right: false, bottom: false, left: true },
+    { cellId: 38,  top: true, right: false, bottom: true, left: false },
+    { cellId: 39,  top: false, right: true, bottom: true, left: false },
+
+    { cellId: 40,  top: true, right: false, bottom: true, left: true },
+    { cellId: 41,  top: true, right: true, bottom: true, left: false },
+    { cellId: 42,  top: false, right: true, bottom: false, left: true },
+    { cellId: 43,  top: true, right: false, bottom: false, left: true },
+    { cellId: 44,  top: false, right: false, bottom: false, left: false },
+    { cellId: 45,  top: false, right: false, bottom: false, left: false },
+    { cellId: 46,  top: true, right: true, bottom: false, left: false },
+    { cellId: 47,  top: false, right: true, bottom: false, left: true },
+    { cellId: 48,  top: true, right: false, bottom: true, left: true },
+    { cellId: 49,  top: true, right: true, bottom: true, left: false },
+
   ]
 
   for (let i = 0; i < walls.length; i++) {
