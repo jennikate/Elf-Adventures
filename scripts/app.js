@@ -7,7 +7,6 @@ function pacnam() {
   const boardSize = boardWidth ** 2
   const cells = [] //declare so can push cell ids to it
 
-  const cellId = 0 //setup so we can find the id and use it in various places
   let cellName = ''
   let cellLocation = 0 //setup so we can push the id of the cell we're looking for to it
 
@@ -16,8 +15,7 @@ function pacnam() {
   let playerClasses = ''
 
 
-
-  // WALLS
+  // DECLARE WALL POSITIONS
   //create array of objects to say which borders have walls
   const walls = [
     { cellId: 0, top: true, right: false, bottom: false, left: true },
@@ -135,9 +133,6 @@ function pacnam() {
 
   // ===== FUNCTIONS =====
 
-  // FIND THE CELL TO DO SOMETHING WITH
-
-
   // GAME BOARD 
   function createBoard() {
     //get element from html for where board is to be created
@@ -158,7 +153,7 @@ function pacnam() {
   function makeWalls() {
     for (let i = 0; i < walls.length; i++) {
       //get the cell ID so we can assign things to it
-      cellName = '#cell' + walls[i].cellId
+      cellName = '#cell' + walls[i].cellId //cellId is the key that we want to return the value of (cause you keep forgetting that's why it's here Jen!!)
       cellLocation = document.querySelector(cellName)
       //check the array to see what borders are needed and add them
       if (walls[i].top === true) {
@@ -176,78 +171,41 @@ function pacnam() {
     }
   }
 
-
-
+  // change player class location, clear/set the list of classes on the cell the player is in
   function changePlayerLocation(newCellId) {
-    //called by sendPlayerHome, player movement
+    //called by start game, player movement
+
+    //clear original location
     cellLocation = document.querySelector(cellName)
     cellLocation.classList.remove('player')
     playerClasses = ''
-
+    //update with new location details
     cellName = '#cell' + newCellId
     cellLocation = document.querySelector(cellName)
     cellLocation.classList.add('player')
     playerLocation = newCellId
     playerClasses = document.querySelector(cellName).classList
-
+    //return the location
     return playerLocation
-  }
-
-  function sendPlayerHome() {
-    changePlayerLocation(playerHome)
   }
 
 
   // ===== CONTROLS =====
-  //start button
+  //start game
   const startGame = document.querySelector('#start')
   startGame.addEventListener('click', () => {
-    sendPlayerHome()
+    //start player at their home location
+    changePlayerLocation(playerHome)
   })
 
   //player movement
   document.addEventListener('keyup', (e) => {
     switch (e.key) {
-      case 'w': {
-        // if there is a wall in the direction I'm trying to move, don't let me move
-        if (playerClasses.contains('wall-top')) {
-          return
-        } else {
-          const cellMoveDirection = (playerLocation - boardWidth)
-          changePlayerLocation(cellMoveDirection)
-        }
-        break
-      }
-      case 'd': {
-        // if there is a wall in the direction I'm trying to move, don't let me move
-        if (playerClasses.contains('wall-right')) {
-          return
-        } else {
-          const cellMoveDirection = (playerLocation + 1)
-          changePlayerLocation(cellMoveDirection)
-        }
-        break
-      }
-      case 's': {
-        // if there is a wall in the direction I'm trying to move, don't let me move
-        if (playerClasses.contains('wall-bottom')) {
-          return
-        } else {
-          const cellMoveDirection = (playerLocation + boardWidth)
-          changePlayerLocation(cellMoveDirection)
-        }
-        break
-      }
-      case 'a': {
-        // if there is a wall in the direction I'm trying to move, don't let me move
-        if (playerClasses.contains('wall-left')) {
-          return
-        } else {
-          const cellMoveDirection = (playerLocation - 1)
-          changePlayerLocation(cellMoveDirection)
-        }
-        break
-      }
+      // if there is a wall in the direction I'm trying to move, don't let me move, else move me appropriately
+      case 'w': { return playerClasses.contains('wall-top') ? null : changePlayerLocation(playerLocation - boardWidth) }
+      case 'd': { return playerClasses.contains('wall-right') ? null : changePlayerLocation(playerLocation + 1) }
+      case 's': { return playerClasses.contains('wall-bottom') ? null : changePlayerLocation(playerLocation + boardWidth) }
+      case 'a': { return playerClasses.contains('wall-left') ? null : changePlayerLocation(playerLocation - 1) }
     }
   })
 
