@@ -1,11 +1,11 @@
 
 //PAPER
-[] draw out wall for level 1
+[x] draw out wall for level 1
 [] work out food box positions
 [] check how player and enemies may move
 
 //CODE BOARD
-[] create a board to match that
+[x] create a board to match that
 [] make player moveable
 [] make one enemy move
 
