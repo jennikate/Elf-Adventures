@@ -10,7 +10,7 @@
 // set user lives to 5
 // show 'new game' button
 
-// ===== CREATION FUNCTIONS =====
+// ===== PAGELOAD : GENERATE ASSETS =====
 
 //(create game board)
 // set width to level number * 5 [might change 5 to another number later]

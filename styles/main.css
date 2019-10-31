@@ -1,0 +1,29 @@
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+}
+
+main {
+  display: flex;
+  align-content: center;
+  justify-content: center;
+}
+
+#grid {
+  margin-top: 30px;
+  border: 1px solid red;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  max-width: 502px;
+}
+
+#grid div {
+  border: 1px solid grey;
+  width: 50px;
+  height: 50px;
+}
