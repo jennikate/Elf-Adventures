@@ -25,14 +25,13 @@ function pacnam() {
   let weaponCellName = ''
   let weaponLocation = 0
 
-  let enemiesHome = [54, 55, 45]
-  let enemyList = []
+  let enemyId = 0
   let enemyCellName = ''
   let enemyLocation = 0
 
   let playerScore = 0
   let playerLives = 3
-  
+
 
 
   // DECLARE WALL POSITIONS
@@ -149,6 +148,13 @@ function pacnam() {
     { cellId: 99, top: false, right: true, bottom: true, left: false }
   ]
 
+  //DECLARE ENEMY DETAILS
+  //create array of objects to set enemy home position, name, and movement pattern
+  const enemies = [
+    { enemyId: 0, homeId: 54, moveId: 'smart' },
+    { enemyId: 1, homeId: 55, moveId: 'dumb' },
+    { enemyId: 2, homeId: 45, moveId: 'average' }
+  ]
 
 
   // ===== FUNCTIONS =====
@@ -216,13 +222,16 @@ function pacnam() {
   }
 
   // START ENEMY AT HOME
-  function sendEnemyHome(whichEnemies) {
-    for ( let i = 0; i < whichEnemies.length; i++ ) {
-      enemyCellName =  '#cell' + whichEnemies[i]
+  function enemiesHome(enemyList) {
+    for (let i = 0; i < enemyList.length; i++) {
+      enemyCellName = '#cell' + enemies[i].homeId
+      enemyId = 'enemyId' + enemies[i].enemyId
       enemyLocation = document.querySelector(enemyCellName)
       enemyLocation.classList.add('enemy')
+      enemyLocation.setAttribute('enemyId', enemies[i].enemyId)
     }
   }
+
 
 
   // ===== PLAYER ACTIONS =====
@@ -266,7 +275,7 @@ function pacnam() {
       document.querySelector('#notification').innerHTML = 'You have a sword, kill the dragons!'
       //turn all enemies into killable
       const allEnemyLoc = document.querySelectorAll('.enemy')
-      for ( let i = 0; i < allEnemyLoc.length; i++ ) {
+      for (let i = 0; i < allEnemyLoc.length; i++) {
         allEnemyLoc[i].classList.add('killable')
       }
       //clear weapons from board
@@ -277,25 +286,36 @@ function pacnam() {
     }
   }
 
-  // ENEMY KILLS YOU
+  // ENEMY COLLISION
   function enemyAttack(playerMove) {
     //called by player movement
     enemyCellName = '#cell' + playerMove
     enemyLocation = document.querySelector(enemyCellName)
+    console.log(enemyLocation)
+    const enemyIdFromHTML = enemyLocation.getAttribute('enemyId')
+    console.log(enemyIdFromHTML)
+
+
+
     //look first for a killable enemy
     if (enemyLocation.classList.contains('killable')) {
+
+
       playerScore = playerScore + 10
       document.querySelector('#player-score span').innerHTML = playerScore
       //send that enemy to home
       //remove its class
-      let enemyLoc = document.querySelector(enemyCellName)
-      enemyLoc.classList.remove('killable')
-      enemyLoc.classList.remove('enemy')
-      //get home location
-      enemyLoc = document.querySelector('#cell' + enemiesHome[0])
-      //add its class
-      enemyLoc.classList.add('killable')
-      enemyLoc.classList.add('enemy')
+      enemyLocation.classList.remove('killable')
+      enemyLocation.classList.remove('enemy')
+
+      //find the homeId for this enemyId
+      console.log(Object(enemies[enemyIdFromHTML]))
+      console.log(Object(enemies[enemyIdFromHTML]).homeId)
+      //send this enemy home
+      cellName = '#cell' + (enemies[enemyIdFromHTML]).homeId
+      document.querySelector(cellName).classList.add('enemy')
+      document.querySelector(cellName).classList.add('killable')
+
       
     } else {
       //if not killable then look for if the enemy is there
@@ -320,7 +340,7 @@ function pacnam() {
     //add weapons (in future will start rolling weapon timers)
     addWeapons()
     //start enemy at their home location
-    sendEnemyHome(enemiesHome) //send their home array
+    enemiesHome(enemies) //send their home array
     //start player at their home location
     changePlayerLocation(playerHome)
   })
@@ -383,8 +403,15 @@ function pacnam() {
         break
       }
     }
-
   })
+
+  //enemy movement
+  //each enemy has it's own movement pattern
+  //enemiesHome[0] : - always moves towards player unless there is a wall, then it goes (top, bottom, left, right)
+  //enemiesHome[1] - makes first move towards player, then continues in that direction until it hits a wall, then it moves towards player again
+  //enemiesHome[2] - makes first move towards player, second move towards player, then continues in that direction until it hits a wall, then it moves towards players again
+
+  //assign enemies their movement patterns
 
   // ===== CREATE! =====
   createBoard()
