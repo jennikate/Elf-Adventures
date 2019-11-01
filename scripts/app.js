@@ -25,7 +25,8 @@ function pacnam() {
   let weaponCellName = ''
   let weaponLocation = 0
 
-  const enemiesHome = [54, 55, 45]
+  let enemiesHome = [54, 55, 45]
+  let enemyList = []
   let enemyCellName = ''
   let enemyLocation = 0
 
@@ -215,9 +216,9 @@ function pacnam() {
   }
 
   // START ENEMY AT HOME
-  function sendEnemyHome() {
-    for ( let i = 0; i < enemiesHome.length; i++ ) {
-      enemyCellName =  '#cell' + enemiesHome[i]
+  function sendEnemyHome(whichEnemies) {
+    for ( let i = 0; i < whichEnemies.length; i++ ) {
+      enemyCellName =  '#cell' + whichEnemies[i]
       enemyLocation = document.querySelector(enemyCellName)
       enemyLocation.classList.add('enemy')
     }
@@ -263,7 +264,12 @@ function pacnam() {
     weaponLocation = document.querySelector(weaponCellName)
     if (weaponLocation.classList.contains('weapon')) {
       document.querySelector('#notification').innerHTML = 'You have a sword, kill the dragons!'
-      // document.querySelectorAll('.weapon').classList.remove('weapon')
+      //turn all enemies into killable
+      const allEnemyLoc = document.querySelectorAll('.enemy')
+      for ( let i = 0; i < allEnemyLoc.length; i++ ) {
+        allEnemyLoc[i].classList.add('killable')
+      }
+      //clear weapons from board
       const allWeapons = document.querySelectorAll('.weapon')
       for (let i = 0; i < allWeapons.length; i++) {
         allWeapons[i].classList.remove('weapon')
@@ -271,16 +277,34 @@ function pacnam() {
     }
   }
 
-  // ENEMY GETS YOU
+  // ENEMY KILLS YOU
   function enemyAttack(playerMove) {
     //called by player movement
     enemyCellName = '#cell' + playerMove
     enemyLocation = document.querySelector(enemyCellName)
-    if (enemyLocation.classList.contains('enemy')) {
-      //send player to their home location
-      changePlayerLocation(playerHome)
-      playerLives = playerLives - 1
-      document.querySelector('#player-lives span').innerHTML = playerLives
+    //look first for a killable enemy
+    if (enemyLocation.classList.contains('killable')) {
+      playerScore = playerScore + 10
+      document.querySelector('#player-score span').innerHTML = playerScore
+      //send that enemy to home
+      //remove its class
+      let enemyLoc = document.querySelector(enemyCellName)
+      enemyLoc.classList.remove('killable')
+      enemyLoc.classList.remove('enemy')
+      //get home location
+      enemyLoc = document.querySelector('#cell' + enemiesHome[0])
+      //add its class
+      enemyLoc.classList.add('killable')
+      enemyLoc.classList.add('enemy')
+      
+    } else {
+      //if not killable then look for if the enemy is there
+      if (enemyLocation.classList.contains('enemy')) {
+        //send player to their home location
+        changePlayerLocation(playerHome)
+        playerLives = playerLives - 1
+        document.querySelector('#player-lives span').innerHTML = playerLives
+      }
     }
   }
 
@@ -296,7 +320,7 @@ function pacnam() {
     //add weapons (in future will start rolling weapon timers)
     addWeapons()
     //start enemy at their home location
-    sendEnemyHome()
+    sendEnemyHome(enemiesHome) //send their home array
     //start player at their home location
     changePlayerLocation(playerHome)
   })
