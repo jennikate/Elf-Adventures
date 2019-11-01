@@ -10,7 +10,7 @@ function pacnam() {
   let cellName = ''
   let cellLocation = 0 //setup so we can push the id of the cell we're looking for to it
 
-  const playerHome = 46 //boardSize - 1 //get bottom right most cell
+  const playerHome = boardSize - 1 //get bottom right most cell
   let playerHomeName = ''
   let playerLocation = 0 //so we can find and move them
   let playerClasses = ''
@@ -231,12 +231,12 @@ function pacnam() {
   function changePlayerLocation(playerMove) {
     //called by start game, player movement
     //clear original location
-    cellLocation = document.querySelector(cellName)
-    cellLocation.classList.remove('player')
+    cellLocation = document.querySelector(cellName) //this is the cell I'm coming from
+    cellLocation.classList.remove('player') //remove the player from that cell
     playerClasses = ''
     //update with new location details
     cellName = '#cell' + playerMove
-    cellLocation = document.querySelector(cellName)
+    cellLocation = document.querySelector(cellName) //this is the cell I'm going to
     cellLocation.classList.add('player')
     playerLocation = playerMove
     playerClasses = document.querySelector(cellName).classList
@@ -278,6 +278,7 @@ function pacnam() {
     enemyLocation = document.querySelector(enemyCellName)
     if (enemyLocation.classList.contains('enemy')) {
       //send player to their home location
+      changePlayerLocation(playerHome)
       playerLives = playerLives - 1
       document.querySelector('#player-lives span').innerHTML = playerLives
     }
@@ -313,8 +314,8 @@ function pacnam() {
         } else {
           collectTreasure(playerMove) //activates if treasure on square, if not does nothing
           collectWeapon(playerMove) //activates if weapon on square, if not does nothing
-          enemyAttack(playerMove) //activates if player moves into an unkillable enemy
           changePlayerLocation(playerMove)
+          enemyAttack(playerMove) //activates if player moves into an unkillable enemy, has to be last as it moves the player automatically after they move themselves
         }
         break
       }
@@ -326,8 +327,8 @@ function pacnam() {
         } else {
           collectTreasure(playerMove) //activates if treasure on square, if not does nothing
           collectWeapon(playerMove) //activates if weapon on square, if not does nothing
-          enemyAttack(playerMove) //activates if player moves into an unkillable enemy
           changePlayerLocation(playerMove)
+          enemyAttack(playerMove) //activates if player moves into an unkillable enemy
         }
         break
       }
@@ -339,8 +340,8 @@ function pacnam() {
         } else {
           collectTreasure(playerMove) //activates if treasure on square, if not does nothing
           collectWeapon(playerMove) //activates if weapon on square, if not does nothing
-          enemyAttack(playerMove) //activates if player moves into an unkillable enemy
           changePlayerLocation(playerMove)
+          enemyAttack(playerMove) //activates if player moves into an unkillable enemy
         }
         break
       }
@@ -352,8 +353,8 @@ function pacnam() {
         } else {
           collectTreasure(playerMove) //activates if treasure on square, if not does nothing
           collectWeapon(playerMove) //activates if weapon on square, if not does nothing
-          enemyAttack(playerMove) //activates if player moves into an unkillable enemy
           changePlayerLocation(playerMove)
+          enemyAttack(playerMove) //activates if player moves into an unkillable enemy
         }
         break
       }
