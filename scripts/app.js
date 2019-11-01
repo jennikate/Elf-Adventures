@@ -28,6 +28,7 @@ function pacnam() {
   let enemyId = 0
   let enemyCellName = ''
   let enemyLocation = 0
+  let enemyKilled = false
 
   let playerScore = 0
   let playerLives = 3
@@ -151,9 +152,9 @@ function pacnam() {
   //DECLARE ENEMY DETAILS
   //create array of objects to set enemy home position, name, and movement pattern
   const enemies = [
-    { enemyId: 0, homeId: 54, moveId: 'smart' },
-    { enemyId: 1, homeId: 55, moveId: 'dumb' },
-    { enemyId: 2, homeId: 45, moveId: 'average' }
+    { enemyId: 0, homeId: 54, locateId: 54, moveId: 'smart' },
+    { enemyId: 1, homeId: 55, locateId: 55, moveId: 'dumb' },
+    { enemyId: 2, homeId: 45, locateId: 45, moveId: 'average' }
   ]
 
 
@@ -228,7 +229,7 @@ function pacnam() {
       enemyId = 'enemyId' + enemies[i].enemyId
       enemyLocation = document.querySelector(enemyCellName)
       enemyLocation.classList.add('enemy')
-      enemyLocation.setAttribute('enemyId', enemies[i].enemyId)
+      enemyLocation.setAttribute('enemy-id', enemies[i].enemyId)
     }
   }
 
@@ -289,34 +290,38 @@ function pacnam() {
   // ENEMY COLLISION
   function enemyAttack(playerMove) {
     //called by player movement
-    enemyCellName = '#cell' + playerMove
-    enemyLocation = document.querySelector(enemyCellName)
-    console.log(enemyLocation)
-    const enemyIdFromHTML = enemyLocation.getAttribute('enemyId')
-    console.log(enemyIdFromHTML)
+    enemyCellName = '#cell' + playerMove //is the player cell
+    // console.log('enemycell' + enemyCellName)
+    enemyLocation = document.querySelector(enemyCellName) //gets nothing
+    // console.log('enemyloc' + enemyLocation)
+    const enemyIdFromHTML = enemyLocation.getAttribute('enemy-id') //is null
+    // console.log('enemyid' + enemyIdFromHTML)
 
 
 
     //look first for a killable enemy
     if (enemyLocation.classList.contains('killable')) {
-
-
       playerScore = playerScore + 10
       document.querySelector('#player-score span').innerHTML = playerScore
-      //send that enemy to home
-      //remove its class
+
+      //remove enemy class from this cell class
+      // console.log(enemyLocation.classList)
       enemyLocation.classList.remove('killable')
       enemyLocation.classList.remove('enemy')
+      enemyLocation.removeAttribute('enemy-id')
 
-      //find the homeId for this enemyId
-      console.log(Object(enemies[enemyIdFromHTML]))
-      console.log(Object(enemies[enemyIdFromHTML]).homeId)
       //send this enemy home
       cellName = '#cell' + (enemies[enemyIdFromHTML]).homeId
+      enemyLocation = document.querySelector(enemyCellName)
       document.querySelector(cellName).classList.add('enemy')
       document.querySelector(cellName).classList.add('killable')
+      //set the enemyId attribute
+      enemyLocation.setAttribute('enemy-id', enemies[enemyIdFromHTML].enemyId)
+      //update enemystatus
+      return enemyKilled = true
 
-      
+
+
     } else {
       //if not killable then look for if the enemy is there
       if (enemyLocation.classList.contains('enemy')) {
@@ -351,6 +356,7 @@ function pacnam() {
     switch (e.key) {
       // if there is a wall in the direction I'm trying to move, don't let me move, else move me appropriately
       case 'w': {
+        console.log(enemyKilled)
         playerMove = playerLocation - boardWidth
         playerDirection = 'top'
         if (playerClasses.contains(`wall-${playerDirection}`) === true) {
@@ -360,6 +366,7 @@ function pacnam() {
           collectWeapon(playerMove) //activates if weapon on square, if not does nothing
           changePlayerLocation(playerMove)
           enemyAttack(playerMove) //activates if player moves into an unkillable enemy, has to be last as it moves the player automatically after they move themselves
+          changeEnemyPosition(playerDirection)
         }
         break
       }
@@ -373,6 +380,7 @@ function pacnam() {
           collectWeapon(playerMove) //activates if weapon on square, if not does nothing
           changePlayerLocation(playerMove)
           enemyAttack(playerMove) //activates if player moves into an unkillable enemy
+          changeEnemyPosition(playerDirection)
         }
         break
       }
@@ -386,6 +394,7 @@ function pacnam() {
           collectWeapon(playerMove) //activates if weapon on square, if not does nothing
           changePlayerLocation(playerMove)
           enemyAttack(playerMove) //activates if player moves into an unkillable enemy
+          changeEnemyPosition(playerDirection)
         }
         break
       }
@@ -399,6 +408,7 @@ function pacnam() {
           collectWeapon(playerMove) //activates if weapon on square, if not does nothing
           changePlayerLocation(playerMove)
           enemyAttack(playerMove) //activates if player moves into an unkillable enemy
+          changeEnemyPosition(playerDirection)
         }
         break
       }
@@ -412,6 +422,44 @@ function pacnam() {
   //enemiesHome[2] - makes first move towards player, second move towards player, then continues in that direction until it hits a wall, then it moves towards players again
 
   //assign enemies their movement patterns
+  // on player move move enemy0 one space in prefered direction
+
+  function changeEnemyPosition(direction) {
+
+    //get enemy position
+    let enemyPosition = enemies[0].locateId
+    // console.log(enemyPosition)
+    enemyCellName = '#cell' + enemyPosition
+
+
+    //clear original location
+    enemyLocation = document.querySelector(enemyCellName) //this is the cell I'm coming from
+    enemyLocation.classList.remove('enemy') //remove the enemy from that cell
+    const isKillableTrue = enemyLocation.classList.contains('killable')
+
+    if (isKillableTrue === true) {
+      enemyLocation.classList.remove('killable') //removes killable class in case it was there
+    }
+
+    switch (direction) {
+      //set to move opposite of player move
+      case 'top': enemyPosition = enemyPosition + boardWidth; break
+      case 'right': enemyPosition = enemyPosition - 1; break
+      case 'bottom': enemyPosition = enemyPosition - boardWidth; break
+      case 'left': enemyPosition = enemyPosition + 1; break
+    }
+
+
+
+    enemyCellName = '#cell' + enemyPosition
+    enemyLocation = document.querySelector(enemyCellName) //this is the cell I'm moving to
+    enemyLocation.classList.add('enemy') //remove the enemy from that cell
+    enemyLocation.setAttribute('enemy-id', enemies[0].enemyId) //set my enemy cell attribute so I can find it
+    if (isKillableTrue === true) {
+      enemyLocation.classList.add('killable') //removes killable class in case it was there
+    }
+    enemies[0].locateId = enemyPosition
+  }
 
   // ===== CREATE! =====
   createBoard()
