@@ -7,31 +7,52 @@ function pacnam() {
   const boardSize = boardWidth ** 2
   const cells = [] //declare so can push cell ids to it
 
-  let cellName = ''
-  let cellLocation = 0 //setup so we can push the id of the cell we're looking for to it
+  // ===== CREATE VARIABLES FOR ADJUSTING CELLS =====
+  // these should only exist within their function and not be used cross function
 
-  const playerHome = boardSize - 1 //get bottom right most cell
-  let playerHomeName = ''
-  let playerLocation = 0 //so we can find and move them
-  let playerClasses = ''
-  let playerMove = 0
-  let playerDirection = ''
+  let cellIdRef = ''
+  let cellElement = 0
 
-  const treasureBoxes = [12, 39, 75, 90] //this can be randomised later
-  let treasureCellName = ''
-  let treasureLocation = 0
+  // ==== GET ELEMENTS TO USE ====
 
-  const weapons = [42, 66] //this can be randomised later
-  let weaponCellName = ''
-  let weaponLocation = 0
+  const grid = document.querySelector('#grid') //position on html to create the cells
+  //const playerElement = document.querySelector('.player') declaring in the function, check if that's best way
 
-  let enemyId = 0
-  let enemyCellName = ''
-  let enemyLocation = 0
-  let enemyKilled = false
+  //get cell element from refNumber
+  function getCellElement(numRef) {
+    cellIdRef = '#cell-' + numRef
+    cellElement = document.querySelector(cellIdRef)
+    return cellElement
+  }
+  //get cell element from class
 
-  let playerScore = 0
-  let playerLives = 3
+
+
+  // let cellName = ''
+  // let cellLocation = 0 //setup so we can push the id of the cell we're looking for to it
+
+  // const playerHome = boardSize - 1 //get bottom right most cell
+
+  // let playerLocation = 0 //so we can find and move them
+  // let playerClasses = ''
+  // let playerMove = 0
+  // let playerDirection = ''
+
+  // const treasureBoxes = [12, 39, 75, 90] //this can be randomised later
+  // let treasureCellName = ''
+  // let treasureLocation = 0
+
+  // const weapons = [42, 66] //this can be randomised later
+  // let weaponCellName = ''
+  // let weaponLocation = 0
+
+
+  // let enemyCellName = ''
+  // let enemyLocation = 0
+  // let enemyKilled = false
+
+  // let playerScore = 0
+  // let playerLives = 3
 
 
 
@@ -149,320 +170,332 @@ function pacnam() {
     { cellId: 99, top: false, right: true, bottom: true, left: false }
   ]
 
+  //DECLARE TREASURE BOXES & WEAPONS
+  const treasureBoxes = [12, 39, 75, 90] //this can be randomised later
+  const weapons = [42, 66] //this can be randomised later
+
   //DECLARE ENEMY DETAILS
   //create array of objects to set enemy home position, name, and movement pattern
   const enemies = [
-    { enemyId: 0, homeId: 54, locateId: 54, moveId: 'smart' },
-    { enemyId: 1, homeId: 55, locateId: 55, moveId: 'dumb' },
-    { enemyId: 2, homeId: 45, locateId: 45, moveId: 'average' }
+    { enemyId: 0, homeId: 54, moveType: 'smart' },
+    { enemyId: 1, homeId: 55, moveType: 'dumb' },
+    { enemyId: 2, homeId: 45, moveType: 'average' }
   ]
 
 
-  // ===== FUNCTIONS =====
+
+  // ===== SETUP BOARD & PLACE ITEMS =====
 
   // GAME BOARD 
   function createBoard() {
-    //get element from html for where board is to be created
-    const grid = document.querySelector('#grid')
-    //create the cells, append, and store in array
     for (let i = 0; i < boardSize; i++) {
       const cell = document.createElement('div')
       cell.classList.add('cell')
-      cell.setAttribute('id', 'cell' + [i])
+      cell.setAttribute('id', 'cell-' + [i])
       grid.appendChild(cell)
       cell.innerHTML = [i]
       cells.push(cell)
     }
+    //add walls based on the wall array
     makeWalls()
   }
+
 
   // MAKE WALLS
   // called by createBoard
   function makeWalls() {
     for (let i = 0; i < walls.length; i++) {
-      //get the cell ID so we can assign things to it
-      cellName = '#cell' + walls[i].cellId //cellId is the key that we want to return the value of (cause you keep forgetting that's why it's here Jen!!)
-      cellLocation = document.querySelector(cellName)
+      //get the cell that relates to this wall
+      getCellElement(walls[i].cellId)
       //check the array to see what borders are needed and add them
       if (walls[i].top === true) {
-        cellLocation.classList.add('wall-top')
+        cellElement.classList.add('wall-top')
       }
       if (walls[i].right === true) {
-        cellLocation.classList.add('wall-right')
+        cellElement.classList.add('wall-right')
       }
       if (walls[i].bottom === true) {
-        cellLocation.classList.add('wall-bottom')
+        cellElement.classList.add('wall-bottom')
       }
       if (walls[i].left === true) {
-        cellLocation.classList.add('wall-left')
+        cellElement.classList.add('wall-left')
       }
     }
   }
-  // // if I refactor above I need to loop through each object, if value is true then set key as wall-keyname
 
 
   // SET TREASURE CHESTS
+  //future version these appear in random places at start of game
   function addTreasureChests() {
     //called by start game 
     for (let i = 0; i < treasureBoxes.length; i++) {
-      treasureCellName = '#cell' + treasureBoxes[i]
-      treasureLocation = document.querySelector(treasureCellName)
-      treasureLocation.classList.add('treasure-chest')
+      getCellElement(treasureBoxes[i])
+      cellElement.classList.add('treasure-chest')
     }
   }
 
   // SET WEAPONS
+  //future version these appear and disappear based on timers
   function addWeapons() {
     //called by start game (will be on timer later)
     for (let i = 0; i < weapons.length; i++) {
-      weaponCellName = '#cell' + weapons[i]
-      weaponLocation = document.querySelector(weaponCellName)
-      weaponLocation.classList.add('weapon')
-      //weapons.push(weaponCellName) in future create weapon locations in this function and push to the weapons array
+      getCellElement(weapons[i])
+      cellElement.classList.add('weapon')
     }
   }
 
   // START ENEMY AT HOME
-  function enemiesHome(enemyList) {
-    for (let i = 0; i < enemyList.length; i++) {
-      enemyCellName = '#cell' + enemies[i].homeId
-      enemyId = 'enemyId' + enemies[i].enemyId
-      enemyLocation = document.querySelector(enemyCellName)
-      enemyLocation.classList.add('enemy')
-      enemyLocation.setAttribute('enemy-id', enemies[i].enemyId)
+  function enemiesHome() {
+    for (let i = 0; i < enemies.length; i++) {
+      getCellElement(enemies[i].homeId)
+      cellElement.classList.add('enemy')
     }
   }
 
+  // ==== PLAYER MOVEMENT ====
 
+  function changePlayerCell(nextCellId) {
+    const cellIdElement = document.querySelector('.player')
+    const cellIdName = cellIdElement.id
+    const cellIdArr = cellIdName.split('-')
+    const cellIdNum = parseInt(cellIdArr[1])
+    console.log(cellIdNum)
 
-  // ===== PLAYER ACTIONS =====
+    //remove class from original cell
+    cellIdElement.classList.remove('player')
 
-  // CHANGE PLAYER LOCATION
-  // change player class location, clear/set the list of classes on the cell the player is in
-  function changePlayerLocation(playerMove) {
-    //called by start game, player movement
-    //clear original location
-    cellLocation = document.querySelector(cellName) //this is the cell I'm coming from
-    cellLocation.classList.remove('player') //remove the player from that cell
-    playerClasses = ''
-    //update with new location details
-    cellName = '#cell' + playerMove
-    cellLocation = document.querySelector(cellName) //this is the cell I'm going to
-    cellLocation.classList.add('player')
-    playerLocation = playerMove
-    playerClasses = document.querySelector(cellName).classList
-    //return the location
-    return playerLocation
+    //get element for cell moving into
+    //console.log(nextCellId)
+    //  getCellElement(numRef)
+    //  const nextCellIdElement = document.querySelector(cellElement)
+    // nextCellIdElement.classList.add('player')
   }
 
-  // AWARD TREASURE
-  function collectTreasure(playerMove) {
-    //called by player movement
-    treasureCellName = '#cell' + playerMove
-    treasureLocation = document.querySelector(treasureCellName)
-    if (treasureLocation.classList.contains('treasure-chest')) {
-      playerScore = playerScore + 1000
-      document.querySelector('#player-score span').innerHTML = playerScore
-      treasureLocation.classList.remove('treasure-chest')
-    }
-  }
-
-  // ACTIVATE WEAPON
-  function collectWeapon(playerMove) {
-    //called by player movement
-    weaponCellName = '#cell' + playerMove
-    weaponLocation = document.querySelector(weaponCellName)
-    if (weaponLocation.classList.contains('weapon')) {
-      document.querySelector('#notification').innerHTML = 'You have a sword, kill the dragons!'
-      //turn all enemies into killable
-      const allEnemyLoc = document.querySelectorAll('.enemy')
-      for (let i = 0; i < allEnemyLoc.length; i++) {
-        allEnemyLoc[i].classList.add('killable')
-      }
-      //clear weapons from board
-      const allWeapons = document.querySelectorAll('.weapon')
-      for (let i = 0; i < allWeapons.length; i++) {
-        allWeapons[i].classList.remove('weapon')
-      }
-    }
-  }
-
-  // ENEMY COLLISION
-  function enemyAttack(playerMove) {
-    //called by player movement
-    enemyCellName = '#cell' + playerMove //is the player cell
-    // console.log('enemycell' + enemyCellName)
-    enemyLocation = document.querySelector(enemyCellName) //gets nothing
-    // console.log('enemyloc' + enemyLocation)
-    const enemyIdFromHTML = enemyLocation.getAttribute('enemy-id') //is null
-    // console.log('enemyid' + enemyIdFromHTML)
+  
 
 
 
-    //look first for a killable enemy
-    if (enemyLocation.classList.contains('killable')) {
-      playerScore = playerScore + 10
-      document.querySelector('#player-score span').innerHTML = playerScore
-
-      //remove enemy class from this cell class
-      // console.log(enemyLocation.classList)
-      enemyLocation.classList.remove('killable')
-      enemyLocation.classList.remove('enemy')
-      enemyLocation.removeAttribute('enemy-id')
-
-      //send this enemy home
-      cellName = '#cell' + (enemies[enemyIdFromHTML]).homeId
-      enemyLocation = document.querySelector(enemyCellName)
-      document.querySelector(cellName).classList.add('enemy')
-      document.querySelector(cellName).classList.add('killable')
-      //set the enemyId attribute
-      enemyLocation.setAttribute('enemy-id', enemies[enemyIdFromHTML].enemyId)
-      //update enemystatus
-      return enemyKilled = true
 
 
-
-    } else {
-      //if not killable then look for if the enemy is there
-      if (enemyLocation.classList.contains('enemy')) {
-        //send player to their home location
-        changePlayerLocation(playerHome)
-        playerLives = playerLives - 1
-        document.querySelector('#player-lives span').innerHTML = playerLives
-      }
-    }
-  }
+  // // ===== PLAYER ACTIONS =====
 
 
-  // ===== CONTROLS =====
-  //start game
-  const startGame = document.querySelector('#start')
-  startGame.addEventListener('click', () => {
-    //set lives
-    document.querySelector('#player-lives span').innerHTML = playerLives
-    //add treasure chests
-    addTreasureChests()
-    //add weapons (in future will start rolling weapon timers)
-    addWeapons()
-    //start enemy at their home location
-    enemiesHome(enemies) //send their home array
-    //start player at their home location
-    changePlayerLocation(playerHome)
-  })
+  // // AWARD TREASURE
+  // function collectTreasure(playerMove) {
+  //   //called by player movement
+  //   treasureCellName = '#cell' + playerMove
+  //   treasureLocation = document.querySelector(treasureCellName)
+  //   if (treasureLocation.classList.contains('treasure-chest')) {
+  //     playerScore = playerScore + 1000
+  //     document.querySelector('#player-score span').innerHTML = playerScore
+  //     treasureLocation.classList.remove('treasure-chest')
+  //   }
+  // }
 
-  //player movement
-  document.addEventListener('keyup', (e) => {
+  // // ACTIVATE WEAPON
+  // function collectWeapon(playerMove) {
+  //   //called by player movement
+  //   weaponCellName = '#cell' + playerMove
+  //   weaponLocation = document.querySelector(weaponCellName)
+  //   if (weaponLocation.classList.contains('weapon')) {
+  //     document.querySelector('#notification').innerHTML = 'You have a sword, kill the dragons!'
+  //     //turn all enemies into killable
+  //     const allEnemyLoc = document.querySelectorAll('.enemy')
+  //     for (let i = 0; i < allEnemyLoc.length; i++) {
+  //       allEnemyLoc[i].classList.add('killable')
+  //     }
+  //     //clear weapons from board
+  //     const allWeapons = document.querySelectorAll('.weapon')
+  //     for (let i = 0; i < allWeapons.length; i++) {
+  //       allWeapons[i].classList.remove('weapon')
+  //     }
+  //   }
+  // }
 
-    switch (e.key) {
-      // if there is a wall in the direction I'm trying to move, don't let me move, else move me appropriately
-      case 'w': {
-        console.log(enemyKilled)
-        playerMove = playerLocation - boardWidth
-        playerDirection = 'top'
-        if (playerClasses.contains(`wall-${playerDirection}`) === true) {
-          return
-        } else {
-          collectTreasure(playerMove) //activates if treasure on square, if not does nothing
-          collectWeapon(playerMove) //activates if weapon on square, if not does nothing
-          changePlayerLocation(playerMove)
-          enemyAttack(playerMove) //activates if player moves into an unkillable enemy, has to be last as it moves the player automatically after they move themselves
-          changeEnemyPosition(playerDirection)
-        }
-        break
-      }
-      case 'd': {
-        playerMove = playerLocation + 1
-        playerDirection = 'right'
-        if (playerClasses.contains(`wall-${playerDirection}`) === true) {
-          return
-        } else {
-          collectTreasure(playerMove) //activates if treasure on square, if not does nothing
-          collectWeapon(playerMove) //activates if weapon on square, if not does nothing
-          changePlayerLocation(playerMove)
-          enemyAttack(playerMove) //activates if player moves into an unkillable enemy
-          changeEnemyPosition(playerDirection)
-        }
-        break
-      }
-      case 's': {
-        playerMove = playerLocation + boardWidth
-        playerDirection = 'bottom'
-        if (playerClasses.contains(`wall-${playerDirection}`) === true) {
-          return
-        } else {
-          collectTreasure(playerMove) //activates if treasure on square, if not does nothing
-          collectWeapon(playerMove) //activates if weapon on square, if not does nothing
-          changePlayerLocation(playerMove)
-          enemyAttack(playerMove) //activates if player moves into an unkillable enemy
-          changeEnemyPosition(playerDirection)
-        }
-        break
-      }
-      case 'a': {
-        playerMove = playerLocation - 1
-        playerDirection = 'left'
-        if (playerClasses.contains(`wall-${playerDirection}`) === true) {
-          return
-        } else {
-          collectTreasure(playerMove) //activates if treasure on square, if not does nothing
-          collectWeapon(playerMove) //activates if weapon on square, if not does nothing
-          changePlayerLocation(playerMove)
-          enemyAttack(playerMove) //activates if player moves into an unkillable enemy
-          changeEnemyPosition(playerDirection)
-        }
-        break
-      }
-    }
-  })
-
-  //enemy movement
-  //each enemy has it's own movement pattern
-  //enemiesHome[0] : - always moves towards player unless there is a wall, then it goes (top, bottom, left, right)
-  //enemiesHome[1] - makes first move towards player, then continues in that direction until it hits a wall, then it moves towards player again
-  //enemiesHome[2] - makes first move towards player, second move towards player, then continues in that direction until it hits a wall, then it moves towards players again
-
-  //assign enemies their movement patterns
-  // on player move move enemy0 one space in prefered direction
-
-  function changeEnemyPosition(direction) {
-
-    //get enemy position
-    let enemyPosition = enemies[0].locateId
-    // console.log(enemyPosition)
-    enemyCellName = '#cell' + enemyPosition
-
-
-    //clear original location
-    enemyLocation = document.querySelector(enemyCellName) //this is the cell I'm coming from
-    enemyLocation.classList.remove('enemy') //remove the enemy from that cell
-    const isKillableTrue = enemyLocation.classList.contains('killable')
-
-    if (isKillableTrue === true) {
-      enemyLocation.classList.remove('killable') //removes killable class in case it was there
-    }
-
-    switch (direction) {
-      //set to move opposite of player move
-      case 'top': enemyPosition = enemyPosition + boardWidth; break
-      case 'right': enemyPosition = enemyPosition - 1; break
-      case 'bottom': enemyPosition = enemyPosition - boardWidth; break
-      case 'left': enemyPosition = enemyPosition + 1; break
-    }
+  // // ENEMY COLLISION
+  // function enemyAttack(playerMove) {
+  //   //called by player movement
+  //   enemyCellName = '#cell' + playerMove //is the player cell
+  //   // console.log('enemycell' + enemyCellName)
+  //   enemyLocation = document.querySelector(enemyCellName) //gets nothing
+  //   // console.log('enemyloc' + enemyLocation)
+  //   const enemyIdFromHTML = enemyLocation.getAttribute('enemy-id') //is null
+  //   // console.log('enemyid' + enemyIdFromHTML)
 
 
 
-    enemyCellName = '#cell' + enemyPosition
-    enemyLocation = document.querySelector(enemyCellName) //this is the cell I'm moving to
-    enemyLocation.classList.add('enemy') //remove the enemy from that cell
-    enemyLocation.setAttribute('enemy-id', enemies[0].enemyId) //set my enemy cell attribute so I can find it
-    if (isKillableTrue === true) {
-      enemyLocation.classList.add('killable') //removes killable class in case it was there
-    }
-    enemies[0].locateId = enemyPosition
-  }
+  //   //look first for a killable enemy
+  //   if (enemyLocation.classList.contains('killable')) {
+  //     playerScore = playerScore + 10
+  //     document.querySelector('#player-score span').innerHTML = playerScore
+
+  //     //remove enemy class from this cell class
+  //     // console.log(enemyLocation.classList)
+  //     enemyLocation.classList.remove('killable')
+  //     enemyLocation.classList.remove('enemy')
+  //     enemyLocation.removeAttribute('enemy-id')
+
+  //     //send this enemy home
+  //     cellName = '#cell' + (enemies[enemyIdFromHTML]).homeId
+  //     enemyLocation = document.querySelector(enemyCellName)
+  //     document.querySelector(cellName).classList.add('enemy')
+  //     document.querySelector(cellName).classList.add('killable')
+  //     //set the enemyId attribute
+  //     enemyLocation.setAttribute('enemy-id', enemies[enemyIdFromHTML].enemyId)
+  //     //update enemystatus
+  //     return enemyKilled = true
+
+
+
+  //   } else {
+  //     //if not killable then look for if the enemy is there
+  //     if (enemyLocation.classList.contains('enemy')) {
+  //       //send player to their home location
+  //       changePlayerLocation(playerHome)
+  //       playerLives = playerLives - 1
+  //       document.querySelector('#player-lives span').innerHTML = playerLives
+  //     }
+  //   }
+  // }
+
+
+  // // ===== CONTROLS =====
+  // //start game
+  // const startGame = document.querySelector('#start')
+  // startGame.addEventListener('click', () => {
+  //   //set lives
+  //   document.querySelector('#player-lives span').innerHTML = playerLives
+  //   //add treasure chests
+  //   addTreasureChests()
+  //   //add weapons (in future will start rolling weapon timers)
+  //   addWeapons()
+  //   //start enemy at their home location
+  //   enemiesHome(enemies) //send their home array
+  //   //start player at their home location
+  //   changePlayerLocation(playerHome)
+  // })
+
+  // //player movement
+  // document.addEventListener('keyup', (e) => {
+
+  //   switch (e.key) {
+  //     // if there is a wall in the direction I'm trying to move, don't let me move, else move me appropriately
+  //     case 'w': {
+  //       console.log(enemyKilled)
+  //       playerMove = playerLocation - boardWidth
+  //       playerDirection = 'top'
+  //       if (playerClasses.contains(`wall-${playerDirection}`) === true) {
+  //         return
+  //       } else {
+  //         collectTreasure(playerMove) //activates if treasure on square, if not does nothing
+  //         collectWeapon(playerMove) //activates if weapon on square, if not does nothing
+  //         changePlayerLocation(playerMove)
+  //         enemyAttack(playerMove) //activates if player moves into an unkillable enemy, has to be last as it moves the player automatically after they move themselves
+  //         changeEnemyPosition(playerDirection)
+  //       }
+  //       break
+  //     }
+  //     case 'd': {
+  //       playerMove = playerLocation + 1
+  //       playerDirection = 'right'
+  //       if (playerClasses.contains(`wall-${playerDirection}`) === true) {
+  //         return
+  //       } else {
+  //         collectTreasure(playerMove) //activates if treasure on square, if not does nothing
+  //         collectWeapon(playerMove) //activates if weapon on square, if not does nothing
+  //         changePlayerLocation(playerMove)
+  //         enemyAttack(playerMove) //activates if player moves into an unkillable enemy
+  //         changeEnemyPosition(playerDirection)
+  //       }
+  //       break
+  //     }
+  //     case 's': {
+  //       playerMove = playerLocation + boardWidth
+  //       playerDirection = 'bottom'
+  //       if (playerClasses.contains(`wall-${playerDirection}`) === true) {
+  //         return
+  //       } else {
+  //         collectTreasure(playerMove) //activates if treasure on square, if not does nothing
+  //         collectWeapon(playerMove) //activates if weapon on square, if not does nothing
+  //         changePlayerLocation(playerMove)
+  //         enemyAttack(playerMove) //activates if player moves into an unkillable enemy
+  //         changeEnemyPosition(playerDirection)
+  //       }
+  //       break
+  //     }
+  //     case 'a': {
+  //       playerMove = playerLocation - 1
+  //       playerDirection = 'left'
+  //       if (playerClasses.contains(`wall-${playerDirection}`) === true) {
+  //         return
+  //       } else {
+  //         collectTreasure(playerMove) //activates if treasure on square, if not does nothing
+  //         collectWeapon(playerMove) //activates if weapon on square, if not does nothing
+  //         changePlayerLocation(playerMove)
+  //         enemyAttack(playerMove) //activates if player moves into an unkillable enemy
+  //         changeEnemyPosition(playerDirection)
+  //       }
+  //       break
+  //     }
+  //   }
+  // })
+
+  // //enemy movement
+  // //each enemy has it's own movement pattern
+  // //enemiesHome[0] : - always moves towards player unless there is a wall, then it goes (top, bottom, left, right)
+  // //enemiesHome[1] - makes first move towards player, then continues in that direction until it hits a wall, then it moves towards player again
+  // //enemiesHome[2] - makes first move towards player, second move towards player, then continues in that direction until it hits a wall, then it moves towards players again
+
+  // //assign enemies their movement patterns
+  // // on player move move enemy0 one space in prefered direction
+
+  // function changeEnemyPosition(direction) {
+
+  //   //get enemy position
+  //   let enemyPosition = enemies[0].locateId
+  //   // console.log(enemyPosition)
+  //   enemyCellName = '#cell' + enemyPosition
+
+
+  //   //clear original location
+  //   enemyLocation = document.querySelector(enemyCellName) //this is the cell I'm coming from
+  //   enemyLocation.classList.remove('enemy') //remove the enemy from that cell
+  //   const isKillableTrue = enemyLocation.classList.contains('killable')
+
+  //   if (isKillableTrue === true) {
+  //     enemyLocation.classList.remove('killable') //removes killable class in case it was there
+  //   }
+
+  //   switch (direction) {
+  //     //set to move opposite of player move
+  //     case 'top': enemyPosition = enemyPosition + boardWidth; break
+  //     case 'right': enemyPosition = enemyPosition - 1; break
+  //     case 'bottom': enemyPosition = enemyPosition - boardWidth; break
+  //     case 'left': enemyPosition = enemyPosition + 1; break
+  //   }
+
+
+
+  //   enemyCellName = '#cell' + enemyPosition
+  //   enemyLocation = document.querySelector(enemyCellName) //this is the cell I'm moving to
+  //   enemyLocation.classList.add('enemy') //remove the enemy from that cell
+  //   enemyLocation.setAttribute('enemy-id', enemies[0].enemyId) //set my enemy cell attribute so I can find it
+  //   if (isKillableTrue === true) {
+  //     enemyLocation.classList.add('killable') //removes killable class in case it was there
+  //   }
+  //   enemies[0].locateId = enemyPosition
+  // }
 
   // ===== CREATE! =====
   createBoard()
+
+  //start game assets
+  addTreasureChests()
+  addWeapons()
+  enemiesHome()
+  //set first player location
+  document.querySelector('#cell-99').classList.add('player')
+  //changePlayerCell()
 
 
 
