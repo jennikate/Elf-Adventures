@@ -190,11 +190,11 @@ function pacnam() {
   }
 
   
-
+  // ===== PLAYER ACTIONS =====
 
   // CHANGE PLAYER LOCATION
   // change player class location, clear/set the list of classes on the cell the player is in
-  function changePlayerLocation(newCellId) {
+  function changePlayerLocation(playerMove) {
     //called by start game, player movement
 
     //clear original location
@@ -202,15 +202,25 @@ function pacnam() {
     cellLocation.classList.remove('player')
     playerClasses = ''
     //update with new location details
-    cellName = '#cell' + newCellId
+    cellName = '#cell' + playerMove
     cellLocation = document.querySelector(cellName)
     cellLocation.classList.add('player')
-    playerLocation = newCellId
+    playerLocation = playerMove
     playerClasses = document.querySelector(cellName).classList
     //return the location
     return playerLocation
   }
 
+  // AWARD TREASURE
+  function collectTreasure(playerMove) {
+    console.log(playerMove)
+    treasureCellName = '#cell' + playerMove
+    treasureLocation = document.querySelector(treasureCellName)
+    if ( treasureLocation.classList.contains('treasure-chest')) {
+      treasureLocation.classList.remove('treasure-chest')
+    }
+    
+  }
 
 
   // ===== CONTROLS =====
@@ -227,11 +237,19 @@ function pacnam() {
   document.addEventListener('keyup', (e) => {
     switch (e.key) {
       // if there is a wall in the direction I'm trying to move, don't let me move, else move me appropriately
-      case 'w': { return playerClasses.contains('wall-top') ? null : changePlayerLocation(playerLocation - boardWidth) }
+      case 'w': { 
+        const playerMove = playerLocation - boardWidth
+        console.log(playerMove)
+        //check for treasure
+        collectTreasure(playerMove)
+        return playerClasses.contains('wall-top') ? null : changePlayerLocation(playerLocation - boardWidth) 
+      }
       case 'd': { return playerClasses.contains('wall-right') ? null : changePlayerLocation(playerLocation + 1) }
       case 's': { return playerClasses.contains('wall-bottom') ? null : changePlayerLocation(playerLocation + boardWidth) }
       case 'a': { return playerClasses.contains('wall-left') ? null : changePlayerLocation(playerLocation - 1) }
     }
+    // if I can move, am I moving onto a treasure chest?
+
   })
 
   // ===== CREATE! =====
