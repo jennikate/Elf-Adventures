@@ -49,3 +49,9 @@ main {
 .weapon {
   background-color: red;
 }
+.enemy {
+  background-color: blue;
+}
+.enemy .killable {
+  background-color: orange;
+}

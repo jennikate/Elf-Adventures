@@ -10,7 +10,8 @@ function pacnam() {
   let cellName = ''
   let cellLocation = 0 //setup so we can push the id of the cell we're looking for to it
 
-  const playerHome = boardSize - 1 //get bottom right most cell
+  const playerHome = 46 //boardSize - 1 //get bottom right most cell
+  let playerHomeName = ''
   let playerLocation = 0 //so we can find and move them
   let playerClasses = ''
   let playerMove = 0
@@ -24,7 +25,13 @@ function pacnam() {
   let weaponCellName = ''
   let weaponLocation = 0
 
+  const enemiesHome = [54, 55, 45]
+  let enemyCellName = ''
+  let enemyLocation = 0
+
   let playerScore = 0
+  let playerLives = 3
+  
 
 
   // DECLARE WALL POSITIONS
@@ -207,6 +214,15 @@ function pacnam() {
     }
   }
 
+  // START ENEMY AT HOME
+  function sendEnemyHome() {
+    for ( let i = 0; i < enemiesHome.length; i++ ) {
+      enemyCellName =  '#cell' + enemiesHome[i]
+      enemyLocation = document.querySelector(enemyCellName)
+      enemyLocation.classList.add('enemy')
+    }
+  }
+
 
   // ===== PLAYER ACTIONS =====
 
@@ -214,7 +230,6 @@ function pacnam() {
   // change player class location, clear/set the list of classes on the cell the player is in
   function changePlayerLocation(playerMove) {
     //called by start game, player movement
-
     //clear original location
     cellLocation = document.querySelector(cellName)
     cellLocation.classList.remove('player')
@@ -256,15 +271,31 @@ function pacnam() {
     }
   }
 
+  // ENEMY GETS YOU
+  function enemyAttack(playerMove) {
+    //called by player movement
+    enemyCellName = '#cell' + playerMove
+    enemyLocation = document.querySelector(enemyCellName)
+    if (enemyLocation.classList.contains('enemy')) {
+      //send player to their home location
+      playerLives = playerLives - 1
+      document.querySelector('#player-lives span').innerHTML = playerLives
+    }
+  }
+
 
   // ===== CONTROLS =====
   //start game
   const startGame = document.querySelector('#start')
   startGame.addEventListener('click', () => {
+    //set lives
+    document.querySelector('#player-lives span').innerHTML = playerLives
     //add treasure chests
     addTreasureChests()
     //add weapons (in future will start rolling weapon timers)
     addWeapons()
+    //start enemy at their home location
+    sendEnemyHome()
     //start player at their home location
     changePlayerLocation(playerHome)
   })
@@ -282,6 +313,7 @@ function pacnam() {
         } else {
           collectTreasure(playerMove) //activates if treasure on square, if not does nothing
           collectWeapon(playerMove) //activates if weapon on square, if not does nothing
+          enemyAttack(playerMove) //activates if player moves into an unkillable enemy
           changePlayerLocation(playerMove)
         }
         break
@@ -294,6 +326,7 @@ function pacnam() {
         } else {
           collectTreasure(playerMove) //activates if treasure on square, if not does nothing
           collectWeapon(playerMove) //activates if weapon on square, if not does nothing
+          enemyAttack(playerMove) //activates if player moves into an unkillable enemy
           changePlayerLocation(playerMove)
         }
         break
@@ -306,6 +339,7 @@ function pacnam() {
         } else {
           collectTreasure(playerMove) //activates if treasure on square, if not does nothing
           collectWeapon(playerMove) //activates if weapon on square, if not does nothing
+          enemyAttack(playerMove) //activates if player moves into an unkillable enemy
           changePlayerLocation(playerMove)
         }
         break
@@ -318,6 +352,7 @@ function pacnam() {
         } else {
           collectTreasure(playerMove) //activates if treasure on square, if not does nothing
           collectWeapon(playerMove) //activates if weapon on square, if not does nothing
+          enemyAttack(playerMove) //activates if player moves into an unkillable enemy
           changePlayerLocation(playerMove)
         }
         break
