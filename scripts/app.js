@@ -14,6 +14,10 @@ function pacnam() {
   let playerLocation = 0 //so we can find and move them
   let playerClasses = ''
 
+  const treasureBoxes = [12,39,75,90] //this can be randomised later
+  let treasureCellName = ''
+  let treasureLocation = 0
+
 
   // DECLARE WALL POSITIONS
   //create array of objects to say which borders have walls
@@ -143,6 +147,7 @@ function pacnam() {
       cell.classList.add('cell')
       cell.setAttribute('id', 'cell' + [i])
       grid.appendChild(cell)
+      cell.innerHTML = [i]
       cells.push(cell)
     }
     makeWalls()
@@ -170,7 +175,24 @@ function pacnam() {
       }
     }
   }
+  // // if I refactor above I need to loop through each object, if value is true then set key as wall-keyname
+   
+  console.log(document.querySelector('#cell12'))
+  
+  // SET TREASURE CHESTS
+  function addTreasureChests() {
+    //called by start game (will be on timer later)
+    for ( let i = 0; i < treasureBoxes.length; i++ ) {
+      treasureCellName = '#cell' + treasureBoxes[i]
+      treasureLocation = document.querySelector(treasureCellName)
+      treasureLocation.classList.add('treasure-chest')
+    }
+  }
 
+  
+
+
+  // CHANGE PLAYER LOCATION
   // change player class location, clear/set the list of classes on the cell the player is in
   function changePlayerLocation(newCellId) {
     //called by start game, player movement
@@ -190,10 +212,13 @@ function pacnam() {
   }
 
 
+
   // ===== CONTROLS =====
   //start game
   const startGame = document.querySelector('#start')
   startGame.addEventListener('click', () => {
+    //add treasure chests
+    addTreasureChests()
     //start player at their home location
     changePlayerLocation(playerHome)
   })

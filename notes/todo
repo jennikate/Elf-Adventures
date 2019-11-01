@@ -6,11 +6,11 @@
 
 //CODE BOARD
 [x] create a board to match that
-[] make player moveable
+[x] make player moveable
 [] make one enemy move
 
 //CODE COLLISIONS
-[] make collision wall
+[x] make collision wall
 [] make collision foodboxes
 [] make collision enemy(not killable)
 [] make collision weapon
@@ -33,6 +33,6 @@
 [] make multiple levels
 
 //MAKE THINGS DYNAMIC
-[] 
+[] randomise treasure chest positions
 
 
