@@ -265,10 +265,8 @@ function pacnam() {
     cellIdElement.classList.remove('player')
 
     //get element for cell moving into
-    //console.log(nextCellId)
-    //  getCellElement(numRef)
-    //  const nextCellIdElement = document.querySelector(cellElement)
-    // nextCellIdElement.classList.add('player')
+    getCellElement(nextCellId)
+    cellElement.classList.add('player')
   }
 
   
@@ -495,7 +493,7 @@ function pacnam() {
   enemiesHome()
   //set first player location
   document.querySelector('#cell-99').classList.add('player')
-  //changePlayerCell()
+  changePlayerCell(89)
 
 
 
