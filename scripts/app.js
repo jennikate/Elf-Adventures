@@ -13,10 +13,18 @@ function pacnam() {
   const playerHome = boardSize - 1 //get bottom right most cell
   let playerLocation = 0 //so we can find and move them
   let playerClasses = ''
+  let playerMove = 0
+  let playerDirection = ''
 
-  const treasureBoxes = [12,39,75,90] //this can be randomised later
+  const treasureBoxes = [12, 39, 75, 90] //this can be randomised later
   let treasureCellName = ''
   let treasureLocation = 0
+
+  const weapons = [42, 66] //this can be randomised later
+  let weaponCellName = ''
+  let weaponLocation = 0
+
+  let playerScore = 0
 
 
   // DECLARE WALL POSITIONS
@@ -176,20 +184,30 @@ function pacnam() {
     }
   }
   // // if I refactor above I need to loop through each object, if value is true then set key as wall-keyname
-   
-  console.log(document.querySelector('#cell12'))
-  
+
+
   // SET TREASURE CHESTS
   function addTreasureChests() {
-    //called by start game (will be on timer later)
-    for ( let i = 0; i < treasureBoxes.length; i++ ) {
+    //called by start game 
+    for (let i = 0; i < treasureBoxes.length; i++) {
       treasureCellName = '#cell' + treasureBoxes[i]
       treasureLocation = document.querySelector(treasureCellName)
       treasureLocation.classList.add('treasure-chest')
     }
   }
 
-  
+  // SET WEAPONS
+  function addWeapons() {
+    //called by start game (will be on timer later)
+    for (let i = 0; i < weapons.length; i++) {
+      weaponCellName = '#cell' + weapons[i]
+      weaponLocation = document.querySelector(weaponCellName)
+      weaponLocation.classList.add('weapon')
+      //weapons.push(weaponCellName) in future create weapon locations in this function and push to the weapons array
+    }
+  }
+
+
   // ===== PLAYER ACTIONS =====
 
   // CHANGE PLAYER LOCATION
@@ -213,13 +231,29 @@ function pacnam() {
 
   // AWARD TREASURE
   function collectTreasure(playerMove) {
-    console.log(playerMove)
+    //called by player movement
     treasureCellName = '#cell' + playerMove
     treasureLocation = document.querySelector(treasureCellName)
-    if ( treasureLocation.classList.contains('treasure-chest')) {
+    if (treasureLocation.classList.contains('treasure-chest')) {
+      playerScore = playerScore + 1000
+      document.querySelector('#player-score span').innerHTML = playerScore
       treasureLocation.classList.remove('treasure-chest')
     }
-    
+  }
+
+  // ACTIVATE WEAPON
+  function collectWeapon(playerMove) {
+    //called by player movement
+    weaponCellName = '#cell' + playerMove
+    weaponLocation = document.querySelector(weaponCellName)
+    if (weaponLocation.classList.contains('weapon')) {
+      document.querySelector('#notification').innerHTML = 'You have a sword, kill the dragons!'
+      // document.querySelectorAll('.weapon').classList.remove('weapon')
+      const allWeapons = document.querySelectorAll('.weapon')
+      for (let i = 0; i < allWeapons.length; i++) {
+        allWeapons[i].classList.remove('weapon')
+      }
+    }
   }
 
 
@@ -229,26 +263,66 @@ function pacnam() {
   startGame.addEventListener('click', () => {
     //add treasure chests
     addTreasureChests()
+    //add weapons (in future will start rolling weapon timers)
+    addWeapons()
     //start player at their home location
     changePlayerLocation(playerHome)
   })
 
   //player movement
   document.addEventListener('keyup', (e) => {
+
     switch (e.key) {
       // if there is a wall in the direction I'm trying to move, don't let me move, else move me appropriately
-      case 'w': { 
-        const playerMove = playerLocation - boardWidth
-        console.log(playerMove)
-        //check for treasure
-        collectTreasure(playerMove)
-        return playerClasses.contains('wall-top') ? null : changePlayerLocation(playerLocation - boardWidth) 
+      case 'w': {
+        playerMove = playerLocation - boardWidth
+        playerDirection = 'top'
+        if (playerClasses.contains(`wall-${playerDirection}`) === true) {
+          return
+        } else {
+          collectTreasure(playerMove) //activates if treasure on square, if not does nothing
+          collectWeapon(playerMove) //activates if weapon on square, if not does nothing
+          changePlayerLocation(playerMove)
+        }
+        break
       }
-      case 'd': { return playerClasses.contains('wall-right') ? null : changePlayerLocation(playerLocation + 1) }
-      case 's': { return playerClasses.contains('wall-bottom') ? null : changePlayerLocation(playerLocation + boardWidth) }
-      case 'a': { return playerClasses.contains('wall-left') ? null : changePlayerLocation(playerLocation - 1) }
+      case 'd': {
+        playerMove = playerLocation + 1
+        playerDirection = 'right'
+        if (playerClasses.contains(`wall-${playerDirection}`) === true) {
+          return
+        } else {
+          collectTreasure(playerMove) //activates if treasure on square, if not does nothing
+          collectWeapon(playerMove) //activates if weapon on square, if not does nothing
+          changePlayerLocation(playerMove)
+        }
+        break
+      }
+      case 's': {
+        playerMove = playerLocation + boardWidth
+        playerDirection = 'bottom'
+        if (playerClasses.contains(`wall-${playerDirection}`) === true) {
+          return
+        } else {
+          collectTreasure(playerMove) //activates if treasure on square, if not does nothing
+          collectWeapon(playerMove) //activates if weapon on square, if not does nothing
+          changePlayerLocation(playerMove)
+        }
+        break
+      }
+      case 'a': {
+        playerMove = playerLocation - 1
+        playerDirection = 'left'
+        if (playerClasses.contains(`wall-${playerDirection}`) === true) {
+          return
+        } else {
+          collectTreasure(playerMove) //activates if treasure on square, if not does nothing
+          collectWeapon(playerMove) //activates if weapon on square, if not does nothing
+          changePlayerLocation(playerMove)
+        }
+        break
+      }
     }
-    // if I can move, am I moving onto a treasure chest?
 
   })
 

@@ -11,7 +11,7 @@
 
 //CODE COLLISIONS
 [x] make collision wall
-[] make collision foodboxes
+[x] make collision foodboxes
 [] make collision enemy(not killable)
 [] make collision weapon
 [] make collision enemy(killable)
