@@ -231,13 +231,14 @@ function pacnam() {
   }
 
   // SET WEAPONS
-  //future version these appear and disappear based on timers
   function addWeapons() {
     //called by start game (will be on timer later)
-    for (let i = 0; i < weapons.length; i++) {
-      getCellElement(weapons[i])
-      cellElement.classList.add('weapon')
-    }
+    setTimeout(() => {
+      for (let i = 0; i < weapons.length; i++) {
+        getCellElement(weapons[i])
+        cellElement.classList.add('weapon')
+      }
+    }, 200)
   }
 
   // START ENEMY AT HOME
@@ -319,35 +320,35 @@ function pacnam() {
 
           //DEADLY ENEMY
         } else
-        if (thisClasslist.contains('enemy')) {
-          console.log('enemy')
-          sendPlayerHome(cellElement)
+          if (thisClasslist.contains('enemy')) {
+            console.log('enemy')
+            sendPlayerHome(cellElement)
 
 
-          //WEAPON
-        } else if (thisClasslist.contains('weapon')) {
-          console.log('weapon')
-          document.querySelector('#notification').innerHTML = 'You have a sword, kill the dragons!'
-          //turn enemies killable
-          const allEnemyLoc = document.querySelectorAll('.enemy')
-          for (let i = 0; i < allEnemyLoc.length; i++) {
-            allEnemyLoc[i].classList.remove('enemy')
-            allEnemyLoc[i].classList.add('enemy-killable')
-            enemyState = 'killable'
+            //WEAPON
+          } else if (thisClasslist.contains('weapon')) {
+            console.log('weapon')
+            document.querySelector('#notification').innerHTML = 'You have a sword, kill the dragons!'
+            //turn enemies killable
+            const allEnemyLoc = document.querySelectorAll('.enemy')
+            for (let i = 0; i < allEnemyLoc.length; i++) {
+              allEnemyLoc[i].classList.remove('enemy')
+              allEnemyLoc[i].classList.add('enemy-killable')
+              enemyState = 'killable'
+            }
+            //clear weapons from board
+            const allWeapons = document.querySelectorAll('.weapon')
+            for (let i = 0; i < allWeapons.length; i++) {
+              allWeapons[i].classList.remove('weapon')
+            }
+
+            //TREASURE
+          } else if (thisClasslist.contains('treasure-chest')) {
+            console.log('treasure-chest')
+            playerScore = playerScore + 1000
+            document.querySelector('#player-score span').innerHTML = playerScore
+            thisClasslist.remove('treasure-chest')
           }
-          //clear weapons from board
-          const allWeapons = document.querySelectorAll('.weapon')
-          for (let i = 0; i < allWeapons.length; i++) {
-            allWeapons[i].classList.remove('weapon')
-          }
-
-          //TREASURE
-        } else if (thisClasslist.contains('treasure-chest')) {
-          console.log('treasure-chest')
-          playerScore = playerScore + 1000
-          document.querySelector('#player-score span').innerHTML = playerScore
-          thisClasslist.remove('treasure-chest')
-        }
         //MOVE ENEMY
         enemyMove()
       }
@@ -423,24 +424,26 @@ function pacnam() {
   }
 
 
-  
+
 
 
   // ===== CREATE! =====
   createBoard()
 
-  //start game assets
-  addTreasureChests()
-  enemiesHome()
-  //set first player location
-  document.querySelector(`#cell-${playerHome}`).classList.add('player')
-  //watch for movement
-  trackPlayerMove()
+  document.querySelector('#start').addEventListener('click', () => {
+    //start game assets
+    addTreasureChests()
+    enemiesHome()
+    //set first player location
+    document.querySelector(`#cell-${playerHome}`).classList.add('player')
+    //watch for movement
+    trackPlayerMove()
 
-  //start timed assets
-  setTimeout(addWeapons(), 500)
+    //start timed assets
+    // setTimeout(addWeapons(), 10000)
+    addWeapons()
 
-
+  })
 
 }
 
