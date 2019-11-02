@@ -98,7 +98,7 @@ function pacnam() {
     { cellId: 38, top: true, right: false, bottom: true, left: false },
     { cellId: 39, top: false, right: true, bottom: true, left: false },
 
-    { cellId: 40, top: true, right: false, bottom: true, left: true },
+    { cellId: 40, top: true, right: false, bottom: false, left: true },
     { cellId: 41, top: true, right: true, bottom: true, left: false },
     { cellId: 42, top: false, right: true, bottom: false, left: true },
     { cellId: 43, top: true, right: false, bottom: false, left: true },
@@ -107,9 +107,9 @@ function pacnam() {
     { cellId: 46, top: true, right: true, bottom: false, left: false },
     { cellId: 47, top: false, right: true, bottom: false, left: true },
     { cellId: 48, top: true, right: false, bottom: true, left: true },
-    { cellId: 49, top: true, right: true, bottom: true, left: false },
+    { cellId: 49, top: true, right: true, bottom: false, left: false },
 
-    { cellId: 50, top: true, right: false, bottom: true, left: false },
+    { cellId: 50, top: false, right: false, bottom: true, left: true },
     { cellId: 51, top: true, right: false, bottom: true, left: false },
     { cellId: 52, top: false, right: false, bottom: false, left: false },
     { cellId: 53, top: false, right: true, bottom: false, left: false },
@@ -118,7 +118,7 @@ function pacnam() {
     { cellId: 56, top: false, right: false, bottom: false, left: true },
     { cellId: 57, top: false, right: false, bottom: false, left: false },
     { cellId: 58, top: true, right: false, bottom: true, left: false },
-    { cellId: 59, top: true, right: false, bottom: true, left: false },
+    { cellId: 59, top: false, right: true, bottom: true, left: false },
 
     { cellId: 60, top: true, right: false, bottom: false, left: true },
     { cellId: 61, top: true, right: false, bottom: false, left: false },
@@ -177,17 +177,7 @@ function pacnam() {
     { enemyId: 2, homeId: 55, location: 55 }
   ]
 
-  //DECLARE DIRECTION CALCULATIONS
-  const directions = [
-    { direction: 'top', mathType: '-', mathAmount: boardWidth },
-    { direction: 'right', mathType: '+', mathAmount: 1 },
-    { direction: 'bottom', mathType: '+', mathAmount: boardWidth },
-    { direction: 'left', mathType: '-', mathAmount: 1 }
-  ]
-  const doMath = {
-    '+': function (x, y) { return x + y },
-    '-': function (x, y) { return x - y }
-  }
+
 
 
   // ===== SETUP BOARD & PLACE ITEMS =====
@@ -276,8 +266,13 @@ function pacnam() {
     document.querySelector('#player-lives span').innerHTML = playerLives
   }
 
-  // ===== KILL ENEMY =====
-  
+  // ===== SEND ENEMY HOME=====
+  function sendEnemyHome(cellElement) {
+    cellElement.classList.remove('enemy-killable')
+    document.querySelector(`#cell-${enemyHome}`).classList.add('enemy-killable')
+    playerScore = playerScore + 10
+    document.querySelector('#player-score span').innerHTML = playerScore
+  }
 
 
   // ===== CELL ACTIONS ON PLAYER MOVE =====
@@ -291,7 +286,6 @@ function pacnam() {
       const cellIdArr = cellIdName.split('-')
       const cellIdNum = parseInt(cellIdArr[1])
       const currentCellClasslist = currentCellElement.classList
-
       //get actions
       if (e.key === 'w' || e.key === 'W') {
         playerDirection = 'top'
@@ -320,20 +314,16 @@ function pacnam() {
 
         //KILLABLE ENEMY
         if (thisClasslist.contains('enemy-killable')) {
-          console.log('enemy killable')
-          //get the enemies index of this guy
-          //get his cell id
-          const enemyLocation = document.querySelector('.player')
-          const enemyLocationId = parseInt(((enemyLocation.id).split('-'))[1])
-          enemyArrayIndex = enemies.findIndex(e => e.location === enemyLocationId)
-          console.log(enemyArrayIndex)
-          sendEnemyHome(enemyLocation, enemyArrayIndex)
+          console.log('kill enemy')
+          sendEnemyHome(cellElement)
 
           //DEADLY ENEMY
         } else
         if (thisClasslist.contains('enemy')) {
           console.log('enemy')
           sendPlayerHome(cellElement)
+
+
           //WEAPON
         } else if (thisClasslist.contains('weapon')) {
           console.log('weapon')
@@ -417,7 +407,9 @@ function pacnam() {
 
       if (enemyState === 'killable') {
         if (cellElement.classList.contains('player')) {
-          sendEnemyHome(cellElement, enemyArrayIndex)
+          console.log('kill dumb enemy')
+          sendEnemyHome(cellElement)
+          enemies[enemyArrayIndex].location = enemyHome
         } else {
           moveTokens(cellElement, 'enemy-killable', nextCellId)
           enemies[enemyArrayIndex].location = nextCellId
@@ -431,15 +423,7 @@ function pacnam() {
   }
 
 
-  function sendEnemyHome(cellElement, enemyArrayIndex) {
-    // console.log(cellElement, enemyArrayIndex)
-    //send enemy home
-    cellElement.classList.remove('enemy-killable')
-    document.querySelector(`#cell-${enemyHome}`).classList.add('enemy-killable')
-    enemies[enemyArrayIndex].location = enemyHome
-    playerScore = playerScore + 10
-    document.querySelector('#player-score span').innerHTML = playerScore
-  }
+  
 
 
   // ===== CREATE! =====
