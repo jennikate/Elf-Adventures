@@ -52,6 +52,6 @@ main {
 .enemy {
   background-color: blue;
 }
-.killable {
+.enemy-killable {
   background-color: orange;
 }

@@ -25,7 +25,7 @@ function pacnam() {
   let playerScore = 0
   let playerLives = 3
 
-
+  let enemyState = 'deadly'
 
 
 
@@ -260,13 +260,11 @@ function pacnam() {
   // ==== TOKEN MOVES ====
   function moveTokens(currentCellElement, className, nextCellId) {
 
-    //remove class from original cell
     currentCellElement.classList.remove(className)
-
-    //get element for cell moving into & all class
     getCellElement(nextCellId)
     cellElement.classList.add(className)
   }
+
 
 
 
@@ -307,19 +305,16 @@ function pacnam() {
         //get new cell classlist
         getCellElement(nextCellId)
         const thisClasslist = cellElement.classList
-        const thisEnemyId = cellElement.getAttribute('enemy-id')
 
         //KILLABLE ENEMY
-        if (thisClasslist.contains('enemy') && thisClasslist.contains('killable')) {
+        if (thisClasslist.contains('enemy-killable')) {
           console.log('enemy killable')
           playerScore = playerScore + 10
           document.querySelector('#player-score span').innerHTML = playerScore
-          thisClasslist.remove('killable')
-          thisClasslist.remove('enemy')
-          //send enemy home, all enemies go to same cell atm
-          getCellElement(enemies[thisEnemyId].homeId)
-          cellElement.classList.add('killable')
-          cellElement.classList.add('enemy')
+          thisClasslist.remove('enemy-killable')
+          //send enemy home, all enemies return to same home cell on death as only one can die at a time
+          getCellElement(enemies[0].homeId)
+          cellElement.classList.add('enemy-killable')
 
           //DEADLY ENEMY
         } else if (thisClasslist.contains('enemy')) {
@@ -337,7 +332,9 @@ function pacnam() {
           //turn enemies killable
           const allEnemyLoc = document.querySelectorAll('.enemy')
           for (let i = 0; i < allEnemyLoc.length; i++) {
-            allEnemyLoc[i].classList.add('killable')
+            allEnemyLoc[i].classList.remove('enemy')
+            allEnemyLoc[i].classList.add('enemy-killable')
+            enemyState = 'killable'
           }
           //clear weapons from board
           const allWeapons = document.querySelectorAll('.weapon')
@@ -363,12 +360,18 @@ function pacnam() {
   // ===== CELL ACTIONS ON ENEMY MOVE =====
   //start with attempting to move down, this can be adjusted later
   let myDirection = 'bottom'
-
   const directionChoice = ['wall-top', 'wall-right', 'wall-bottom', 'wall-left']
+
   function enemyMove() {
+    let enemyList = []
 
     // get all enemy locations
-    const enemyList = Array.from(document.querySelectorAll('.enemy'))
+    if (enemyState === 'deadly') {
+      enemyList = Array.from(document.querySelectorAll('.enemy'))
+    } else {
+      enemyList = Array.from(document.querySelectorAll('.enemy-killable'))
+    }
+
     const enemyListNum = enemyList.map((elem) => {
       return parseInt(((elem.id).split('-'))[1])
     })
@@ -384,15 +387,20 @@ function pacnam() {
         return !thisClasslist.contains(elem)
       })
       chooseDirection(newDirArray, enemyListNum[i])
-      
+
       //look for enemy in that cell
       getCellElement(nextCellId)
-      console.log(cellElement)
-      if ( cellElement.classList.contains('enemy')) {
+      if (cellElement.classList.contains('enemy') || cellElement.classList.contains('enemy-killable') ) {
         chooseDirection(newDirArray, enemyListNum[i])   //this does not yet work 100% of time
       }
       //and move the token
-      moveTokens(enemyList[i], 'enemy', nextCellId)
+      if (enemyState === 'deadly') {
+        console.log('moving deadly')
+        moveTokens(enemyList[i], 'enemy', nextCellId)
+      } else {
+        console.log('moving killable')
+        moveTokens(enemyList[i], 'enemy-killable', nextCellId)
+      }
     }
   }
 
