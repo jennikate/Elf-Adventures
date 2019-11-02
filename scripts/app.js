@@ -5,6 +5,7 @@ function pacnam() {
 
   const boardWidth = 10
   const boardSize = boardWidth ** 2
+  const playerHome = Math.max(boardSize) - 1
   const cells = [] //declare so can push cell ids to it
 
   // ===== CREATE VARIABLES FOR ADJUSTING CELLS =====
@@ -12,6 +13,13 @@ function pacnam() {
 
   let cellIdRef = ''
   let cellElement = 0
+
+  let playerDirection = ''
+  // let playerMoveCal = 0
+  let nextCellId
+  let playerScore = 0
+
+
 
   // ==== GET ELEMENTS TO USE ====
 
@@ -24,35 +32,6 @@ function pacnam() {
     cellElement = document.querySelector(cellIdRef)
     return cellElement
   }
-  //get cell element from class
-
-
-
-  // let cellName = ''
-  // let cellLocation = 0 //setup so we can push the id of the cell we're looking for to it
-
-  // const playerHome = boardSize - 1 //get bottom right most cell
-
-  // let playerLocation = 0 //so we can find and move them
-  // let playerClasses = ''
-  // let playerMove = 0
-  // let playerDirection = ''
-
-  // const treasureBoxes = [12, 39, 75, 90] //this can be randomised later
-  // let treasureCellName = ''
-  // let treasureLocation = 0
-
-  // const weapons = [42, 66] //this can be randomised later
-  // let weaponCellName = ''
-  // let weaponLocation = 0
-
-
-  // let enemyCellName = ''
-  // let enemyLocation = 0
-  // let enemyKilled = false
-
-  // let playerScore = 0
-  // let playerLives = 3
 
 
 
@@ -252,28 +231,76 @@ function pacnam() {
     }
   }
 
-  // ==== PLAYER MOVEMENT ====
-
-  function changePlayerCell(nextCellId) {
-    const cellIdElement = document.querySelector('.player')
-    const cellIdName = cellIdElement.id
-    const cellIdArr = cellIdName.split('-')
-    const cellIdNum = parseInt(cellIdArr[1])
-    console.log(cellIdNum)
+  // ==== TOKEN MOVES ====
+  function moveTokens(currentCellElement, className, nextCellId) {
 
     //remove class from original cell
-    cellIdElement.classList.remove('player')
+    currentCellElement.classList.remove(className)
 
-    //get element for cell moving into
+    //get element for cell moving into & all class
     getCellElement(nextCellId)
-    cellElement.classList.add('player')
+    cellElement.classList.add(className)
   }
 
-  
 
 
+  // ===== CELL ACTIONS ON PLAYER MOVE =====
+
+  function trackPlayerMove() {
+    document.addEventListener('keyup', (e) => {
+      //get cellId of current player cell
+      const className = 'player'
+      const currentCellElement = document.querySelector('.player')
+      const cellIdName = currentCellElement.id
+      const cellIdArr = cellIdName.split('-')
+      const cellIdNum = parseInt(cellIdArr[1])
+      const currentCellClasslist = currentCellElement.classList
+
+      //get actions
+      if (e.key === 'w' || e.key === 'W') {
+        playerDirection = 'top'
+        nextCellId = cellIdNum - boardWidth
+      } else if (e.key === 'd' || e.key === 'D') {
+        playerDirection = 'right'
+        nextCellId = cellIdNum + 1
+      } else if (e.key === 's' || e.key === 'S') {
+        playerDirection = 'bottom'
+        nextCellId = cellIdNum + boardWidth
+      } else if (e.key === 'a' || e.key === 'A') {
+        playerDirection = 'left'
+        nextCellId = cellIdNum - 1
+      } else {
+        return
+      }
+
+      //check for WALL COLLISION
+      if (currentCellClasslist.contains(`wall-${playerDirection}`) === true) {
+        return
+      } else {
+        moveTokens(currentCellElement, className, nextCellId)
+        //get new cell classlist
+        getCellElement(nextCellId)
+        const thisClasslist = cellElement.classList
+        if (thisClasslist.contains('enemy') && thisClasslist.contains('killable')) {
+          console.log('enemy killable')
+        } else if (thisClasslist.contains('enemy')) {
+          console.log('enemy')
+        } else if (thisClasslist.contains('weapon')) {
+          console.log('weapon')
+        } else if (thisClasslist.contains('treasure-chest')) {
+          console.log('treasure-chest')
+          playerScore = playerScore + 1000
+          document.querySelector('#player-score span').innerHTML = playerScore
+          thisClasslist.remove('treasure-chest')
+        } 
+      }
+    })
+  }
 
 
+  // ===== COLLISION ACTIONS =====
+
+    // function 
 
   // // ===== PLAYER ACTIONS =====
 
@@ -492,8 +519,16 @@ function pacnam() {
   addWeapons()
   enemiesHome()
   //set first player location
-  document.querySelector('#cell-99').classList.add('player')
-  changePlayerCell(89)
+  document.querySelector(`#cell-${playerHome}`).classList.add('player')
+  //watch for movement
+  trackPlayerMove()
+
+
+
+
+
+  // changePlayerCell(89)
+
 
 
 
