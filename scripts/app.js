@@ -1,5 +1,9 @@
 
+
 function pacnam() {
+
+
+
 
   // ===== CREATE STARTING VALUES =====
 
@@ -7,6 +11,16 @@ function pacnam() {
   const boardSize = boardWidth ** 2
   const playerHome = Math.max(boardSize) - 1
   const cells = [] //declare so can push cell ids to it
+  const directions = [
+    { direction: 'top', mathType: '-', mathAmount: boardWidth },
+    { direction: 'right', mathType: '+', mathAmount: 1 },
+    { direction: 'bottom', mathType: '+', mathAmount: boardWidth },
+    { direction: 'left', mathType: '-', mathAmount: 1 }
+  ]
+  const doMath = {
+    '+': function (x, y) { return x + y },
+    '-': function (x, y) { return x - y }
+  }
 
   // ===== CREATE VARIABLES FOR ADJUSTING CELLS =====
   // these should only exist within their function and not be used cross function
@@ -19,6 +33,8 @@ function pacnam() {
   let nextCellId
   let playerScore = 0
   let playerLives = 3
+
+
 
 
 
@@ -163,9 +179,9 @@ function pacnam() {
   //DECLARE ENEMY DETAILS
   //create array of objects to set enemy home position, name, and movement pattern
   const enemies = [
-    { enemyId: 0, homeId: 54, moveType: 'smart' },
-    { enemyId: 1, homeId: 55, moveType: 'dumb' },
-    { enemyId: 2, homeId: 45, moveType: 'average' }
+    // { enemyId: 0, homeId: 54, moveType: 'smart' },
+    // { enemyId: 1, homeId: 45, moveType: 'dumb' },
+    { enemyId: 2, homeId: 55, moveType: 'average' }
   ]
 
 
@@ -303,7 +319,7 @@ function pacnam() {
           cellElement.classList.add('killable')
           cellElement.classList.add('enemy')
 
-        //DEADLY ENEMY
+          //DEADLY ENEMY
         } else if (thisClasslist.contains('enemy')) {
           console.log('enemy')
           //send player home
@@ -333,15 +349,207 @@ function pacnam() {
           playerScore = playerScore + 1000
           document.querySelector('#player-score span').innerHTML = playerScore
           thisClasslist.remove('treasure-chest')
-        } 
+        }
       }
+      //MOVE ENEMY
+      enemyMove()
     })
   }
 
 
-  
-// ===== CELL ACTIONS ON ENEMY MOVE =====
 
+  // ===== CELL ACTIONS ON ENEMY MOVE =====
+
+  //chase, scatter, flee
+
+  let myDirection = 'bottom'
+
+
+  const directionChoice = ['wall-top', 'wall-right', 'wall-bottom', 'wall-left']
+  function enemyMove() {
+    console.log(myDirection)
+    // get all enemy locations
+    const enemyList = Array.from(document.querySelectorAll('.enemy'))
+    const enemyListNum = enemyList.map((elem) => {
+      return parseInt(((elem.id).split('-'))[1])
+    })
+
+    //setting start direction down for now
+    for (let i = 0; i < enemyList.length; i++) {
+      const thisClasslist = enemyList[i].classList
+      // console.log(thisClasslist)
+      newDirArray = directionChoice.filter(elem => {
+        return !thisClasslist.contains(elem)
+      })
+
+      newIndex = Math.floor(Math.random() * newDirArray.length)
+      newDirection = newDirArray[newIndex]
+      myDirection = newDirection.split('-')[1]
+      console.log(myDirection)
+
+
+      //then get direction to move in calculation
+      const directionIndex = directions.findIndex(elem => elem.direction === myDirection)
+      const mathOperation = directions[directionIndex].mathType
+      const mathSecondNum = directions[directionIndex].mathAmount
+      const mathFirstNum = enemyListNum[i]
+      nextCellId = doMath[mathOperation](mathFirstNum, mathSecondNum)
+      //and move the token
+      moveTokens(enemyList[i], 'enemy', nextCellId)
+    }
+
+  }
+
+  // moveTokens(currentCellElement, className, nextCellId)
+
+
+
+  //check for walls
+  //make my movement choice
+  // for (let i = 0; i < directionChoice.length; i++) {
+  //   console.log(directionChoice[i])
+
+  //   if (!thisClasslist.contains(`wall-${directionChoice[i]}`)) {
+  //     //if no wall then set my direction to this direction (from array)
+  //     myDirection = directionChoice[(i+1) % directionChoice.length] //return the remainder as that should give the next position
+  //     console.log('chg', myDirection)
+
+  //     // //then get direction to move in calculation
+  //     // const directionIndex = directions.findIndex(elem => elem.direction === myDirection)
+  //     // const mathOperation = directions[directionIndex].mathType
+  //     // const mathSecondNum = directions[directionIndex].mathAmount
+  //     // const mathFirstNum = enemyListNum[i]
+  //     // nextCellId = doMath[mathOperation](mathFirstNum, mathSecondNum)
+  //     // //and move the toke
+  //     // moveTokens(enemyList[i], 'enemy', nextCellId)
+
+  //   } else {
+  //     console.log('nochange')
+  //   }
+  //   return myDirection
+  // }
+
+
+  //----------------------------
+
+  // for (let i = 0; i < enemyListNum.length; i++) {
+  //   const p = playerLoc
+  //   const e = enemyListNum[i]
+  //   const d = e - p
+  //   // console.log(d)
+
+  //   //enemy moves down until hits a wall
+  //   let enemyDirection = 'bottom'
+  //   let nextE
+
+  //   if ((enemyList[i].classList).contains(`wall-${enemyDirection}`) === true) {
+  //     if (directions.indexOf(enemyDirection).length === (directions.indexOf(enemyDirection).length - 1)) {
+  //       nextE = 0
+  //     } else { 
+  //       nextE = directions.indexOf(enemyDirection) + 1 
+  //     }
+  //     console.log(nextE)
+  //   }
+
+
+  // else {
+  //   moveTokens(enemyList[i], 'enemy', (e-10))
+  //  }
+
+
+  // if (d > -10 && d < boardWidth) { //they're on the same row
+  //   if (e > p) { //e is to the right
+  //     nextCellId = e - 1
+  //   } else // e is to the left {
+  //     nextCellId = e + 1
+  // } else {
+  //   //they are not on the same row
+  //   if (e > p) { //e is above
+  //     nextCellId = e - 10
+  //   } else { //e is below
+  //     nextCellId = e + 10
+  //   }
+  // }
+  // console.log(nextCellId)
+  // moveTokens(enemyList[i], 'enemy', nextCellId)
+  // }
+
+
+  // }
+
+
+
+
+
+
+  //   nextCellId
+
+
+
+
+  //chase
+  // p is 99, e is 45 
+  // 99 - 45 = r54 
+  // if r < 10 then same row
+  //if same row and e > p go left
+  //else if same row and e < p go right
+  // else if r >= 10 then not same row
+  //if e > p go up
+  // else if e < p go down
+  //if hits wall, find first clear space (is there a top, right, bottom, left)
+
+
+
+
+
+
+
+
+
+
+
+
+
+  //enemy are going to chase my player
+  //get player location
+
+
+
+
+  //get the cell id for each
+  // for ( let i = 0; i < enemies.length; i++) {
+  //get current enemy location & push to enemy currentLoc in array
+
+
+
+
+  // (enemies[i].enemyId)
+
+  // console.log(cellElement)
+
+  // moveTokens(currentCellElement, className, nextCellId)
+
+  // //remove existing classes
+  // if ( cellElement.classList.contains('killable')) {
+  //   cellElement
+  // } 
+  // console.log(cellElement.classList)
+  // console.log(cellElement)
+
+  // }
+
+
+
+
+
+
+
+
+  //get smart enemy position
+
+  //get player direction
+  //move one square in opposite direction
+  //if wall, attempt to go in next direction : top, right, bottom, down
 
 
 
@@ -422,12 +630,7 @@ function pacnam() {
   trackPlayerMove()
 
 
-
-
-
   // changePlayerCell(89)
-
-
 
 
 }
