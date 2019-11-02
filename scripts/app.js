@@ -26,6 +26,7 @@ function pacnam() {
   let playerLives = 3
 
   let enemyState = 'deadly'
+  let enemyHome = 54
 
 
 
@@ -170,9 +171,9 @@ function pacnam() {
   //DECLARE ENEMY DETAILS
   //create array of objects to set enemy home position, name, and movement pattern
   const enemies = [
-    { enemyId: 0, homeId: 54, moveType: 'smart' },
-    { enemyId: 1, homeId: 45, moveType: 'dumb' },
-    { enemyId: 2, homeId: 55, moveType: 'average' }
+    { enemyId: 0, homeId: 54, location: 54 },
+    { enemyId: 1, homeId: 45, location: 45 },
+    { enemyId: 2, homeId: 55, location: 55 }
   ]
 
   //DECLARE DIRECTION CALCULATIONS
@@ -253,7 +254,7 @@ function pacnam() {
     for (let i = 0; i < enemies.length; i++) {
       getCellElement(enemies[i].homeId)
       cellElement.classList.add('enemy')
-      cellElement.setAttribute('enemy-id', (enemies[i].enemyId))
+      // cellElement.setAttribute('enemy-id', (enemies[i].enemyId))
     }
   }
 
@@ -265,7 +266,20 @@ function pacnam() {
     cellElement.classList.add(className)
   }
 
+  // ===== SEND PLAYER HOME =====
 
+  function sendPlayerHome(cellElement) {
+    cellElement.classList.remove('player')
+    document.querySelector(`#cell-${playerHome}`).classList.add('player')
+    playerLives = playerLives - 1
+    document.querySelector('#player-lives span').innerHTML = playerLives
+  }
+
+  // ===== KILL ENEMY =====
+  function killEnemy(cellElement) {
+
+
+  }
 
 
   // ===== CELL ACTIONS ON PLAYER MOVE =====
@@ -309,22 +323,20 @@ function pacnam() {
         //KILLABLE ENEMY
         if (thisClasslist.contains('enemy-killable')) {
           console.log('enemy killable')
+          killEnemy(cellElement)
           playerScore = playerScore + 10
           document.querySelector('#player-score span').innerHTML = playerScore
           thisClasslist.remove('enemy-killable')
           //send enemy home, all enemies return to same home cell on death as only one can die at a time
-          getCellElement(enemies[0].homeId)
-          cellElement.classList.add('enemy-killable')
+          const enemyHomeCellIdRef = '#cell-' + enemyHome
+          const enemyHomeCellElement = document.querySelector(enemyHomeCellIdRef)
+          enemyHomeCellElement.classList.add('enemy-killable')
 
           //DEADLY ENEMY
-        } else if (thisClasslist.contains('enemy')) {
+        } else
+        if (thisClasslist.contains('enemy')) {
           console.log('enemy')
-          //send player home
-          thisClasslist.remove('player')
-          document.querySelector(`#cell-${playerHome}`).classList.add('player')
-          playerLives = playerLives - 1
-          document.querySelector('#player-lives span').innerHTML = playerLives
-
+          sendPlayerHome(cellElement)
           //WEAPON
         } else if (thisClasslist.contains('weapon')) {
           console.log('weapon')
@@ -349,11 +361,12 @@ function pacnam() {
           document.querySelector('#player-score span').innerHTML = playerScore
           thisClasslist.remove('treasure-chest')
         }
+        //MOVE ENEMY
+        enemyMove()
       }
-      //MOVE ENEMY
-      enemyMove()
     })
   }
+
 
 
 
@@ -388,20 +401,53 @@ function pacnam() {
       })
       chooseDirection(newDirArray, enemyListNum[i])
 
+
+      // +++++++++++THIS IS WHERE YOU"RE AT +++++++++++++
+      //it works unless they both try to move together eg right and left, only one registers as an error
       //look for enemy in that cell
-      getCellElement(nextCellId)
-      if (cellElement.classList.contains('enemy') || cellElement.classList.contains('enemy-killable') ) {
-        chooseDirection(newDirArray, enemyListNum[i])   //this does not yet work 100% of time
+      const checkForEnemy = document.querySelector(`#cell-${nextCellId}`)
+      // console.log(checkForEnemy.classList)
+
+      if (checkForEnemy.classList.contains('enemy') || checkForEnemy.classList.contains('enemy')) {
+        console.log(enemyListNum[i], 'dont go there')
+        //what direction did I just go in?
+        console.log(myDirection)
+        const myDirName = 'wall-' + myDirection
+        console.log(newDirArray)
+        //remove this from the newDirArray
+        const enemyFreeArray = newDirArray.filter(() => {
+          return newDirArray !== myDirName
+        })
+        chooseDirection(enemyFreeArray, enemyListNum[i])
       }
+      // +++++++++++THIS IS WHERE YOU"RE AT +++++++++++++
+
+
+
       //and move the token
       if (enemyState === 'deadly') {
-        console.log('moving deadly')
         moveTokens(enemyList[i], 'enemy', nextCellId)
+        if (cellElement.classList.contains('player')) {
+          sendPlayerHome(cellElement)
+        }
       } else {
-        console.log('moving killable')
         moveTokens(enemyList[i], 'enemy-killable', nextCellId)
       }
+
+      if (cellElement.classList.contains('player') && cellElement.classList.contains('enemy-killable')) {
+        //CURRENTLY COPIED THIS CODE TO PLAYER MOVEMENT AS IT NEEDS TO TRIGGER THERE TOO, need a function
+        // console.log('die')
+        playerScore = playerScore + 10
+        document.querySelector('#player-score span').innerHTML = playerScore
+        cellElement.classList.remove('enemy-killable')
+        //send enemy home, all enemies return to same home cell on death as only one can die at a time
+        const enemyHomeCellIdRef = '#cell-' + enemyHome
+        const enemyHomeCellElement = document.querySelector(enemyHomeCellIdRef)
+        // console.log(enemyHomeCellElement)
+        enemyHomeCellElement.classList.add('enemy-killable')
+      }
     }
+
   }
 
   function chooseDirection(directionOptions, firstNum) {
@@ -425,12 +471,14 @@ function pacnam() {
 
   //start game assets
   addTreasureChests()
-  addWeapons()
   enemiesHome()
   //set first player location
   document.querySelector(`#cell-${playerHome}`).classList.add('player')
   //watch for movement
   trackPlayerMove()
+
+  //start timed assets
+  setTimeout(addWeapons(), 500)
 
 
 

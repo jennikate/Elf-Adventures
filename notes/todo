@@ -1,35 +1,36 @@
 
 //PAPER
 [x] draw out wall for level 1
-[] work out food box positions
+[x] work out food box positions
 [] check how player and enemies may move
 
 //CODE BOARD
 [x] create a board to match that
 [x] make player moveable
-[] make one enemy move
+[x] make one enemy move
 
 //CODE COLLISIONS
 [x] make collision wall
 [x] make collision foodboxes
-[] make collision enemy(not killable)
-[] make collision weapon
-[] make collision enemy(killable)
+[x] make collision enemy(not killable)
+[x] make collision weapon
+[x] make collision enemy(killable)
 
 //CODE STATE CHANGES
-[] make weapon turn enemy killable
+[x] make weapon turn enemy killable
 [] make killable end
 [] make weapon timed drop
 [] make weapon time out
 
 //CODE END STATES
-[] add scoring
-[] add lives
+[x] add scoring
+[x] add lives
 [] add level end
 [] add game end
 
 //CODE FOR MANY
-[] make multiple enemies move
+[x] make multiple enemies move
+[] stop enemies eating each other
 [] make multiple levels
 
 //MAKE THINGS DYNAMIC
