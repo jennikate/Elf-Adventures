@@ -18,6 +18,7 @@ function pacnam() {
   // let playerMoveCal = 0
   let nextCellId
   let playerScore = 0
+  let playerLives = 3
 
 
 
@@ -32,6 +33,12 @@ function pacnam() {
     cellElement = document.querySelector(cellIdRef)
     return cellElement
   }
+
+  // //get enemy home cell Id
+  // function getEnemyHome(enemyId) {
+  //   const enemyHome = enemies[enemyId].homeId
+  //   return enemyHome
+  // }
 
 
 
@@ -228,6 +235,7 @@ function pacnam() {
     for (let i = 0; i < enemies.length; i++) {
       getCellElement(enemies[i].homeId)
       cellElement.classList.add('enemy')
+      cellElement.setAttribute('enemy-id', (enemies[i].enemyId))
     }
   }
 
@@ -273,7 +281,7 @@ function pacnam() {
         return
       }
 
-      //check for WALL COLLISION
+      //WALL
       if (currentCellClasslist.contains(`wall-${playerDirection}`) === true) {
         return
       } else {
@@ -281,12 +289,45 @@ function pacnam() {
         //get new cell classlist
         getCellElement(nextCellId)
         const thisClasslist = cellElement.classList
+        const thisEnemyId = cellElement.getAttribute('enemy-id')
+
+        //KILLABLE ENEMY
         if (thisClasslist.contains('enemy') && thisClasslist.contains('killable')) {
           console.log('enemy killable')
+          playerScore = playerScore + 10
+          document.querySelector('#player-score span').innerHTML = playerScore
+          thisClasslist.remove('killable')
+          thisClasslist.remove('enemy')
+          //send enemy home, all enemies go to same cell atm
+          getCellElement(enemies[thisEnemyId].homeId)
+          cellElement.classList.add('killable')
+          cellElement.classList.add('enemy')
+
+        //DEADLY ENEMY
         } else if (thisClasslist.contains('enemy')) {
           console.log('enemy')
+          //send player home
+          thisClasslist.remove('player')
+          document.querySelector(`#cell-${playerHome}`).classList.add('player')
+          playerLives = playerLives - 1
+          document.querySelector('#player-lives span').innerHTML = playerLives
+
+          //WEAPON
         } else if (thisClasslist.contains('weapon')) {
           console.log('weapon')
+          document.querySelector('#notification').innerHTML = 'You have a sword, kill the dragons!'
+          //turn enemies killable
+          const allEnemyLoc = document.querySelectorAll('.enemy')
+          for (let i = 0; i < allEnemyLoc.length; i++) {
+            allEnemyLoc[i].classList.add('killable')
+          }
+          //clear weapons from board
+          const allWeapons = document.querySelectorAll('.weapon')
+          for (let i = 0; i < allWeapons.length; i++) {
+            allWeapons[i].classList.remove('weapon')
+          }
+
+          //TREASURE
         } else if (thisClasslist.contains('treasure-chest')) {
           console.log('treasure-chest')
           playerScore = playerScore + 1000
@@ -298,90 +339,11 @@ function pacnam() {
   }
 
 
-  // ===== COLLISION ACTIONS =====
-
-    // function 
-
-  // // ===== PLAYER ACTIONS =====
-
-
-  // // AWARD TREASURE
-  // function collectTreasure(playerMove) {
-  //   //called by player movement
-  //   treasureCellName = '#cell' + playerMove
-  //   treasureLocation = document.querySelector(treasureCellName)
-  //   if (treasureLocation.classList.contains('treasure-chest')) {
-  //     playerScore = playerScore + 1000
-  //     document.querySelector('#player-score span').innerHTML = playerScore
-  //     treasureLocation.classList.remove('treasure-chest')
-  //   }
-  // }
-
-  // // ACTIVATE WEAPON
-  // function collectWeapon(playerMove) {
-  //   //called by player movement
-  //   weaponCellName = '#cell' + playerMove
-  //   weaponLocation = document.querySelector(weaponCellName)
-  //   if (weaponLocation.classList.contains('weapon')) {
-  //     document.querySelector('#notification').innerHTML = 'You have a sword, kill the dragons!'
-  //     //turn all enemies into killable
-  //     const allEnemyLoc = document.querySelectorAll('.enemy')
-  //     for (let i = 0; i < allEnemyLoc.length; i++) {
-  //       allEnemyLoc[i].classList.add('killable')
-  //     }
-  //     //clear weapons from board
-  //     const allWeapons = document.querySelectorAll('.weapon')
-  //     for (let i = 0; i < allWeapons.length; i++) {
-  //       allWeapons[i].classList.remove('weapon')
-  //     }
-  //   }
-  // }
-
-  // // ENEMY COLLISION
-  // function enemyAttack(playerMove) {
-  //   //called by player movement
-  //   enemyCellName = '#cell' + playerMove //is the player cell
-  //   // console.log('enemycell' + enemyCellName)
-  //   enemyLocation = document.querySelector(enemyCellName) //gets nothing
-  //   // console.log('enemyloc' + enemyLocation)
-  //   const enemyIdFromHTML = enemyLocation.getAttribute('enemy-id') //is null
-  //   // console.log('enemyid' + enemyIdFromHTML)
+  
+// ===== CELL ACTIONS ON ENEMY MOVE =====
 
 
 
-  //   //look first for a killable enemy
-  //   if (enemyLocation.classList.contains('killable')) {
-  //     playerScore = playerScore + 10
-  //     document.querySelector('#player-score span').innerHTML = playerScore
-
-  //     //remove enemy class from this cell class
-  //     // console.log(enemyLocation.classList)
-  //     enemyLocation.classList.remove('killable')
-  //     enemyLocation.classList.remove('enemy')
-  //     enemyLocation.removeAttribute('enemy-id')
-
-  //     //send this enemy home
-  //     cellName = '#cell' + (enemies[enemyIdFromHTML]).homeId
-  //     enemyLocation = document.querySelector(enemyCellName)
-  //     document.querySelector(cellName).classList.add('enemy')
-  //     document.querySelector(cellName).classList.add('killable')
-  //     //set the enemyId attribute
-  //     enemyLocation.setAttribute('enemy-id', enemies[enemyIdFromHTML].enemyId)
-  //     //update enemystatus
-  //     return enemyKilled = true
-
-
-
-  //   } else {
-  //     //if not killable then look for if the enemy is there
-  //     if (enemyLocation.classList.contains('enemy')) {
-  //       //send player to their home location
-  //       changePlayerLocation(playerHome)
-  //       playerLives = playerLives - 1
-  //       document.querySelector('#player-lives span').innerHTML = playerLives
-  //     }
-  //   }
-  // }
 
 
   // // ===== CONTROLS =====
@@ -400,70 +362,6 @@ function pacnam() {
   //   changePlayerLocation(playerHome)
   // })
 
-  // //player movement
-  // document.addEventListener('keyup', (e) => {
-
-  //   switch (e.key) {
-  //     // if there is a wall in the direction I'm trying to move, don't let me move, else move me appropriately
-  //     case 'w': {
-  //       console.log(enemyKilled)
-  //       playerMove = playerLocation - boardWidth
-  //       playerDirection = 'top'
-  //       if (playerClasses.contains(`wall-${playerDirection}`) === true) {
-  //         return
-  //       } else {
-  //         collectTreasure(playerMove) //activates if treasure on square, if not does nothing
-  //         collectWeapon(playerMove) //activates if weapon on square, if not does nothing
-  //         changePlayerLocation(playerMove)
-  //         enemyAttack(playerMove) //activates if player moves into an unkillable enemy, has to be last as it moves the player automatically after they move themselves
-  //         changeEnemyPosition(playerDirection)
-  //       }
-  //       break
-  //     }
-  //     case 'd': {
-  //       playerMove = playerLocation + 1
-  //       playerDirection = 'right'
-  //       if (playerClasses.contains(`wall-${playerDirection}`) === true) {
-  //         return
-  //       } else {
-  //         collectTreasure(playerMove) //activates if treasure on square, if not does nothing
-  //         collectWeapon(playerMove) //activates if weapon on square, if not does nothing
-  //         changePlayerLocation(playerMove)
-  //         enemyAttack(playerMove) //activates if player moves into an unkillable enemy
-  //         changeEnemyPosition(playerDirection)
-  //       }
-  //       break
-  //     }
-  //     case 's': {
-  //       playerMove = playerLocation + boardWidth
-  //       playerDirection = 'bottom'
-  //       if (playerClasses.contains(`wall-${playerDirection}`) === true) {
-  //         return
-  //       } else {
-  //         collectTreasure(playerMove) //activates if treasure on square, if not does nothing
-  //         collectWeapon(playerMove) //activates if weapon on square, if not does nothing
-  //         changePlayerLocation(playerMove)
-  //         enemyAttack(playerMove) //activates if player moves into an unkillable enemy
-  //         changeEnemyPosition(playerDirection)
-  //       }
-  //       break
-  //     }
-  //     case 'a': {
-  //       playerMove = playerLocation - 1
-  //       playerDirection = 'left'
-  //       if (playerClasses.contains(`wall-${playerDirection}`) === true) {
-  //         return
-  //       } else {
-  //         collectTreasure(playerMove) //activates if treasure on square, if not does nothing
-  //         collectWeapon(playerMove) //activates if weapon on square, if not does nothing
-  //         changePlayerLocation(playerMove)
-  //         enemyAttack(playerMove) //activates if player moves into an unkillable enemy
-  //         changeEnemyPosition(playerDirection)
-  //       }
-  //       break
-  //     }
-  //   }
-  // })
 
   // //enemy movement
   // //each enemy has it's own movement pattern
