@@ -2,7 +2,7 @@
 //PAPER
 [x] draw out wall for level 1
 [x] work out food box positions
-[] check how player and enemies may move
+[x] check how player and enemies may move
 
 //CODE BOARD
 [x] create a board to match that
@@ -18,22 +18,25 @@
 
 //CODE STATE CHANGES
 [x] make weapon turn enemy killable
-[] make killable end
-[] make weapon timed drop
-[] make weapon time out
+[x] make killable end
+[x] make weapon timed drop
+[x] make weapon time out
 
 //CODE END STATES
 [x] add scoring
 [x] add lives
-[] add level end
-[] add game end
+[x] add level end
+[x] add game end
+[] hide start button when game starts
+[] show and handle reset/next game button
 
 //CODE FOR MANY
 [x] make multiple enemies move
-[] stop enemies eating each other
+[x] stop enemies eating each other
 [] make multiple levels
 
 //MAKE THINGS DYNAMIC
+[] make a second weapon drop after x time
 [] randomise treasure chest positions
-[] make it so arrows or capital letters let you move
+[] make it so arrows let you move
 

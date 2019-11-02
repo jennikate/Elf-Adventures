@@ -11,6 +11,7 @@ function pacnam() {
   const boardSize = boardWidth ** 2
   const playerHome = Math.max(boardSize) - 1
   const cells = [] //declare so can push cell ids to it
+  const overlay = document.querySelector('.overlay')
 
 
   // ===== CREATE VARIABLES FOR ADJUSTING CELLS =====
@@ -263,6 +264,7 @@ function pacnam() {
         elem.classList.add('enemy')
       })
       enemyState = 'deadly'
+      document.querySelector('#alert').innerHTML = ''
     }, 10000)
   }
 
@@ -345,7 +347,7 @@ function pacnam() {
           //WEAPON
         } else if (thisClasslist.contains('weapon')) {
           console.log('weapon')
-          document.querySelector('#notification').innerHTML = 'You have a sword, kill the dragons!'
+          document.querySelector('#alert').innerHTML = 'You have a sword, kill the dragons!'
           //turn enemies killable
           const allEnemyLoc = document.querySelectorAll('.enemy')
           for (let i = 0; i < allEnemyLoc.length; i++) {
@@ -449,8 +451,8 @@ function pacnam() {
 
   function gameOver(result) {
     const playerResult = playerScore
-    console.log(result)
-    console.log(playerResult)
+    document.querySelector('#game-result').innerHTML = result
+    document.querySelector('#final-score').innerHTML = playerResult
     playerScore = 0
     playerLives = 3
   }
@@ -463,8 +465,14 @@ function pacnam() {
   createBoard()
 
   document.querySelector('#start').addEventListener('click', () => {
+    startGame()
+  })
+  
+
+  function startGame() {
     //start game assets
-    gameOver()
+    playerScore = 0
+    playerLives = 3
     addTreasureChests()
     enemiesHome()
     addWeapons()
@@ -474,8 +482,8 @@ function pacnam() {
     document.querySelector(`#cell-${playerHome}`).classList.add('player')
     //watch for movement
     trackPlayerMove()
-
-  })
+    //need to hide start button
+  }
 
 }
 
