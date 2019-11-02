@@ -27,8 +27,7 @@ function pacnam() {
 
   let enemyState = 'deadly'
   let enemyHome = 54
-  let enemyInSpace
-  let myLocation
+  let enemyArrayIndex
 
 
 
@@ -278,10 +277,7 @@ function pacnam() {
   }
 
   // ===== KILL ENEMY =====
-  function killEnemy(cellElement) {
-
-
-  }
+  
 
 
   // ===== CELL ACTIONS ON PLAYER MOVE =====
@@ -325,44 +321,43 @@ function pacnam() {
         //KILLABLE ENEMY
         if (thisClasslist.contains('enemy-killable')) {
           console.log('enemy killable')
-          killEnemy(cellElement)
-          playerScore = playerScore + 10
-          document.querySelector('#player-score span').innerHTML = playerScore
-          thisClasslist.remove('enemy-killable')
-          //send enemy home, all enemies return to same home cell on death as only one can die at a time
-          const enemyHomeCellIdRef = '#cell-' + enemyHome
-          const enemyHomeCellElement = document.querySelector(enemyHomeCellIdRef)
-          enemyHomeCellElement.classList.add('enemy-killable')
+          //get the enemies index of this guy
+          //get his cell id
+          const enemyLocation = document.querySelector('.player')
+          const enemyLocationId = parseInt(((enemyLocation.id).split('-'))[1])
+          enemyArrayIndex = enemies.findIndex(e => e.location === enemyLocationId)
+          console.log(enemyArrayIndex)
+          sendEnemyHome(enemyLocation, enemyArrayIndex)
 
           //DEADLY ENEMY
         } else
-          if (thisClasslist.contains('enemy')) {
-            console.log('enemy')
-            sendPlayerHome(cellElement)
-            //WEAPON
-          } else if (thisClasslist.contains('weapon')) {
-            console.log('weapon')
-            document.querySelector('#notification').innerHTML = 'You have a sword, kill the dragons!'
-            //turn enemies killable
-            const allEnemyLoc = document.querySelectorAll('.enemy')
-            for (let i = 0; i < allEnemyLoc.length; i++) {
-              allEnemyLoc[i].classList.remove('enemy')
-              allEnemyLoc[i].classList.add('enemy-killable')
-              enemyState = 'killable'
-            }
-            //clear weapons from board
-            const allWeapons = document.querySelectorAll('.weapon')
-            for (let i = 0; i < allWeapons.length; i++) {
-              allWeapons[i].classList.remove('weapon')
-            }
-
-            //TREASURE
-          } else if (thisClasslist.contains('treasure-chest')) {
-            console.log('treasure-chest')
-            playerScore = playerScore + 1000
-            document.querySelector('#player-score span').innerHTML = playerScore
-            thisClasslist.remove('treasure-chest')
+        if (thisClasslist.contains('enemy')) {
+          console.log('enemy')
+          sendPlayerHome(cellElement)
+          //WEAPON
+        } else if (thisClasslist.contains('weapon')) {
+          console.log('weapon')
+          document.querySelector('#notification').innerHTML = 'You have a sword, kill the dragons!'
+          //turn enemies killable
+          const allEnemyLoc = document.querySelectorAll('.enemy')
+          for (let i = 0; i < allEnemyLoc.length; i++) {
+            allEnemyLoc[i].classList.remove('enemy')
+            allEnemyLoc[i].classList.add('enemy-killable')
+            enemyState = 'killable'
           }
+          //clear weapons from board
+          const allWeapons = document.querySelectorAll('.weapon')
+          for (let i = 0; i < allWeapons.length; i++) {
+            allWeapons[i].classList.remove('weapon')
+          }
+
+          //TREASURE
+        } else if (thisClasslist.contains('treasure-chest')) {
+          console.log('treasure-chest')
+          playerScore = playerScore + 1000
+          document.querySelector('#player-score span').innerHTML = playerScore
+          thisClasslist.remove('treasure-chest')
+        }
         //MOVE ENEMY
         enemyMove()
       }
@@ -387,7 +382,7 @@ function pacnam() {
     //get the classlist for enemy cells
     enemyList.forEach(elem => {
       //get my enemies array value
-      const enemyArrayIndex = enemies.findIndex(e => e.location === elem)
+      enemyArrayIndex = enemies.findIndex(e => e.location === elem)
       // console.log(enemyArrayIndex)
       const enemiesInCells = []
 
@@ -421,12 +416,8 @@ function pacnam() {
       cellElement = document.querySelector('#cell-' + elem)
 
       if (enemyState === 'killable') {
-        console.log('killable')
-        if (cellElement.classList.contains('player')) { 
-          //send enemy home
-          cellElement.classList.remove('enemy-killable')
-          document.querySelector(`#cell-${enemyHome}`).classList.add('enemy-killable')
-          enemies[enemyArrayIndex].location = enemyHome
+        if (cellElement.classList.contains('player')) {
+          sendEnemyHome(cellElement, enemyArrayIndex)
         } else {
           moveTokens(cellElement, 'enemy-killable', nextCellId)
           enemies[enemyArrayIndex].location = nextCellId
@@ -440,8 +431,15 @@ function pacnam() {
   }
 
 
-
-
+  function sendEnemyHome(cellElement, enemyArrayIndex) {
+    // console.log(cellElement, enemyArrayIndex)
+    //send enemy home
+    cellElement.classList.remove('enemy-killable')
+    document.querySelector(`#cell-${enemyHome}`).classList.add('enemy-killable')
+    enemies[enemyArrayIndex].location = enemyHome
+    playerScore = playerScore + 10
+    document.querySelector('#player-score span').innerHTML = playerScore
+  }
 
 
   // ===== CREATE! =====
