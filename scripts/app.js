@@ -387,10 +387,10 @@ function pacnam() {
     //get the classlist for enemy cells
     enemyList.forEach(elem => {
       //get my enemies array value
-      const enemyArrayIndex = enemies.findIndex(e => e.location === elem )
+      const enemyArrayIndex = enemies.findIndex(e => e.location === elem)
       // console.log(enemyArrayIndex)
       const enemiesInCells = []
-      
+
       //get walls from this cell, and remove from the usable cells array
       const myWalls = document.querySelector(('#cell-' + elem)).classList
       // enemiesInCell[0] = me
@@ -410,79 +410,35 @@ function pacnam() {
         }
       })
 
-      if ( usableCells.length === 0 ) {
+      if (usableCells.length === 0) {
         nextCellId = elem
       } else {
         nextCellId = usableCells[Math.floor(Math.random() * usableCells.length)]
       }
       // console.log(nextCellId)
-      
+
       //get cellElement for originating cell
       cellElement = document.querySelector('#cell-' + elem)
 
-      if (enemyState === 'deadly') {
-        moveTokens(cellElement, 'enemy', nextCellId)
-        if (cellElement.classList.contains('player')) {
-          sendPlayerHome(cellElement)
+      if (enemyState === 'killable') {
+        console.log('killable')
+        if (cellElement.classList.contains('player')) { 
+          //send enemy home
+          cellElement.classList.remove('enemy-killable')
+          document.querySelector(`#cell-${enemyHome}`).classList.add('enemy-killable')
+          enemies[enemyArrayIndex].location = enemyHome
+        } else {
+          moveTokens(cellElement, 'enemy-killable', nextCellId)
+          enemies[enemyArrayIndex].location = nextCellId
         }
       } else {
-        moveTokens(cellElement, 'enemy-killable', nextCellId)
+        moveTokens(cellElement, 'enemy', nextCellId)
+        enemies[enemyArrayIndex].location = nextCellId
+        if (cellElement.classList.contains('player')) { sendPlayerHome(cellElement) }
       }
-
-      if (cellElement.classList.contains('player') && cellElement.classList.contains('enemy-killable')) {
-        //CURRENTLY COPIED THIS CODE TO PLAYER MOVEMENT AS IT NEEDS TO TRIGGER THERE TOO, need a function
-        // console.log('die')
-        playerScore = playerScore + 10
-        document.querySelector('#player-score span').innerHTML = playerScore
-        cellElement.classList.remove('enemy-killable')
-        //send enemy home, all enemies return to same home cell on death as only one can die at a time
-        const enemyHomeCellIdRef = '#cell-' + enemyHome
-        const enemyHomeCellElement = document.querySelector(enemyHomeCellIdRef)
-        // console.log(enemyHomeCellElement)
-        enemyHomeCellElement.classList.add('enemy-killable')
-      }
-    
-      //UPDATE ENEMY LOCATION
-      enemies[enemyArrayIndex].location = nextCellId
-
-      console.log(enemies)
-
-
-
     })
   }
 
-
-
-
-
-
-
-  //     //and move the token
-  //     if (enemyState === 'deadly') {
-  //       moveTokens(enemyList[i], 'enemy', nextCellId)
-  //       if (cellElement.classList.contains('player')) {
-  //         sendPlayerHome(cellElement)
-  //       }
-  //     } else {
-  //       moveTokens(enemyList[i], 'enemy-killable', nextCellId)
-  //     }
-
-  //     if (cellElement.classList.contains('player') && cellElement.classList.contains('enemy-killable')) {
-  //       //CURRENTLY COPIED THIS CODE TO PLAYER MOVEMENT AS IT NEEDS TO TRIGGER THERE TOO, need a function
-  //       // console.log('die')
-  //       playerScore = playerScore + 10
-  //       document.querySelector('#player-score span').innerHTML = playerScore
-  //       cellElement.classList.remove('enemy-killable')
-  //       //send enemy home, all enemies return to same home cell on death as only one can die at a time
-  //       const enemyHomeCellIdRef = '#cell-' + enemyHome
-  //       const enemyHomeCellElement = document.querySelector(enemyHomeCellIdRef)
-  //       // console.log(enemyHomeCellElement)
-  //       enemyHomeCellElement.classList.add('enemy-killable')
-  //     }
-  //   }
-  //   console.log(enemies)
-  // }
 
 
 
