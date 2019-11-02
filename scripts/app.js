@@ -238,7 +238,19 @@ function pacnam() {
         getCellElement(weapons[i])
         cellElement.classList.add('weapon')
       }
-    }, 200)
+    }, 3000)
+    removeWeapons()
+  }
+
+  // REMOVE WEAPONS
+  function removeWeapons() {
+    //called by start game (will be on timer later)
+    setTimeout(() => {
+      const weaponCells = document.querySelectorAll('.weapon')
+      weaponCells.forEach(elem => {
+        elem.classList.remove('weapon')
+      })
+    }, 13000)
   }
 
   // START ENEMY AT HOME
@@ -246,8 +258,21 @@ function pacnam() {
     for (let i = 0; i < enemies.length; i++) {
       getCellElement(enemies[i].homeId)
       cellElement.classList.add('enemy')
-      // cellElement.setAttribute('enemy-id', (enemies[i].enemyId))
     }
+  }
+
+  // TURN ENEMIES DEADLY :::
+  function deadlyEnemies() {
+    setTimeout(() => {
+      // console.log('enemies deadly')
+      const enemyCells = document.querySelectorAll('.enemy-killable')
+      console.log(enemyCells)
+      enemyCells.forEach(elem => {
+        elem.classList.remove('enemy-killable')
+        elem.classList.add('enemy')
+      })
+      enemyState = 'deadly'
+    }, 10000)
   }
 
   // ==== TOKEN MOVES ====
@@ -335,6 +360,7 @@ function pacnam() {
               allEnemyLoc[i].classList.remove('enemy')
               allEnemyLoc[i].classList.add('enemy-killable')
               enemyState = 'killable'
+              deadlyEnemies()
             }
             //clear weapons from board
             const allWeapons = document.querySelectorAll('.weapon')
@@ -434,14 +460,13 @@ function pacnam() {
     //start game assets
     addTreasureChests()
     enemiesHome()
+    addWeapons()
+    document.querySelector('#player-score span').innerHTML = playerScore
+    document.querySelector('#player-lives span').innerHTML = playerLives
     //set first player location
     document.querySelector(`#cell-${playerHome}`).classList.add('player')
     //watch for movement
     trackPlayerMove()
-
-    //start timed assets
-    // setTimeout(addWeapons(), 10000)
-    addWeapons()
 
   })
 
