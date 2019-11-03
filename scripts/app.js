@@ -182,7 +182,6 @@ function pacnam() {
       cell.classList.add('cell')
       cell.setAttribute('id', 'cell-' + [i])
       grid.appendChild(cell)
-      cell.innerHTML = [i]
       cells.push(cell)
     }
     //add walls based on the wall array
@@ -265,6 +264,7 @@ function pacnam() {
       })
       enemyState = 'deadly'
       document.querySelector('#alert').innerHTML = ''
+      document.querySelector('#alert').classList.add('hide')
     }, 10000)
   }
 
@@ -348,6 +348,8 @@ function pacnam() {
         } else if (thisClasslist.contains('weapon')) {
           console.log('weapon')
           document.querySelector('#alert').innerHTML = 'You have a sword, kill the dragons!'
+          let findAlert = document.querySelector('#alert')
+          findAlert.classList.remove('hide')
           //turn enemies killable
           const allEnemyLoc = document.querySelectorAll('.enemy')
           for (let i = 0; i < allEnemyLoc.length; i++) {

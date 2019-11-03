@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link href="https://fonts.googleapis.com/css?family=Cormorant+Upright:400,700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles/reset.css">
   <link rel="stylesheet" href="styles/main.css">
   <script src="scripts/app.js"></script>
@@ -12,18 +13,34 @@
 
 <body>
   
+  <header>
+    <h1>Elf Adventures</h1>
+    <p>Enter the dark forest to capture it's treasures. But beware the dragons that lurk within.</p>
+  </header>
   <main>
-    <div id='grid'>
-    </div>
+    <section>
+      <div id='grid'></div>
+      <div id='control-panel'>
+        <div class='scores'>
+            <p id='player-score' class='player-score'><span>0</span></p>
+            <p id='player-lives' class='player-lives'><span></span></p>
+        </div>
+        <button id='start'>Start</button>
+      </div>
+    </section>
+
+      <div id='notification'>
+        <p id='alert' class='alert hide'></p>
+        <p id='game-result'></p>
+        <p id='final-score'></p>
+      </div>
+
   </main>
-    <button id='start'>Start</button>
-    <p id='player-score'>Player score: <span></span></p>
-    <p id='player-lives'>Player lives: <span></span></p>
-    <div id='notification'>
-      <p id='alert'></p>
-      <p id='game-result'></p>
-      <p id='final-score'></p>
-    </div>
+
+
+  
+    
+    
 
 
 

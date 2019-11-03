@@ -4,9 +4,25 @@
 
 html, body {
   height: 100%;
+  font-family: 'Cormorant Upright', serif;
+  background-image: url('../assets/bgrd.jpg');
+  background-repeat: no-repeat;
+  color: rgb(231, 244, 228);
 }
 
-main {
+header {
+  text-align: center;
+  padding: 30px;
+  font-size: 20px;
+}
+
+h1 {
+  font-weight: 700;
+  font-size: 50px;
+  margin-bottom: 20px;
+}
+
+section {
   display: flex;
   align-content: center;
   justify-content: center;
@@ -14,17 +30,15 @@ main {
 }
 
 #grid {
-  margin-top: 30px;
   display: flex;
   align-content: center;
   justify-content: center;
   flex-wrap: wrap;
   max-width: 502px;
+  margin-left: 30px;
 }
 
-
 .cell {
-  border: 1px solid white;
   width: 50px;
   height: 50px;
 }
@@ -42,18 +56,89 @@ main {
   border-bottom: 2px solid green;
 }
 
+
 .player {
-  background-color: purple;
+  background-image: url('../assets/elf.png');
+  background-size: 100%;
+  background-repeat: no-repeat;
+}
+.player-weapon {
+  background-image: url('../assets/elf-sword.png');
+  background-size: 100%;
+  background-repeat: no-repeat;
 }
 .treasure-chest {
-  background-color: gold;
+  background-image: url('../assets/treasure.png');
+  background-size: 100%;
+  background-repeat: no-repeat;
 }
 .weapon {
-  background-color: red;
+  background-image: url('../assets/sword.png');
+  background-size: 100%;
+  background-repeat: no-repeat;
 }
 .enemy {
-  background-color: blue;
+  background-image: url('../assets/dragon1.png');
+  background-size: 100%;
+  background-repeat: no-repeat;
 }
 .enemy-killable {
-  background-color: orange;
+  background-image: url('../assets/dragon-killable.png');
+  background-size: 100%;
+  background-repeat: no-repeat;
+}
+
+button {
+  background-color: purple;
+  width: 150px;
+  height: 50px;
+  color: white;
+  font-family: 'Cormorant Upright', serif;
+  font-size: 32px;
+}
+
+#control-panel {
+  min-width: 150px;
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  justify-content: space-between;
+  padding: 0 20px;
+}
+#control-panel button {
+  align-self: flex-end;
+}
+
+.player-score {
+  background-image: url('../assets/gold.png');
+  background-size: 32px;
+  background-repeat: no-repeat;
+  height: 32px;
+  font-size: 32px;
+  padding-left: 42px;
+  margin-bottom: 20px;
+}
+
+.player-lives {
+  background-image: url('../assets/gold.png');
+  background-size: 32px;
+  background-repeat: no-repeat;
+  height: 32px;
+  font-size: 32px;
+  padding-left: 42px;
+}
+
+.alert {
+  background-color: rgba(231, 244, 228, 0.3);
+  margin-top: 20px;
+  padding: 10px;
+  width: 100%;
+  font-size: 32px;
+  font-weight: 700;
+  color: #ffffcc;
+  text-align: center;
+}
+
+.hide {
+  display:none; 
 }

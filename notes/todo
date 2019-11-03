@@ -39,4 +39,10 @@
 [] make a second weapon drop after x time
 [] randomise treasure chest positions
 [] make it so arrows let you move
+[] change player token to token with sword when killing
+
+
+//BUGS
+[] killable ghosts don't always die
+[] game end doesn't clear all cell tokens
 
