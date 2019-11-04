@@ -16,6 +16,7 @@ function pacnam() {
   let moveToCellId
   let playerDirection
   let myWalls = []
+  let nextCellClasses
 
   const treasure = [12, 39, 75, 90] //this can be randomised later
   const weapons = [42, 66] //this can be randomised later
@@ -233,7 +234,6 @@ function pacnam() {
     // console.log(currentCellId, className, nextCellId)
     const currentCellElement = document.querySelector(`#cell-${currentCellId}`)
     // console.log( currentCellElement)
-
     currentCellElement.classList.remove(className)
     getCellElement(nextCellId)
     // console.log(cellElement)
@@ -255,6 +255,13 @@ function pacnam() {
     }
     // console.log(`I am in cell ${replaceWithLoopVar.myCellId} and I will move to ${moveToCellId}`)
   }
+
+  function enemyKill(moveToCellId) {
+    //return player home
+    moveTokens(moveToCellId, 'player', playerHome)
+    //remove a life
+  }
+
 
   function getWeapon() {
     //change state to killable
@@ -376,7 +383,7 @@ function pacnam() {
       // console.log(`my array location is ${arrLocation[loc]}, my walls are at ${myWalls}`)
       //loop through my new available cells for enemy move
 
-      console.log(replaceWithLoopVar.myRef)
+      // console.log(replaceWithLoopVar.myRef)
 
       if (replaceWithLoopVar.myRef === 'enemy' || replaceWithLoopVar.myRef === 'enemy-killable') {
         for (let i = moveTo.length - 1; i >= 0; i--) {
@@ -405,8 +412,15 @@ function pacnam() {
           moveToCellId = moveTo[Math.floor(Math.random() * moveTo.length)]
           moveEnemyCalculation(moveToCellId, replaceWithLoopVar.myRef)
         }
-        // console.log(`I am in cell ${replaceWithLoopVar.myCellId} and I will move to ${moveToCellId}`)
-        moveTokens(replaceWithLoopVar.myCellId, replaceWithLoopVar.myRef, moveToCellId)
+        if (replaceWithLoopVar.myRef === 'enemy') {
+          moveTokens(replaceWithLoopVar.myCellId, replaceWithLoopVar.myRef, moveToCellId)
+        } //deadly enemy moves first
+        //if player in that location kill them
+        console.log(document.querySelector(`#cell-${moveToCellId}`))
+        if ((document.querySelector(`#cell-${moveToCellId}`)).classList.contains('player')) {
+          enemyKill(moveToCellId)
+          break // no more moves this round
+        }
       }
 
 
@@ -432,16 +446,19 @@ function pacnam() {
           if ((cellElement.classList).contains('enemy-killable')) {
             killEnemy(moveToCellId)
             moveTokens(replaceWithLoopVar.myCellId, replaceWithLoopVar.myRef, moveToCellId)
+            break //stop the loop if player kills an enemy!
           } else if ((cellElement.classList).contains('treasure-chest')) {
             //is there a treasure chest?
           } else if ((cellElement.classList).contains('weapon')) {
             getWeapon()
             moveTokens(replaceWithLoopVar.myCellId, 'player-weapon', moveToCellId)
+            //======ARGH           
             //clear enemy cells (they're persisting somewhere easiest to clear them here and refactor later)
             const persistentEnemy = document.querySelectorAll('.enemy')
             persistentEnemy.classList.remove('enemy')
+            //this is throwing an error when enemies didn't persist, but the game is working
           } else if ((cellElement.classList).contains('enemy')) {
-            //is there an enemy
+            enemyKill(moveToCellId)
           } else {
             //player can move to cell
             moveTokens(replaceWithLoopVar.myCellId, replaceWithLoopVar.myRef, moveToCellId)
@@ -451,7 +468,10 @@ function pacnam() {
           //player tried to move into a wall
           return
         }
-      }
+      } //player moves second
+      if (replaceWithLoopVar.myRef === 'enemy-killable') {
+        moveTokens(replaceWithLoopVar.myCellId, replaceWithLoopVar.myRef, moveToCellId)
+      } //killable enemy moves last
     }
 
 
