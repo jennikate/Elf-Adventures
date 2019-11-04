@@ -235,11 +235,10 @@ function pacnam() {
     //TESTING
     // enemyState = 'killable'
     // document.querySelector('#cell-54').classList.add('enemy-killable')
-    document.querySelector('#cell-98').classList.add('enemy-killable')
-    document.querySelector('#cell-99').classList.add('player-weapon')
+    document.querySelector('#cell-98').classList.add('enemy')
+    document.querySelector('#cell-99').classList.add('player')
 
     //get current location of everything
-
 
     let myRefArray
     let myRef
@@ -293,8 +292,8 @@ function pacnam() {
     //for each myCellId in arrLocation
     //start with one
 
-    // console.log(arrLocation)
-    const replaceWithLoopVar = arrLocation[4]
+    console.log(arrLocation)
+    const replaceWithLoopVar = arrLocation[5]
 
 
     //get the walls of my cell
@@ -308,49 +307,48 @@ function pacnam() {
     //check for scenarios where I won't move to that cell, remove them from arrLocation
     //set length for loop (length will change if I remove anything)
 
-    for (let i = moveTo.length-1; i >=0; i--) {
+    for (let i = moveTo.length - 1; i >= 0; i--) {
       getCellElement(moveTo[i])
       let nextCellClasses = cellElement.classList
 
       // if cell contains an enemy & I am enemy : remove from array as I won't move there
-
       if ((replaceWithLoopVar.myRef === '.enemy' || replaceWithLoopVar.myRef === '.enemy-killable') &&
         (nextCellClasses.contains('enemy') || nextCellClasses.contains('enemy-killable'))) {
-
-        console.log(`I am cell ${replaceWithLoopVar.myCellId}, I am checking the moveTo array item number ${[i]}
-        that array item is cell ${moveTo[i]} element has the following classes ${nextCellClasses}`)
-        console.log(`Does cell ${moveTo[i]} have an enemy in it? ${nextCellClasses.contains('enemy')}`)
-
         moveTo.splice([i], 1)
+      }
+      //if cell contains a player and I am enemy and I am killable : I won't move there
+      if (replaceWithLoopVar.myRef === '.enemy-killable' && nextCellClasses.contains('player-weapon')) {
+        moveTo.splice([i], 1)
+      }
+      //if cell contains a player and I am enemy and I am deadly : I WANT TO move there
+      if (replaceWithLoopVar.myRef === '.enemy' && nextCellClasses.contains('player')) {
+        moveTo = moveTo[i]
+        break //stop looping, I've found my direction
         
       }
-      console.log([i])
     }
 
 
 
-
-
-
-      // //if cell contains player & I am enemy & enemy is killable : I won't move there
-      // if (replaceWithLoopVar.myRef === '.player' && enemyState === 'killable') {
-      //   console.log('I am enemy that wants to run')
-      //   moveTo.splice([i], 1)
-      // }
-
-
-      //if cell contains enemy & I am player & enemy is deadly : I want to move there
-      //if cell contains enemy & I am player & enemy is killable : I want to move there
-
-
-      //if cell contains enemy & I am player : player is in control, move where they press
-      //if keypress is not available in array do nothing
-      //else move token
+    // console.log(`I am cell ${replaceWithLoopVar.myCellId}, I am checking the moveTo array item number ${[i]}
+    // that array item is cell ${moveTo[i]} element has the following classes ${nextCellClasses}`)
+    // console.log(`Does cell ${moveTo[i]} have an enemy in it? ${nextCellClasses.contains('enemy')}`)
 
 
 
 
-    
+    //if cell contains enemy & I am player & enemy is deadly : I want to move there
+    //if cell contains enemy & I am player & enemy is killable : I want to move there
+
+
+    //if cell contains enemy & I am player : player is in control, move where they press
+    //if keypress is not available in array do nothing
+    //else move token
+
+
+
+
+
     console.log('final moveTo array', moveTo)
 
 
