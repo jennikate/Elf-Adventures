@@ -8,6 +8,8 @@ function pacnam() {
   const boardWidth = 10
   const boardSize = boardWidth ** 2
   const playerHome = Math.max(boardSize) - 1
+  const treasureValue = 1000
+  const enemyValue = 20
 
   let cellIdRef
   let cellElement
@@ -16,13 +18,13 @@ function pacnam() {
   let moveToCellId
   let playerDirection
   let myWalls = []
-  let nextCellClasses
+  // let nextCellClasses
 
   const treasure = [12, 39, 75, 90] //this can be randomised later
   const weapons = [42, 66] //this can be randomised later
 
   let enemyState = 'deadly'
-  let enemyHome = 54
+  const enemyHome = 54
 
 
 
@@ -286,6 +288,13 @@ function pacnam() {
     //start enemies back to deadly timer
   }
 
+  function lootTreasure(thisCell) {
+    //remove that treasure cell class
+    const thisTreasureLocation = document.querySelector(`#cell-${thisCell}`)
+    thisTreasureLocation.classList.remove('treasure-chest')
+    //give user points
+  }
+
 
   // ==================================================
   // COLLISION LOGIC
@@ -448,7 +457,8 @@ function pacnam() {
             moveTokens(replaceWithLoopVar.myCellId, replaceWithLoopVar.myRef, moveToCellId)
             break //stop the loop if player kills an enemy!
           } else if ((cellElement.classList).contains('treasure-chest')) {
-            //is there a treasure chest?
+            lootTreasure(moveToCellId)
+            moveTokens(replaceWithLoopVar.myCellId, 'player-weapon', moveToCellId)
           } else if ((cellElement.classList).contains('weapon')) {
             getWeapon()
             moveTokens(replaceWithLoopVar.myCellId, 'player-weapon', moveToCellId)
@@ -484,20 +494,10 @@ function pacnam() {
 
 
   createBoard()
-  // addTreasureChests()
+  addTreasureChests()
   addWeapons()
   addEnemies()
   document.querySelector(`#cell-${playerHome}`).classList.add('player')
-
-
-  //testing, can remove these
-
-  // enemyState = 'killable'
-  // // document.querySelector('#cell-54').classList.add('enemy-killable')
-  // document.querySelector('#cell-98').classList.add('enemy-killable')
-  // document.querySelector('#cell-99').classList.add('player-weapon')
-  // document.querySelector('#cell-99').classList.remove('player')
-
 
 
 
