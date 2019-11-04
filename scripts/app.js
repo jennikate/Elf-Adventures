@@ -13,30 +13,16 @@ function pacnam() {
   let playerLives = 3
   let playerScore = 0
 
+
   let cellIdRef
   let cellElement
-  let arrLocation = [{ myRef: '', myCellId: 0, myClassList: '' }]
-  let moveTo = []
-  let moveToCellId
-  let playerDirection
-  let myWalls = []
-  // let nextCellClasses
 
   const treasure = [12, 39, 75, 90] //this can be randomised later
   const weapons = [42, 66] //this can be randomised later
 
   let enemyState = 'deadly'
   const enemyHome = 54
-
-
-
-  // ==== CREATE ARRAYS FOR TOKEN TRACKING
-
-  const enemies = [
-    { enemyId: 0, homeId: 54, location: 54 },
-    { enemyId: 1, homeId: 45, location: 45 },
-    { enemyId: 3, homeId: 55, location: 55 }
-  ]
+  const enemies = [54, 45, 55]
 
 
 
@@ -222,8 +208,19 @@ function pacnam() {
   }
 
   function addEnemies() {
+    //remove any existing enemies
+    document.querySelectorAll('.enemy').forEach(elem => {
+      const currentEnemy = elem.classList
+      currentEnemy.remove('enemy')
+    })
+    document.querySelectorAll('.enemy-killable').forEach(elem => {
+      //currentEnemies.push(elem)
+      const currentEnemy = elem.classList
+      currentEnemy.remove('enemy-killable')
+    })
+    //add enemies
     for (let i = 0; i < enemies.length; i++) {
-      getCellElement(enemies[i].homeId)
+      getCellElement(enemies[i])
       cellElement.classList.add('enemy')
     }
   }
@@ -266,7 +263,7 @@ function pacnam() {
     moveTokens(moveToCellId, 'player', playerHome)
     playerLives = playerLives - 1
     let myHeart
-    console.log(playerLives)
+    // console.log(playerLives)
     switch (playerLives) {
       case 2: {
         myHeart = document.querySelector('.heart-three')
@@ -321,7 +318,6 @@ function pacnam() {
       const notificationUpdate = document.querySelector('#notification').classList
       notificationUpdate.remove('hide')
       document.querySelector('#alert').innerHTML = 'You have a sword, kill the dragons!'
-
     })
 
 
@@ -573,8 +569,12 @@ function pacnam() {
 
   function gameover() {
     console.log('gameover')
-
+    const notificationUpdate = document.querySelector('#notification').classList
+    notificationUpdate.remove('hide')
+    document.querySelector('#game-result').innerHTML = 'Game Over'
+    document.querySelector('#final-score ').innerHTML = `Your score ${playerScore}`
   }
+
 
 }
 
