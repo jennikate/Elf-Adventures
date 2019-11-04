@@ -312,7 +312,7 @@ function pacnam() {
     playerLocationClassList.add('player-weapon')
     playerLocationClassList.remove('player')
     //change enemy class to enemy-killable
-    let enemyLocations = document.querySelectorAll('.enemy')
+    const enemyLocations = document.querySelectorAll('.enemy')
     enemyLocations.forEach(elem => {
       elem.classList.remove('enemy')
       elem.classList.add('enemy-killable')
@@ -350,7 +350,7 @@ function pacnam() {
 
   function collision(playerDirection) {
     // console.log(playerDirection)
-
+   
     //set variables for this function
     let myRefArray
     let myRef
@@ -501,6 +501,7 @@ function pacnam() {
           } else if ((cellElement.classList).contains('weapon')) {
             getWeapon()
             moveTokens(replaceWithLoopVar.myCellId, 'player-weapon', moveToCellId)
+            break
           } else if ((cellElement.classList).contains('enemy')) {
             // enemyKill(moveToCellId)
             console.log('player dumb')
