@@ -12,6 +12,7 @@ function pacnam() {
   let cellElement
   const arrLocation = [{ myRef: '', myCellId: 0, myClassList: '' }]
   let moveTo = []
+  let moveToCellId
 
   const treasure = [12, 39, 75, 90] //this can be randomised later
   const weapons = [42, 66] //this can be randomised later
@@ -291,7 +292,6 @@ function pacnam() {
 
     //for each myCellId in arrLocation
     //start with one
-
     console.log(arrLocation)
     const replaceWithLoopVar = arrLocation[5]
 
@@ -304,12 +304,15 @@ function pacnam() {
     if (!myWalls.contains('wall-bottom')) { moveTo.push(replaceWithLoopVar.myCellId + 10) } //I can move down
     if (!myWalls.contains('wall-left')) { moveTo.push(replaceWithLoopVar.myCellId - 1) } //I can move left
 
-    //check for scenarios where I won't move to that cell, remove them from arrLocation
-    //set length for loop (length will change if I remove anything)
-
+    //loop through my new available cells
     for (let i = moveTo.length - 1; i >= 0; i--) {
       getCellElement(moveTo[i])
-      let nextCellClasses = cellElement.classList
+      const nextCellClasses = cellElement.classList
+
+      // console.log(`I am cell ${replaceWithLoopVar.myCellId}`)
+      // console.log((replaceWithLoopVar.myRef === '.enemy' || replaceWithLoopVar.myRef === '.enemy-killable'))
+      // console.log(`I am checking cell ${moveTo[i]}`)
+      // console.log((nextCellClasses.contains('enemy') || nextCellClasses.contains('enemy-killable')))
 
       // if cell contains an enemy & I am enemy : remove from array as I won't move there
       if ((replaceWithLoopVar.myRef === '.enemy' || replaceWithLoopVar.myRef === '.enemy-killable') &&
@@ -324,9 +327,17 @@ function pacnam() {
       if (replaceWithLoopVar.myRef === '.enemy' && nextCellClasses.contains('player')) {
         moveTo = moveTo[i]
         break //stop looping, I've found my direction
-        
       }
     }
+    //select position for enemy to move to
+    if (moveTo === 0 ) { moveToCellId = replaceWithLoopVar.myCellId } //I have no viable options so I stay here
+    else if ( moveTo.length === 1 ) { moveToCellId = moveTo } //I have only one option (or I am next to a player) so I want to move there
+    else {
+      //get a random location to move to
+      moveToCellId = moveTo[Math.floor(Math.random() * moveTo.length)]
+    }
+
+    console.log(moveToCellId)
 
 
 
@@ -336,14 +347,18 @@ function pacnam() {
 
 
 
+    //ENEMY MOVES
+    //enemy moves to enemy : don't move there, remove from array
+    //enemy killable moves to enemy killable : don't move there, remove from array
+    //enemy killable moves to player : don't move there, remove from array
+    //enemy moves to player : GO HERE AND KILL THEM
 
-    //if cell contains enemy & I am player & enemy is deadly : I want to move there
-    //if cell contains enemy & I am player & enemy is killable : I want to move there
+    //PLAYER MOVES
+    //w, W, uparrow : if cell available go up
+    //d, D, right arrow: if cell available go right
+    //s, S, down arrow: if cell available go down
+    //a, A, left arrow: if cell available go left
 
-
-    //if cell contains enemy & I am player : player is in control, move where they press
-    //if keypress is not available in array do nothing
-    //else move token
 
 
 
