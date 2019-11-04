@@ -12,6 +12,7 @@ function pacnam() {
   const enemyValue = 20
   let playerLives = 3
   let playerScore = 0
+  let level = 1
 
 
   let cellIdRef
@@ -22,7 +23,6 @@ function pacnam() {
 
   let enemyState = 'deadly'
   const enemyHome = 54
-  const enemies = [54, 45, 55]
 
 
 
@@ -208,6 +208,7 @@ function pacnam() {
   }
 
   function addEnemies() {
+    console.log(level)
     //remove any existing enemies
     document.querySelectorAll('.enemy').forEach(elem => {
       const currentEnemy = elem.classList
@@ -218,7 +219,14 @@ function pacnam() {
       const currentEnemy = elem.classList
       currentEnemy.remove('enemy-killable')
     })
-    //add enemies
+    //create number of enemies
+    const enemies = [54]
+    if ( level === 2 ) { enemies.push(44) }
+    if ( level === 3 ) { 
+      enemies.push(44) 
+      enemies.push(55) 
+    }
+    //add enemies to cells
     for (let i = 0; i < enemies.length; i++) {
       getCellElement(enemies[i])
       cellElement.classList.add('enemy')
@@ -228,9 +236,9 @@ function pacnam() {
   function addPlayer() {
     //clear player
     if (document.querySelector('.player') || document.querySelector('.player-weapon')) {
-      console.log('player exists')
-      console.log(document.querySelector('.player'))
-      console.log(document.querySelector('.player-weapon'))
+      // console.log('player exists')
+      // console.log(document.querySelector('.player'))
+      // console.log(document.querySelector('.player-weapon'))
       if (document.querySelector('.player')) {
         const getPlayer = document.querySelector('.player').classList
         getPlayer.remove('player')
@@ -354,8 +362,6 @@ function pacnam() {
     //last treasure collected means level won
     if (document.querySelectorAll('.treasure-chest').length === 0) {
       levelWon()
-    } else {
-      console.log('chests')
     }
   }
 
@@ -599,6 +605,7 @@ function pacnam() {
   }
   function nextLevel() {
     document.querySelector('#next-level').addEventListener('click', () => {
+      level = level + 1
       const notificationUpdate = document.querySelector('#notification').classList
       const buttonUpdate = document.querySelector('#next-level').classList
       notificationUpdate.add('hide')
