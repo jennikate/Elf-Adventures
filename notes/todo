@@ -30,6 +30,10 @@
 [] hide start button when game starts
 [] show and handle reset/next game button
 
+//MVP STYLING
+[] end game notification
+[] next game button
+
 //CODE FOR MANY
 [x] make multiple enemies move
 [x] stop enemies eating each other

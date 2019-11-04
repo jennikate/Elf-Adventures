@@ -2,36 +2,31 @@
 
 function pacnam() {
 
-
-
-
   // ===== CREATE STARTING VALUES =====
 
   const boardWidth = 10
   const boardSize = boardWidth ** 2
   const playerHome = Math.max(boardSize) - 1
-  const cells = [] //declare so can push cell ids to it
-  const overlay = document.querySelector('.overlay')
+
+  let cellIdRef
+  let cellElement
+
+  const treasure = [12, 39, 75, 90] //this can be randomised later
+  const weapons = [42, 66] //this can be randomised later
 
 
-  // ===== CREATE VARIABLES FOR ADJUSTING CELLS =====
-  // these should only exist within their function and not be used cross function
+  // ==== CREATE ARRAYS FOR TOKEN TRACKING
 
-  let cellIdRef = ''
-  let cellElement = 0
-
-  let playerDirection = ''
-  let nextCellId
-  let playerScore
-  let playerLives
-
-  let enemyState = 'deadly'
-  const enemyHome = 54
-  let enemyArrayIndex
+  const enemies = [
+    { enemyId: 0, homeId: 54, location: 54 },
+    { enemyId: 1, homeId: 45, location: 45 },
+    { enemyId: 2, homeId: 55, location: 55 }
+  ]
 
 
 
-  // ==== GET ELEMENTS TO USE ====
+
+  // ==== GET ELEMENTS NEEDED ====
 
   const grid = document.querySelector('#grid') //position on html to create the cells
 
@@ -42,6 +37,10 @@ function pacnam() {
     return cellElement
   }
 
+
+  // ==================================================
+  // CREATE GAME BOARD
+  // ==================================================
 
   // DECLARE WALL POSITIONS
   //create array of objects to say which borders have walls
@@ -157,24 +156,6 @@ function pacnam() {
     { cellId: 99, top: false, right: true, bottom: true, left: false }
   ]
 
-  //DECLARE TREASURE BOXES & WEAPONS
-  const treasureBoxes = [12, 39, 75, 90] //this can be randomised later
-  const winScore = treasureBoxes.length*1000
-  const weapons = [42, 66] //this can be randomised later
-
-  //DECLARE ENEMY DETAILS
-  //create array of objects to set enemy home position, name, and movement pattern
-  const enemies = [
-    { enemyId: 0, homeId: 54, location: 54 },
-    { enemyId: 1, homeId: 45, location: 45 },
-    { enemyId: 2, homeId: 55, location: 55 }
-  ]
-
-
-
-
-  // ===== SETUP BOARD & PLACE ITEMS =====
-
   // GAME BOARD 
   function createBoard() {
     for (let i = 0; i < boardSize; i++) {
@@ -182,15 +163,12 @@ function pacnam() {
       cell.classList.add('cell')
       cell.setAttribute('id', 'cell-' + [i])
       grid.appendChild(cell)
-      cells.push(cell)
     }
     //add walls based on the wall array
     makeWalls()
   }
 
-
   // MAKE WALLS
-  // called by createBoard
   function makeWalls() {
     for (let i = 0; i < walls.length; i++) {
       //get the cell that relates to this wall
@@ -211,282 +189,49 @@ function pacnam() {
     }
   }
 
-
-  // SET TREASURE CHESTS
-  //future version these appear in random places at start of game
+  // SET INITIAL POSITIONS
   function addTreasureChests() {
     //called by start game 
-    for (let i = 0; i < treasureBoxes.length; i++) {
-      getCellElement(treasureBoxes[i])
+    for (let i = 0; i < treasure.length; i++) {
+      getCellElement(treasure[i])
       cellElement.classList.add('treasure-chest')
     }
   }
 
-  // SET WEAPONS
   function addWeapons() {
-    //called by start game (will be on timer later)
-    setTimeout(() => {
-      for (let i = 0; i < weapons.length; i++) {
-        getCellElement(weapons[i])
-        cellElement.classList.add('weapon')
-      }
-    }, 3000)
-    removeWeapons()
+    for (let i = 0; i < weapons.length; i++) {
+      getCellElement(weapons[i])
+      cellElement.classList.add('weapon')
+    }
   }
 
-  // REMOVE WEAPONS
-  function removeWeapons() {
-    //called by start game (will be on timer later)
-    setTimeout(() => {
-      const weaponCells = document.querySelectorAll('.weapon')
-      weaponCells.forEach(elem => {
-        elem.classList.remove('weapon')
-      })
-    }, 13000)
-  }
-
-  // START ENEMY AT HOME
-  function enemiesHome() {
+  function addEnemies() {
     for (let i = 0; i < enemies.length; i++) {
       getCellElement(enemies[i].homeId)
       cellElement.classList.add('enemy')
     }
   }
 
-  // TURN ENEMIES DEADLY :::
-  function deadlyEnemies() {
-    setTimeout(() => {
-      // console.log('enemies deadly')
-      const enemyCells = document.querySelectorAll('.enemy-killable')
-      enemyCells.forEach(elem => {
-        elem.classList.remove('enemy-killable')
-        elem.classList.add('enemy')
-      })
-      enemyState = 'deadly'
-      document.querySelector('#alert').innerHTML = ''
-      document.querySelector('#alert').classList.add('hide')
-    }, 10000)
-  }
-
-  // ==== TOKEN MOVES ====
-  function moveTokens(currentCellElement, className, nextCellId) {
-
-    currentCellElement.classList.remove(className)
-    getCellElement(nextCellId)
-    cellElement.classList.add(className)
-  }
-
-  // ===== SEND PLAYER HOME =====
-
-  function sendPlayerHome(cellElement) {
-    cellElement.classList.remove('player')
-    document.querySelector(`#cell-${playerHome}`).classList.add('player')
-    playerLives = playerLives - 1
-    if ( playerLives === 0 ) { gameOver('lose') }
-    document.querySelector('#player-lives span').innerHTML = playerLives
-  }
-
-  // ===== SEND ENEMY HOME=====
-  function sendEnemyHome(cellElement) {
-    cellElement.classList.remove('enemy-killable')
-    document.querySelector(`#cell-${enemyHome}`).classList.add('enemy-killable')
-    playerScore = playerScore + 10
-    document.querySelector('#player-score span').innerHTML = playerScore
-  }
 
 
-  // ===== CELL ACTIONS ON PLAYER MOVE =====
-
-  function trackPlayerMove() {
-    document.addEventListener('keyup', (e) => {
-      //get cellId of current player cell
-      const className = 'player'
-      const currentCellElement = document.querySelector('.player')
-      const cellIdName = currentCellElement.id
-      const cellIdArr = cellIdName.split('-')
-      const cellIdNum = parseInt(cellIdArr[1])
-      const currentCellClasslist = currentCellElement.classList
-      //get actions
-      if (e.key === 'w' || e.key === 'W') {
-        playerDirection = 'top'
-        nextCellId = cellIdNum - boardWidth
-      } else if (e.key === 'd' || e.key === 'D') {
-        playerDirection = 'right'
-        nextCellId = cellIdNum + 1
-      } else if (e.key === 's' || e.key === 'S') {
-        playerDirection = 'bottom'
-        nextCellId = cellIdNum + boardWidth
-      } else if (e.key === 'a' || e.key === 'A') {
-        playerDirection = 'left'
-        nextCellId = cellIdNum - 1
-      } else {
-        return
-      }
-
-      //WALL
-      if (currentCellClasslist.contains(`wall-${playerDirection}`) === true) {
-        return
-      } else {
-        moveTokens(currentCellElement, className, nextCellId)
-        //get new cell classlist
-        getCellElement(nextCellId)
-        const thisClasslist = cellElement.classList
-
-        //KILLABLE ENEMY
-        if (thisClasslist.contains('enemy-killable')) {
-          console.log('kill enemy')
-          sendEnemyHome(cellElement)
-
-          //DEADLY ENEMY
-        } else
-        if (thisClasslist.contains('enemy')) {
-          console.log('enemy')
-          sendPlayerHome(cellElement)
-
-
-          //WEAPON
-        } else if (thisClasslist.contains('weapon')) {
-          console.log('weapon')
-          document.querySelector('#alert').innerHTML = 'You have a sword, kill the dragons!'
-          let findAlert = document.querySelector('#alert')
-          findAlert.classList.remove('hide')
-          //turn enemies killable
-          const allEnemyLoc = document.querySelectorAll('.enemy')
-          for (let i = 0; i < allEnemyLoc.length; i++) {
-            allEnemyLoc[i].classList.remove('enemy')
-            allEnemyLoc[i].classList.add('enemy-killable')
-            enemyState = 'killable'
-            deadlyEnemies()
-          }
-          //clear weapons from board
-          const allWeapons = document.querySelectorAll('.weapon')
-          for (let i = 0; i < allWeapons.length; i++) {
-            allWeapons[i].classList.remove('weapon')
-          }
-
-          //TREASURE
-        } else if (thisClasslist.contains('treasure-chest')) {
-          console.log('treasure-chest')
-          playerScore = playerScore + 1000
-          if (playerScore >= winScore ) { gameOver('win') }
-          document.querySelector('#player-score span').innerHTML = playerScore
-          thisClasslist.remove('treasure-chest')
-        }
-        //MOVE ENEMY
-        
-        enemyMove()
-      }
-    })
-  }
+  // ==================================================
+  // COLLISION LOGIC
+  // ==================================================
 
 
 
 
-  // ===== CELL ACTIONS ON ENEMY MOVE =====
-  //start with attempting to move down, this can be adjusted later
-  // let myDirection = 'bottom'
-  // const directionChoice = ['wall-top', 'wall-right', 'wall-bottom', 'wall-left']
 
-  function enemyMove() {
-    let enemyList = []
-
-    //get all enemy locations
-    enemyList = enemies.map(elem => {
-      return elem.location
-    })
-    //get the classlist for enemy cells
-    enemyList.forEach(elem => {
-      //get my enemies array value
-      enemyArrayIndex = enemies.findIndex(e => e.location === elem)
-      // console.log(enemyArrayIndex)
-      const enemiesInCells = []
-
-      //get walls from this cell, and remove from the usable cells array
-      const myWalls = document.querySelector(('#cell-' + elem)).classList
-      // enemiesInCell[0] = me
-      if (!myWalls.contains('wall-top')) { enemiesInCells.push(elem - 10) }
-      if (!myWalls.contains('wall-right')) { enemiesInCells.push(elem + 1) }
-      if (!myWalls.contains('wall-bottom')) { enemiesInCells.push(elem + 10) }
-      if (!myWalls.contains('wall-left')) { enemiesInCells.push(elem - 1) }
-      // console.log(enemiesInCells)
-
-      //remove the enemy cells
-      const usableCells = []
-      enemiesInCells.forEach(item => {
-        if ((document.querySelector(('#cell-' + item)).classList).contains('enemy')) {
-          return
-        } else {
-          usableCells.push(item)
-        }
-      })
-
-      if (usableCells.length === 0) {
-        nextCellId = elem
-      } else {
-        nextCellId = usableCells[Math.floor(Math.random() * usableCells.length)]
-      }
-      // console.log(nextCellId)
-
-      //get cellElement for originating cell
-      cellElement = document.querySelector('#cell-' + elem)
-
-      if (enemyState === 'killable') {
-        if (cellElement.classList.contains('player')) {
-          console.log('kill dumb enemy')
-          sendEnemyHome(cellElement)
-          enemies[enemyArrayIndex].location = enemyHome
-        } else {
-          moveTokens(cellElement, 'enemy-killable', nextCellId)
-          enemies[enemyArrayIndex].location = nextCellId
-        }
-      } else {
-        moveTokens(cellElement, 'enemy', nextCellId)
-        enemies[enemyArrayIndex].location = nextCellId
-        if (cellElement.classList.contains('player')) { sendPlayerHome(cellElement) }
-      }
-    })
-  }
+  // ==================================================
+  // INITIALISE
+  // ==================================================
 
 
-
-  // ==== GAME OVER =====
-
-  function gameOver(result) {
-    const playerResult = playerScore
-    document.querySelector('#game-result').innerHTML = result
-    document.querySelector('#final-score').innerHTML = playerResult
-    playerScore = 0
-    playerLives = 3
-  }
-
-
-  
-
-
-  // ===== CREATE! =====
   createBoard()
-
-  document.querySelector('#start').addEventListener('click', () => {
-    startGame()
-  })
-  
-
-  function startGame() {
-    //start game assets
-    playerScore = 0
-    playerLives = 3
-    addTreasureChests()
-    enemiesHome()
-    addWeapons()
-    document.querySelector('#player-score span').innerHTML = playerScore
-    document.querySelector('#player-lives span').innerHTML = playerLives
-    //set first player location
-    document.querySelector(`#cell-${playerHome}`).classList.add('player')
-    //watch for movement
-    trackPlayerMove()
-    //need to hide start button
-  }
+  addTreasureChests()
+  addWeapons()
+  addEnemies()
+  document.querySelector(`#cell-${playerHome}`).classList.add('player')
 
 }
-
 window.addEventListener('DOMContentLoaded', pacnam)
