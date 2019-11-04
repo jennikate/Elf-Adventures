@@ -245,7 +245,8 @@ function pacnam() {
   }
 
   function killEnemy(enemyCellId) {
-    //player gets 20 points
+    playerScore = playerScore + enemyValue
+    document.querySelector('#player-score span').innerHTML = playerScore
     //enemy goes home
     moveTokens(enemyCellId, 'enemy-killable', enemyHome)
   }
