@@ -120,7 +120,7 @@ button {
 }
 
 .player-lives {
-  background-image: url('../assets/gold.png');
+  background-image: url('../assets/heart.png');
   background-size: 32px;
   background-repeat: no-repeat;
   height: 32px;

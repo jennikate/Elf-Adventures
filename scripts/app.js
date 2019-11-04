@@ -38,6 +38,7 @@ function pacnam() {
   }
 
 
+
   // ==================================================
   // CREATE GAME BOARD
   // ==================================================
@@ -218,6 +219,89 @@ function pacnam() {
   // COLLISION LOGIC
   // ==================================================
 
+  // Function(trigger) 
+  // - player move
+  // - weapon drop
+  // - treasure drop
+  // - start game 
+
+  function collision(trigger) {
+
+    //get current location of everything
+    let arrLocation = [
+      { myClass: '', myCellId: 0 }
+    ]
+
+    // arrLocation.push()
+
+
+
+
+    let myRef
+
+    myRef = document.querySelector('.player').id
+    myId = parseInt(myRef.split('-')[1])
+    arrLocation.push({ 'myClass': '.player', 'myCellId': myId })
+
+
+    console.log(arrLocation)
+
+  }
+
+
+
+
+
+  // console.log((document.querySelector('.player').id)).split('-')
+
+
+
+  // (document.querySelector(('.player-weapon').id).split('-')[1])
+  // (document.querySelectorAll(('.enemy').id).split('-')[1])
+  // (document.querySelectorAll(('.enemy-killable').id).split('-')[1])
+  // (document.querySelectorAll(('.treasure-chest').id).split('-')[1])
+  // (document.querySelectorAll(('.weapon').id).split('-')[1]))
+
+
+
+
+
+  // //get current location of everything
+
+
+
+  // Push to object array
+  // Class, cell Id
+
+  // Loop through this array and do the followong
+
+  // Get classes and I'd of cells around me and me
+  // Make move to array of movable cells
+  // - if my cell has wall too, remove top cell I'd from move to array
+
+  // Check cells around me
+  // - if I am [class type] and there is [class type] in next cell remove from move to array
+
+  // Now I have array of moveable cells
+
+  // //determine if enemy wants to hit player or run away
+  // If enemy cell has a player in move to array
+  // Then if enemy deadly move to that cell
+  // Else if enemy killable remove that cell from array
+  // If enemy and no cells available in move to array then do not move
+  // Else randomly pick cell and move to it
+
+
+  // Get player keypress move direction
+  // If not in move to array do nothing
+  // If is in move to array then
+  // Is there a class in next cell
+  // - if yes take actuon
+  // -- killable enemu
+  // -- treasure
+  // -- weapon
+  // -- enemy
+  // And move player accordingly
 
 
 
@@ -232,6 +316,8 @@ function pacnam() {
   addWeapons()
   addEnemies()
   document.querySelector(`#cell-${playerHome}`).classList.add('player')
+
+  collision()
 
 }
 window.addEventListener('DOMContentLoaded', pacnam)
