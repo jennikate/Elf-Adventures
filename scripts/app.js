@@ -25,6 +25,7 @@ function pacnam() {
   const enemyHome = 54
 
   let intervalId
+  let deadlyTimeout
 
 
 
@@ -210,6 +211,7 @@ function pacnam() {
         cellElement.classList.add('weapon')
       }
       removeWeapons()
+      console.log('addweapons ran')
     }, 3000)
   }
 
@@ -219,13 +221,13 @@ function pacnam() {
       weaponCells.forEach(elem => {
         elem.classList.remove('weapon')
       })
+      console.log('removeweapons ran')
     }, 1000)
   }
 
 
 
   function addEnemies() {
-    console.log(level)
     //remove any existing enemies
     document.querySelectorAll('.enemy').forEach(elem => {
       const currentEnemy = elem.classList
@@ -387,7 +389,8 @@ function pacnam() {
   }
 
   function deadlyEnemies() {
-    setTimeout(() => {
+    deadlyTimeout = setTimeout(() => {
+      console.log('Im making things deadly soon')
       // console.log('enemies deadly')
       const enemyCells = document.querySelectorAll('.enemy-killable')
       enemyCells.forEach(elem => {
@@ -395,14 +398,15 @@ function pacnam() {
         elem.classList.add('enemy')
       })
       const playerCell = document.querySelector('.player-weapon').classList
-      playerCell.remove('player')
+      playerCell.remove('player-weapon')
       playerCell.add('player')
       enemyState = 'deadly'
       document.querySelector('#alert').innerHTML = ''
       document.querySelector('#notification').classList.add('hide')
+      console.log('Im running addweapons')
       addWeapons()
+      console.log('deadlyenemy ran')
     }, 5000)
-    //start weapon timer
 
   }
 
@@ -644,6 +648,12 @@ function pacnam() {
       addEnemies()
       addPlayer()
       enemyState = 'deadly'
+      myHeart = document.querySelector('.heart-one')
+      myHeart.classList.add('heart')
+      myHeart = document.querySelector('.heart-two')
+      myHeart.classList.add('heart')
+      myHeart = document.querySelector('.heart-three')
+      myHeart.classList.add('heart')
     })
   }
   function nextLevel() {
@@ -666,22 +676,38 @@ function pacnam() {
 
   function gameover() {
     clearInterval(intervalId)
+    clearTimeout(deadlyTimeout)
     const notificationUpdate = document.querySelector('#notification').classList
+    const endNote = document.querySelector('#end-note').classList
+    const nextLevelButton = document.querySelector('#next-level').classList
+    const newGameButton = document.querySelector('#new-game').classList
     notificationUpdate.remove('hide')
+    endNote.remove('hide')
+    nextLevelButton.add('hide')
+    newGameButton.remove('hide')
     document.querySelector('#game-result').innerHTML = 'Game Over'
     document.querySelector('#final-score ').innerHTML = `Your score ${playerScore}`
   }
 
   function levelWon() {
     clearInterval(intervalId)
+    clearTimeout(deadlyTimeout)
     const notificationUpdate = document.querySelector('#notification').classList
     const endNote = document.querySelector('#end-note').classList
+    const nextLevelButton = document.querySelector('#next-level').classList
+    const newGameButton = document.querySelector('#new-game').classList
     notificationUpdate.remove('hide')
     endNote.remove('hide')
+    nextLevelButton.remove('hide')
+    newGameButton.add('hide')
     document.querySelector('#game-result').innerHTML = 'Level Complete'
     document.querySelector('#final-score ').innerHTML = `Your score ${playerScore}`
   }
 
+  document.querySelector('#new-game').addEventListener('click', () => {
+    //probably a better way exists to do this
+    location.reload()
+  })
 
 }
 

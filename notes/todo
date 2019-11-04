@@ -1,7 +1,11 @@
 
+
+[x] fix bug where after dragon killable timeouts it leaves a player token on screen with player-weapon
+
+[] make hearts correct at each level reset (persist? get new ones?)
+
+
 [] create an end game state with final big treasure to collect
-[] fix bug where after dragon killable timeouts it leaves a player token on screen with player-weapon
-// pretty sure I need to just add a break somewhere
 [] randomise weapon locations
 [] randomise treasure locations
 
