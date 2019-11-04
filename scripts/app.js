@@ -24,6 +24,8 @@ function pacnam() {
   let enemyState = 'deadly'
   const enemyHome = 54
 
+  let intervalId
+
 
 
 
@@ -200,13 +202,14 @@ function pacnam() {
     }
   }
 
+//THIS NEEDS TO STOP IF I PICK UP A WEAPON AND START AGAIN WHEN DRAGONS NORMAL
   function addWeapons() {
-    setTimeout(() => {
+    intervalId = setInterval(() => {
       for (let i = 0; i < weapons.length; i++) {
         getCellElement(weapons[i])
         cellElement.classList.add('weapon')
       }
-    removeWeapons()
+      removeWeapons()
     }, 3000)
   }
 
@@ -216,9 +219,10 @@ function pacnam() {
       weaponCells.forEach(elem => {
         elem.classList.remove('weapon')
       })
-      addWeapons()
-    }, 3000)
+    }, 1000)
   }
+
+
 
   function addEnemies() {
     console.log(level)
@@ -358,13 +362,11 @@ function pacnam() {
       notificationUpdate.remove('hide')
       document.querySelector('#alert').innerHTML = 'You have a sword, kill the dragons!'
     })
-    //start remove weapon timer
-    
     //start enemies back to deadly timer
-    //start weapon respawn timer
+    deadlyEnemies()
   }
 
-  
+
 
   function lootTreasure(thisCell) {
     //remove that treasure cell class
@@ -377,7 +379,28 @@ function pacnam() {
     //last treasure collected means level won
     if (document.querySelectorAll('.treasure-chest').length === 0) {
       levelWon()
+    } else {
+      return
     }
+  }
+
+  function deadlyEnemies() {
+    setTimeout(() => {
+      // console.log('enemies deadly')
+      const enemyCells = document.querySelectorAll('.enemy-killable')
+      enemyCells.forEach(elem => {
+        elem.classList.remove('enemy-killable')
+        elem.classList.add('enemy')
+      })
+      const playerCell = document.querySelector('.player-weapon').classList
+      playerCell.remove('player')
+      playerCell.add('player')
+      enemyState = 'deadly'
+      document.querySelector('#alert').innerHTML = ''
+      document.querySelector('#notification').classList.add('hide')
+    }, 5000)
+    //start weapon timer
+    addWeapons()
   }
 
 
@@ -606,9 +629,9 @@ function pacnam() {
   function start() {
     document.querySelector('#start').addEventListener('click', () => {
       const notificationUpdate = document.querySelector('#notification').classList
-      const buttonUpdate = document.querySelector('#next-level').classList
+      const endNote = document.querySelector('#end-note').classList
       notificationUpdate.add('hide')
-      buttonUpdate.add('hide')
+      endNote.add('hide')
       document.querySelector('#alert').innerHTML = ''
       // console.log('clickedstart')
       addTreasureChests()
@@ -622,9 +645,9 @@ function pacnam() {
     document.querySelector('#next-level').addEventListener('click', () => {
       level = level + 1
       const notificationUpdate = document.querySelector('#notification').classList
-      const buttonUpdate = document.querySelector('#next-level').classList
+      const endNote = document.querySelector('#end-note').classList
       notificationUpdate.add('hide')
-      buttonUpdate.add('hide')
+      endNote.add('hide')
       document.querySelector('#alert').innerHTML = ''
       addTreasureChests()
       addWeapons()
@@ -635,7 +658,7 @@ function pacnam() {
   }
 
   function gameover() {
-    // console.log('gameover')
+    clearInterval(intervalId)
     const notificationUpdate = document.querySelector('#notification').classList
     notificationUpdate.remove('hide')
     document.querySelector('#game-result').innerHTML = 'Game Over'
@@ -643,10 +666,11 @@ function pacnam() {
   }
 
   function levelWon() {
+    clearInterval(intervalId)
     const notificationUpdate = document.querySelector('#notification').classList
-    const buttonUpdate = document.querySelector('#next-level').classList
+    const endNote = document.querySelector('#end-note').classList
     notificationUpdate.remove('hide')
-    buttonUpdate.remove('hide')
+    endNote.remove('hide')
     document.querySelector('#game-result').innerHTML = 'Level Complete'
     document.querySelector('#final-score ').innerHTML = `Your score ${playerScore}`
   }
