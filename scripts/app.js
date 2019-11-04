@@ -202,7 +202,7 @@ function pacnam() {
     }
   }
 
-//THIS NEEDS TO STOP IF I PICK UP A WEAPON AND START AGAIN WHEN DRAGONS NORMAL
+
   function addWeapons() {
     intervalId = setInterval(() => {
       for (let i = 0; i < weapons.length; i++) {
@@ -340,6 +340,8 @@ function pacnam() {
 
 
   function getWeapon() {
+    //stop weapon creation timer
+    clearInterval(intervalId)
     //change state to killable
     enemyState = 'killable'
     //hide all weapons
@@ -398,9 +400,10 @@ function pacnam() {
       enemyState = 'deadly'
       document.querySelector('#alert').innerHTML = ''
       document.querySelector('#notification').classList.add('hide')
+      addWeapons()
     }, 5000)
     //start weapon timer
-    addWeapons()
+    
   }
 
 
@@ -633,6 +636,8 @@ function pacnam() {
       notificationUpdate.add('hide')
       endNote.add('hide')
       document.querySelector('#alert').innerHTML = ''
+    document.querySelector('#game-result').innerHTML = ''
+    document.querySelector('#final-score ').innerHTML = ''
       // console.log('clickedstart')
       addTreasureChests()
       addWeapons()
@@ -649,6 +654,8 @@ function pacnam() {
       notificationUpdate.add('hide')
       endNote.add('hide')
       document.querySelector('#alert').innerHTML = ''
+      document.querySelector('#game-result').innerHTML = ''
+      document.querySelector('#final-score ').innerHTML = ''
       addTreasureChests()
       addWeapons()
       addEnemies()
