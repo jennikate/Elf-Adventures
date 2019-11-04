@@ -235,8 +235,8 @@ function pacnam() {
   function collision() {
     //TESTING
     // enemyState = 'killable'
-    // // document.querySelector('#cell-54').classList.add('enemy-killable')
-    // document.querySelector('#cell-98').classList.add('enemy-killable')
+    // document.querySelector('#cell-54').classList.add('enemy-killable')
+    document.querySelector('#cell-98').classList.add('enemy')
     // document.querySelector('#cell-99').classList.add('player-weapon')
 
     //set variables for this function
@@ -288,7 +288,7 @@ function pacnam() {
     //for each myCellId in arrLocation
     //start with one
     console.log(arrLocation)
-    const replaceWithLoopVar = arrLocation[2]
+    const replaceWithLoopVar = arrLocation[4]
     //trigger is a userkeypress, but we move enemy first
 
 
@@ -321,8 +321,8 @@ function pacnam() {
         }
       }
       //move enemies
-      if (moveTo === 0) { moveToCellId = replaceWithLoopVar.myCellId } //I have no viable options so I stay here
-      else if (moveTo.length === 1) { moveToCellId = moveTo } //I have only one option (or I am next to a player) so I want to move there
+      if (moveTo.length === 0) { moveToCellId = replaceWithLoopVar.myCellId } //I have no viable options so I stay here
+      else if (typeof moveTo === 'number') { moveToCellId = moveTo } //I have only one option (or I am next to a player) so I want to move there
       else {
         //get a random location to move to
         moveToCellId = moveTo[Math.floor(Math.random() * moveTo.length)]
