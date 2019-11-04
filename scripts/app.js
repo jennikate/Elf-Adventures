@@ -317,8 +317,12 @@ function pacnam() {
     enemyLocations.forEach(elem => {
       elem.classList.remove('enemy')
       elem.classList.add('enemy-killable')
+      //show kill enemy message
+      const notificationUpdate = document.querySelector('#notification').classList
+      notificationUpdate.remove('hide')
+      document.querySelector('#alert').innerHTML = 'You have a sword, kill the dragons!'
+
     })
-    //enemyclass isn't clearing from original cell as its getting caught in the enemy movement so addressing that in the killable enemy move
 
 
     //start weapon respawn timer
@@ -332,7 +336,7 @@ function pacnam() {
     //give user points
     playerScore = playerScore + treasureValue
     document.querySelector('#player-score span').innerHTML = playerScore
-    
+
   }
 
 
@@ -351,7 +355,7 @@ function pacnam() {
 
   function collision(playerDirection) {
     // console.log(playerDirection)
-   
+
     //set variables for this function
     let myRefArray
     let myRef
@@ -569,6 +573,7 @@ function pacnam() {
 
   function gameover() {
     console.log('gameover')
+
   }
 
 }
