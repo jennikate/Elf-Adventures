@@ -201,10 +201,23 @@ function pacnam() {
   }
 
   function addWeapons() {
-    for (let i = 0; i < weapons.length; i++) {
-      getCellElement(weapons[i])
-      cellElement.classList.add('weapon')
-    }
+    setTimeout(() => {
+      for (let i = 0; i < weapons.length; i++) {
+        getCellElement(weapons[i])
+        cellElement.classList.add('weapon')
+      }
+    removeWeapons()
+    }, 3000)
+  }
+
+  function removeWeapons() {
+    setTimeout(() => {
+      const weaponCells = document.querySelectorAll('.weapon')
+      weaponCells.forEach(elem => {
+        elem.classList.remove('weapon')
+      })
+      addWeapons()
+    }, 3000)
   }
 
   function addEnemies() {
@@ -221,10 +234,10 @@ function pacnam() {
     })
     //create number of enemies
     const enemies = [54]
-    if ( level === 2 ) { enemies.push(44) }
-    if ( level === 3 ) { 
-      enemies.push(44) 
-      enemies.push(55) 
+    if (level === 2) { enemies.push(44) }
+    if (level === 3) {
+      enemies.push(44)
+      enemies.push(55)
     }
     //add enemies to cells
     for (let i = 0; i < enemies.length; i++) {
@@ -345,11 +358,13 @@ function pacnam() {
       notificationUpdate.remove('hide')
       document.querySelector('#alert').innerHTML = 'You have a sword, kill the dragons!'
     })
-
-
-    //start weapon respawn timer
+    //start remove weapon timer
+    
     //start enemies back to deadly timer
+    //start weapon respawn timer
   }
+
+  
 
   function lootTreasure(thisCell) {
     //remove that treasure cell class
