@@ -225,7 +225,25 @@ function pacnam() {
     }
   }
 
-
+  function addPlayer() {
+    //clear player
+    if (document.querySelector('.player') || document.querySelector('.player-weapon')) {
+      console.log('player exists')
+      console.log(document.querySelector('.player'))
+      console.log(document.querySelector('.player-weapon'))
+      if (document.querySelector('.player')) {
+        const getPlayer = document.querySelector('.player').classList
+        getPlayer.remove('player')
+      }
+      if (document.querySelector('.player-weapon')) {
+        const getPlayer = document.querySelector('.player-weapon').classList
+        getPlayer.remove('player-weapon')
+      }
+    }
+    //add player
+    const setPlayer = document.querySelector(`#cell-${playerHome}`).classList
+    setPlayer.add('player')
+  }
 
   // ==================================================
   // FUNCTIONS FOR TOKEN MOVEMENT
@@ -333,6 +351,12 @@ function pacnam() {
     playerScore = playerScore + treasureValue
     document.querySelector('#player-score span').innerHTML = playerScore
 
+    //last treasure collected means level won
+    if (document.querySelectorAll('.treasure-chest').length === 0) {
+      levelWon()
+    } else {
+      console.log('chests')
+    }
   }
 
 
@@ -532,6 +556,7 @@ function pacnam() {
 
   createBoard()
   start()
+  nextLevel()
 
 
 
@@ -559,19 +584,48 @@ function pacnam() {
 
   function start() {
     document.querySelector('#start').addEventListener('click', () => {
-      console.log('clickedstart')
+      const notificationUpdate = document.querySelector('#notification').classList
+      const buttonUpdate = document.querySelector('#next-level').classList
+      notificationUpdate.add('hide')
+      buttonUpdate.add('hide')
+      document.querySelector('#alert').innerHTML = ''
+      // console.log('clickedstart')
       addTreasureChests()
       addWeapons()
       addEnemies()
-      document.querySelector(`#cell-${playerHome}`).classList.add('player')
+      addPlayer()
+      enemyState = 'deadly'
+    })
+  }
+  function nextLevel() {
+    document.querySelector('#next-level').addEventListener('click', () => {
+      const notificationUpdate = document.querySelector('#notification').classList
+      const buttonUpdate = document.querySelector('#next-level').classList
+      notificationUpdate.add('hide')
+      buttonUpdate.add('hide')
+      document.querySelector('#alert').innerHTML = ''
+      addTreasureChests()
+      addWeapons()
+      addEnemies()
+      addPlayer()
+      enemyState = 'deadly'
     })
   }
 
   function gameover() {
-    console.log('gameover')
+    // console.log('gameover')
     const notificationUpdate = document.querySelector('#notification').classList
     notificationUpdate.remove('hide')
     document.querySelector('#game-result').innerHTML = 'Game Over'
+    document.querySelector('#final-score ').innerHTML = `Your score ${playerScore}`
+  }
+
+  function levelWon() {
+    const notificationUpdate = document.querySelector('#notification').classList
+    const buttonUpdate = document.querySelector('#next-level').classList
+    notificationUpdate.remove('hide')
+    buttonUpdate.remove('hide')
+    document.querySelector('#game-result').innerHTML = 'Level Complete'
     document.querySelector('#final-score ').innerHTML = `Your score ${playerScore}`
   }
 

@@ -90,12 +90,12 @@ section {
 
 button {
   background-color: purple;
-  width: 150px;
   height: 50px;
   color: white;
   font-family: 'Cormorant Upright', serif;
   font-size: 32px;
 }
+
 
 #control-panel {
   min-width: 150px;
@@ -107,6 +107,7 @@ button {
 }
 #control-panel button {
   align-self: flex-end;
+  width: 150px;
 }
 
 .player-score {
