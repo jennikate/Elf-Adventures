@@ -10,9 +10,13 @@ function pacnam() {
 
   let cellIdRef
   let cellElement
+  const arrLocation = [{ myRef: '', myCellId: 0, myClassList: '' }]
+  let moveTo = []
 
   const treasure = [12, 39, 75, 90] //this can be randomised later
   const weapons = [42, 66] //this can be randomised later
+
+  let enemyState = 'deadly'
 
 
   // ==== CREATE ARRAYS FOR TOKEN TRACKING
@@ -20,7 +24,7 @@ function pacnam() {
   const enemies = [
     { enemyId: 0, homeId: 54, location: 54 },
     { enemyId: 1, homeId: 45, location: 45 },
-    { enemyId: 2, homeId: 55, location: 55 }
+    { enemyId: 3, homeId: 55, location: 55 }
   ]
 
 
@@ -215,6 +219,8 @@ function pacnam() {
 
 
 
+
+
   // ==================================================
   // COLLISION LOGIC
   // ==================================================
@@ -226,52 +232,134 @@ function pacnam() {
   // - start game 
 
   function collision(trigger) {
+    //TESTING
+    // enemyState = 'killable'
+    // document.querySelector('#cell-54').classList.add('enemy-killable')
+    document.querySelector('#cell-98').classList.add('enemy-killable')
+    document.querySelector('#cell-99').classList.add('player-weapon')
 
     //get current location of everything
-    let arrLocation = [
-      { myClass: '', myCellId: 0 }
-    ]
-
-    // arrLocation.push()
 
 
-
-
+    let myRefArray
     let myRef
+    let myId
 
-    myRef = document.querySelector('.player').id
-    myId = parseInt(myRef.split('-')[1])
-    arrLocation.push({ 'myClass': '.player', 'myCellId': myId })
+    //PLAYER AND ENEMY (if deadly uses one class, if killable uses a different class)
+    if (enemyState === 'deadly') {
+      myRef = document.querySelector('.player')
+      myId = parseInt((myRef.id).split('-')[1])
+      arrLocation.push({ 'myRef': '.player', 'myCellId': myId, 'myClassList': myRef })
+
+      myRefArray = document.querySelectorAll('.enemy')
+      myRefArray.forEach(elem => {
+        myRef = elem
+        myId = parseInt((myRef.id).split('-')[1])
+        arrLocation.push({ 'myRef': '.enemy', 'myCellId': myId, 'myClassList': myRef })
+      })
+    } else if (enemyState === 'killable') {
+      myRef = document.querySelector('.player-weapon')
+      myId = parseInt((myRef.id).split('-')[1])
+      arrLocation.push({ 'myRef': '.player-weapon', 'myCellId': myId, 'myClassList': myRef })
+
+      const myRefArray = document.querySelectorAll('.enemy-killable')
+      myRefArray.forEach(elem => {
+        myRef = elem
+        myId = parseInt((myRef.id).split('-')[1])
+        arrLocation.push({ 'myRef': '.enemy-killable', 'myCellId': myId, 'myClassList': myRef })
+      })
+    }
+
+    //TREASURE AND WEAPON
+    myRefArray = document.querySelectorAll('.treasure-chest')
+    myRefArray.forEach(elem => {
+      myRef = elem
+      myId = parseInt((myRef.id).split('-')[1])
+      arrLocation.push({ 'myRef': '.treasure-chest', 'myCellId': myId, 'myClassList': myRef })
+    })
+
+    myRefArray = document.querySelectorAll('.weapon')
+    myRefArray.forEach(elem => {
+      myRef = elem
+      myId = parseInt((myRef.id).split('-')[1])
+      arrLocation.push({ 'myRef': '.weapon', 'myCellId': myId, 'myClassList': myRef })
+    })
 
 
-    console.log(arrLocation)
+
+
+    // ===== CHECK CELLS AROUND ME =====
+
+    //for each myCellId in arrLocation
+    //start with one
+
+    // console.log(arrLocation)
+    const replaceWithLoopVar = arrLocation[4]
+
+
+    //get the walls of my cell
+    const myWalls = document.querySelector(('#cell-' + replaceWithLoopVar.myCellId)).classList
+    //if there is no wall, then push the available cellIDs to my moveTo array
+    if (!myWalls.contains('wall-top')) { moveTo.push(replaceWithLoopVar.myCellId - 10) } //I can move up
+    if (!myWalls.contains('wall-right')) { moveTo.push(replaceWithLoopVar.myCellId + 1) } //I can move right
+    if (!myWalls.contains('wall-bottom')) { moveTo.push(replaceWithLoopVar.myCellId + 10) } //I can move down
+    if (!myWalls.contains('wall-left')) { moveTo.push(replaceWithLoopVar.myCellId - 1) } //I can move left
+
+    //check for scenarios where I won't move to that cell, remove them from arrLocation
+    //set length for loop (length will change if I remove anything)
+
+    for (let i = moveTo.length-1; i >=0; i--) {
+      getCellElement(moveTo[i])
+      let nextCellClasses = cellElement.classList
+
+      // if cell contains an enemy & I am enemy : remove from array as I won't move there
+
+      if ((replaceWithLoopVar.myRef === '.enemy' || replaceWithLoopVar.myRef === '.enemy-killable') &&
+        (nextCellClasses.contains('enemy') || nextCellClasses.contains('enemy-killable'))) {
+
+        console.log(`I am cell ${replaceWithLoopVar.myCellId}, I am checking the moveTo array item number ${[i]}
+        that array item is cell ${moveTo[i]} element has the following classes ${nextCellClasses}`)
+        console.log(`Does cell ${moveTo[i]} have an enemy in it? ${nextCellClasses.contains('enemy')}`)
+
+        moveTo.splice([i], 1)
+        
+      }
+      console.log([i])
+    }
+
+
+
+
+
+
+      // //if cell contains player & I am enemy & enemy is killable : I won't move there
+      // if (replaceWithLoopVar.myRef === '.player' && enemyState === 'killable') {
+      //   console.log('I am enemy that wants to run')
+      //   moveTo.splice([i], 1)
+      // }
+
+
+      //if cell contains enemy & I am player & enemy is deadly : I want to move there
+      //if cell contains enemy & I am player & enemy is killable : I want to move there
+
+
+      //if cell contains enemy & I am player : player is in control, move where they press
+      //if keypress is not available in array do nothing
+      //else move token
+
+
+
+
+    
+    console.log('final moveTo array', moveTo)
+
+
 
   }
 
 
 
 
-
-  // console.log((document.querySelector('.player').id)).split('-')
-
-
-
-  // (document.querySelector(('.player-weapon').id).split('-')[1])
-  // (document.querySelectorAll(('.enemy').id).split('-')[1])
-  // (document.querySelectorAll(('.enemy-killable').id).split('-')[1])
-  // (document.querySelectorAll(('.treasure-chest').id).split('-')[1])
-  // (document.querySelectorAll(('.weapon').id).split('-')[1]))
-
-
-
-
-
-  // //get current location of everything
-
-
-
-  // Push to object array
-  // Class, cell Id
 
   // Loop through this array and do the followong
 
@@ -318,6 +406,8 @@ function pacnam() {
   document.querySelector(`#cell-${playerHome}`).classList.add('player')
 
   collision()
+
+  //testing, can remove these
 
 }
 window.addEventListener('DOMContentLoaded', pacnam)
