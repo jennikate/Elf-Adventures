@@ -1,4 +1,18 @@
 
+[] create an end game state with final big treasure to collect
+[] fix bug where after dragon killable timeouts it leaves a player token on screen with player-weapon
+// pretty sure I need to just add a break somewhere
+[] randomise weapon locations
+[] randomise treasure locations
+
+[] sounds?
+[] responsive?
+[] local host save?
+
+
+
+//==========OLD LIST
+
 //PAPER
 [x] draw out wall for level 1
 [x] work out food box positions

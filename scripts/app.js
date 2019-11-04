@@ -403,7 +403,7 @@ function pacnam() {
       addWeapons()
     }, 5000)
     //start weapon timer
-    
+
   }
 
 
@@ -636,8 +636,8 @@ function pacnam() {
       notificationUpdate.add('hide')
       endNote.add('hide')
       document.querySelector('#alert').innerHTML = ''
-    document.querySelector('#game-result').innerHTML = ''
-    document.querySelector('#final-score ').innerHTML = ''
+      document.querySelector('#game-result').innerHTML = ''
+      document.querySelector('#final-score ').innerHTML = ''
       // console.log('clickedstart')
       addTreasureChests()
       addWeapons()
