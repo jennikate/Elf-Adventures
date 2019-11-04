@@ -1,3 +1,4 @@
+/* eslint-disable brace-style */
 
 
 function pacnam() {
@@ -13,11 +14,13 @@ function pacnam() {
   const arrLocation = [{ myRef: '', myCellId: 0, myClassList: '' }]
   let moveTo = []
   let moveToCellId
+  let playerDirection
 
   const treasure = [12, 39, 75, 90] //this can be randomised later
   const weapons = [42, 66] //this can be randomised later
 
   let enemyState = 'deadly'
+
 
 
   // ==== CREATE ARRAYS FOR TOKEN TRACKING
@@ -232,17 +235,19 @@ function pacnam() {
   // - treasure drop
   // - start game 
 
-  function collision() {
+
+
+
+  function collision(playerDirection) {
+    console.log(playerDirection)
     //TESTING
-    // enemyState = 'killable'
-    // document.querySelector('#cell-54').classList.add('enemy-killable')
-    document.querySelector('#cell-98').classList.add('enemy')
-    // document.querySelector('#cell-99').classList.add('player-weapon')
+
 
     //set variables for this function
     let myRefArray
     let myRef
     let myId
+    // let nextCellClasses
 
     // ===== CHECK CELLS AROUND ME =====
     //PLAYER AND ENEMY (if deadly uses one class, if killable uses a different class)
@@ -288,8 +293,11 @@ function pacnam() {
     //for each myCellId in arrLocation
     //start with one
     console.log(arrLocation)
-    const replaceWithLoopVar = arrLocation[4]
+    const replaceWithLoopVar = arrLocation[1]
     //trigger is a userkeypress, but we move enemy first
+
+    console.log(replaceWithLoopVar.myCellId)
+    console.log(replaceWithLoopVar.myRef)
 
 
     //get the walls of my cell
@@ -332,91 +340,45 @@ function pacnam() {
 
 
     //now loop for player move
+    console.log(replaceWithLoopVar.myRef)
+
     if (replaceWithLoopVar.myRef === '.player' || replaceWithLoopVar.myRef === '.player-weapon') {
-      console.log(`I am a player`)
+      //get the cell ID I want to move to
+      if (playerDirection === 'top') { moveToCellId = replaceWithLoopVar.myCellId - 10 }
+      if (playerDirection === 'right') { moveToCellId = replaceWithLoopVar.myCellId + 1 }
+      if (playerDirection === 'bottom') { moveToCellId = replaceWithLoopVar.myCellId + 10 }
+      if (playerDirection === 'left') { moveToCellId = replaceWithLoopVar.myCellId - 1 }
+      console.log(`I am a player with a weapon, I am in cell ${replaceWithLoopVar.myCellId}, I want to move to ${playerDirection} ${moveToCellId}, I can move to ${moveTo}`)
+
+      //can I move to the cell I want to move to?
+      if (moveTo.includes(moveToCellId)) {
+        console.log('I can go there')
+        //whats in that cell?
+        getCellElement(moveToCellId)
+        console.log(`I am in cell ${replaceWithLoopVar.myCellId} I am looking at cell ${moveToCellId}. The class list for that cell is ${cellElement.classList}`)
+
+        //is there a killable enemy?
+        if ((cellElement.classList).contains('enemy-killable')) {
+          console.log('killit')
+          //kill enemy function
+          //move player function
+        } else if ((cellElement.classList).contains('treasure-chest')) {
+          //is there a treasure chest?
+        } else if ((cellElement.classList).contains('weapon')) {
+          //is there a weapon?
+        } else if ((cellElement.classList).contains('enemy')) {
+          //is there an enemy
+        }
+      } else {
+        console.log('no no ')
+        //player tried to move into a wall
+        return
+      }
     }
-
-    //if I am a player and I move to a cell with a deadly enemy on it, I die
-    //if I am a player and I move to a cell with a killable enemy on it, I kill it
-    //if I am a player and I move to a cell with a treasure chest on it, I loot it
-    //if I am a player and I move to a cell with a weapon on it, I have a sword and enemies will die
-
-
-
-
-
-
-
-    //select position for enemy to move to
-
-
-    //call move token and pass moveToCellId, myClassName
-
-
-
-
-
-
-    // console.log(`I am cell ${replaceWithLoopVar.myCellId}, I am checking the moveTo array item number ${[i]}
-    // that array item is cell ${moveTo[i]} element has the following classes ${nextCellClasses}`)
-    // console.log(`Does cell ${moveTo[i]} have an enemy in it? ${nextCellClasses.contains('enemy')}`)
-
-
-
-    //ENEMY MOVES
-    //enemy moves to enemy : don't move there, remove from array
-    //enemy killable moves to enemy killable : don't move there, remove from array
-    //enemy killable moves to player : don't move there, remove from array
-    //enemy moves to player : GO HERE AND KILL THEM
-
-    //PLAYER MOVES
-    //w, W, uparrow : if cell available go up
-    //d, D, right arrow: if cell available go right
-    //s, S, down arrow: if cell available go down
-    //a, A, left arrow: if cell available go left
-
-
-
 
 
 
   }
-
-
-
-
-
-  // Loop through this array and do the followong
-
-  // Get classes and I'd of cells around me and me
-  // Make move to array of movable cells
-  // - if my cell has wall too, remove top cell I'd from move to array
-
-  // Check cells around me
-  // - if I am [class type] and there is [class type] in next cell remove from move to array
-
-  // Now I have array of moveable cells
-
-  // //determine if enemy wants to hit player or run away
-  // If enemy cell has a player in move to array
-  // Then if enemy deadly move to that cell
-  // Else if enemy killable remove that cell from array
-  // If enemy and no cells available in move to array then do not move
-  // Else randomly pick cell and move to it
-
-
-  // Get player keypress move direction
-  // If not in move to array do nothing
-  // If is in move to array then
-  // Is there a class in next cell
-  // - if yes take actuon
-  // -- killable enemu
-  // -- treasure
-  // -- weapon
-  // -- enemy
-  // And move player accordingly
-
-
 
 
   // ==================================================
@@ -430,9 +392,32 @@ function pacnam() {
   addEnemies()
   document.querySelector(`#cell-${playerHome}`).classList.add('player')
 
-  collision()
 
   //testing, can remove these
 
+  enemyState = 'killable'
+  document.querySelector('#cell-54').classList.add('enemy-killable')
+  document.querySelector('#cell-98').classList.add('enemy-killable')
+  document.querySelector('#cell-99').classList.add('player-weapon')
+
+  // ==================================================
+  // PLAYER MOVEMENT
+  // ==================================================
+  document.addEventListener('keyup', (e) => {
+    if (e.key === 'w' || e.key === 'W') { playerDirection = 'top' }
+    else if (e.key === 'd' || e.key === 'D') { playerDirection = 'right' }
+    else if (e.key === 's' || e.key === 'S') { playerDirection = 'bottom' }
+    else if (e.key === 'a' || e.key === 'A') { playerDirection = 'left' }
+    else {
+      return
+    }
+
+    console.log(playerDirection)
+    collision(playerDirection)
+    return playerDirection
+  })
+
+
 }
-window.addEventListener('DOMContentLoaded', pacnam)
+
+window.addEventListener('DOMContentLoaded', pacnam) 
