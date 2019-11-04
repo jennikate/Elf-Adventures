@@ -50,3 +50,5 @@
 [] killable ghosts don't always die
 [] game end doesn't clear all cell tokens
 
+
+IF ENEMY ON PLAYER HOME DO NOT LET PLAYER SPAWN THERE

@@ -10,6 +10,8 @@ function pacnam() {
   const playerHome = Math.max(boardSize) - 1
   const treasureValue = 1000
   const enemyValue = 20
+  let playerLives = 3
+  let playerScore = 0
 
   let cellIdRef
   let cellElement
@@ -261,7 +263,38 @@ function pacnam() {
   function enemyKill(moveToCellId) {
     //return player home
     moveTokens(moveToCellId, 'player', playerHome)
-    //remove a life
+    playerLives = playerLives - 1
+    let myHeart
+    console.log(playerLives)
+    switch (playerLives) {
+      case 2: {
+        myHeart = document.querySelector('.heart-three')
+        myHeart.classList.add('empty-heart')
+        myHeart.classList.remove('heart')
+        break;
+      }
+      case 1: {
+        myHeart = document.querySelector('.heart-two')
+        myHeart.classList.add('empty-heart')
+        myHeart.classList.remove('heart')
+        break;
+      }
+      case 0: {
+        myHeart = document.querySelector('.heart-one')
+        myHeart.classList.add('empty-heart')
+        myHeart.classList.remove('heart')
+        break;
+      }
+      default: {
+        document.querySelector('.heart-one').classList = 'heart heart-one'
+        document.querySelector('.heart-two').classList = 'heart heart-two'
+        document.querySelector('.heart-three').classList = 'heart heart-three'
+      }
+    }
+    if (playerLives === 0) {
+      gameover()
+    }
+    // document.querySelector('#player-lives span').innerHTML = `<img src='assets/heart.png />`
   }
 
 
@@ -275,14 +308,17 @@ function pacnam() {
     })
     //change player class to player-weapon
     const playerLocation = document.querySelector('.player')
-    playerLocation.classList.add('player-weapon')
-    playerLocation.classList.remove('player')
+    const playerLocationClassList = playerLocation.classList
+    playerLocationClassList.add('player-weapon')
+    playerLocationClassList.remove('player')
     //change enemy class to enemy-killable
-    const enemyLocations = document.querySelectorAll('.enemy')
+    let enemyLocations = document.querySelectorAll('.enemy')
     enemyLocations.forEach(elem => {
       elem.classList.remove('enemy')
       elem.classList.add('enemy-killable')
     })
+    //enemyclass isn't clearing from original cell as its getting caught in the enemy movement so addressing that in the killable enemy move
+
 
     //start weapon respawn timer
     //start enemies back to deadly timer
@@ -293,6 +329,9 @@ function pacnam() {
     const thisTreasureLocation = document.querySelector(`#cell-${thisCell}`)
     thisTreasureLocation.classList.remove('treasure-chest')
     //give user points
+    playerScore = playerScore + treasureValue
+    document.querySelector('#player-score span').innerHTML = playerScore
+    
   }
 
 
@@ -425,7 +464,7 @@ function pacnam() {
           moveTokens(replaceWithLoopVar.myCellId, replaceWithLoopVar.myRef, moveToCellId)
         } //deadly enemy moves first
         //if player in that location kill them
-        console.log(document.querySelector(`#cell-${moveToCellId}`))
+        // console.log(document.querySelector(`#cell-${moveToCellId}`))
         if ((document.querySelector(`#cell-${moveToCellId}`)).classList.contains('player')) {
           enemyKill(moveToCellId)
           break // no more moves this round
@@ -458,17 +497,13 @@ function pacnam() {
             break //stop the loop if player kills an enemy!
           } else if ((cellElement.classList).contains('treasure-chest')) {
             lootTreasure(moveToCellId)
-            moveTokens(replaceWithLoopVar.myCellId, 'player-weapon', moveToCellId)
+            moveTokens(replaceWithLoopVar.myCellId, replaceWithLoopVar.myRef, moveToCellId)
           } else if ((cellElement.classList).contains('weapon')) {
             getWeapon()
             moveTokens(replaceWithLoopVar.myCellId, 'player-weapon', moveToCellId)
-            //======ARGH           
-            //clear enemy cells (they're persisting somewhere easiest to clear them here and refactor later)
-            const persistentEnemy = document.querySelectorAll('.enemy')
-            persistentEnemy.classList.remove('enemy')
-            //this is throwing an error when enemies didn't persist, but the game is working
           } else if ((cellElement.classList).contains('enemy')) {
-            enemyKill(moveToCellId)
+            // enemyKill(moveToCellId)
+            console.log('player dumb')
           } else {
             //player can move to cell
             moveTokens(replaceWithLoopVar.myCellId, replaceWithLoopVar.myRef, moveToCellId)
@@ -494,10 +529,8 @@ function pacnam() {
 
 
   createBoard()
-  addTreasureChests()
-  addWeapons()
-  addEnemies()
-  document.querySelector(`#cell-${playerHome}`).classList.add('player')
+  start()
+
 
 
 
@@ -518,6 +551,23 @@ function pacnam() {
     return playerDirection
   })
 
+  // ==================================================
+  // START AND END THINGS
+  // ==================================================
+
+  function start() {
+    document.querySelector('#start').addEventListener('click', () => {
+      console.log('clickedstart')
+      addTreasureChests()
+      addWeapons()
+      addEnemies()
+      document.querySelector(`#cell-${playerHome}`).classList.add('player')
+    })
+  }
+
+  function gameover() {
+    console.log('gameover')
+  }
 
 }
 

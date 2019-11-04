@@ -1,3 +1,4 @@
+/* eslint-disable brace-style */
 
 
 function pacnam() {
@@ -11,7 +12,7 @@ function pacnam() {
   const boardSize = boardWidth ** 2
   const playerHome = Math.max(boardSize) - 1
   const cells = [] //declare so can push cell ids to it
-  const overlay = document.querySelector('.overlay')
+  // const overlay = document.querySelector('.overlay')
 
 
   // ===== CREATE VARIABLES FOR ADJUSTING CELLS =====
@@ -339,39 +340,39 @@ function pacnam() {
 
           //DEADLY ENEMY
         } else
-          if (thisClasslist.contains('enemy')) {
-            console.log('enemy')
-            sendPlayerHome(cellElement)
+        if (thisClasslist.contains('enemy')) {
+          console.log('enemy')
+          sendPlayerHome(cellElement)
 
 
-            //WEAPON
-          } else if (thisClasslist.contains('weapon')) {
-            console.log('weapon')
-            document.querySelector('#alert').innerHTML = 'You have a sword, kill the dragons!'
-            let findAlert = document.querySelector('#alert')
-            findAlert.classList.remove('hide')
-            //turn enemies killable
-            const allEnemyLoc = document.querySelectorAll('.enemy')
-            for (let i = 0; i < allEnemyLoc.length; i++) {
-              allEnemyLoc[i].classList.remove('enemy')
-              allEnemyLoc[i].classList.add('enemy-killable')
-              enemyState = 'killable'
-              deadlyEnemies()
-            }
-            //clear weapons from board
-            const allWeapons = document.querySelectorAll('.weapon')
-            for (let i = 0; i < allWeapons.length; i++) {
-              allWeapons[i].classList.remove('weapon')
-            }
-
-            //TREASURE
-          } else if (thisClasslist.contains('treasure-chest')) {
-            console.log('treasure-chest')
-            playerScore = playerScore + 1000
-            if (playerScore >= winScore) { gameOver('win') }
-            document.querySelector('#player-score span').innerHTML = playerScore
-            thisClasslist.remove('treasure-chest')
+          //WEAPON
+        } else if (thisClasslist.contains('weapon')) {
+          console.log('weapon')
+          document.querySelector('#alert').innerHTML = 'You have a sword, kill the dragons!'
+          // let findAlert = document.querySelector('#alert')
+          // findAlert.classList.remove('hide')
+          //turn enemies killable
+          const allEnemyLoc = document.querySelectorAll('.enemy')
+          for (let i = 0; i < allEnemyLoc.length; i++) {
+            allEnemyLoc[i].classList.remove('enemy')
+            allEnemyLoc[i].classList.add('enemy-killable')
+            enemyState = 'killable'
+            deadlyEnemies()
           }
+          //clear weapons from board
+          const allWeapons = document.querySelectorAll('.weapon')
+          for (let i = 0; i < allWeapons.length; i++) {
+            allWeapons[i].classList.remove('weapon')
+          }
+
+          //TREASURE
+        } else if (thisClasslist.contains('treasure-chest')) {
+          console.log('treasure-chest')
+          playerScore = playerScore + 1000
+          if (playerScore >= winScore) { gameOver('win') }
+          document.querySelector('#player-score span').innerHTML = playerScore
+          thisClasslist.remove('treasure-chest')
+        }
         //MOVE ENEMY
 
         enemyMove()
@@ -496,49 +497,47 @@ window.addEventListener('DOMContentLoaded', pacnam)
 
 
 
-    //if I am a player and I move to a cell with a killable enemy on it, I kill it
-    //  if (replaceWithLoopVar.myRef === '.player-weapon') {
+//if I am a player and I move to a cell with a killable enemy on it, I kill it
+//  if (replaceWithLoopVar.myRef === '.player-weapon') {
 
-    //if I am a player and I move to a cell with a killable enemy on it, I kill it
-    //if I am a player and I move to a cell with a treasure chest on it, I loot it
-    //if I am a player and I move to a cell with a weapon on it, I have a sword and enemies will die
-    //this is a dumb move, so unlikely so do last if I am a player and I move to a cell with a deadly enemy on it, I die
-
-
-
-
-
-
-
-    //select position for enemy to move to
-
-
-    //call move token and pass moveToCellId, myClassName
+//if I am a player and I move to a cell with a killable enemy on it, I kill it
+//if I am a player and I move to a cell with a treasure chest on it, I loot it
+//if I am a player and I move to a cell with a weapon on it, I have a sword and enemies will die
+//this is a dumb move, so unlikely so do last if I am a player and I move to a cell with a deadly enemy on it, I die
 
 
 
 
 
 
-    // console.log(`I am cell ${replaceWithLoopVar.myCellId}, I am checking the moveTo array item number ${[i]}
-    // that array item is cell ${moveTo[i]} element has the following classes ${nextCellClasses}`)
-    // console.log(`Does cell ${moveTo[i]} have an enemy in it? ${nextCellClasses.contains('enemy')}`)
+
+//select position for enemy to move to
+
+
+//call move token and pass moveToCellId, myClassName
 
 
 
-    //ENEMY MOVES
-    //enemy moves to enemy : don't move there, remove from array
-    //enemy killable moves to enemy killable : don't move there, remove from array
-    //enemy killable moves to player : don't move there, remove from array
-    //enemy moves to player : GO HERE AND KILL THEM
-
-    //PLAYER MOVES
-    //w, W, uparrow : if cell available go up
-    //d, D, right arrow: if cell available go right
-    //s, S, down arrow: if cell available go down
-    //a, A, left arrow: if cell available go left
 
 
+
+// console.log(`I am cell ${replaceWithLoopVar.myCellId}, I am checking the moveTo array item number ${[i]}
+// that array item is cell ${moveTo[i]} element has the following classes ${nextCellClasses}`)
+// console.log(`Does cell ${moveTo[i]} have an enemy in it? ${nextCellClasses.contains('enemy')}`)
+
+
+
+//ENEMY MOVES
+//enemy moves to enemy : don't move there, remove from array
+//enemy killable moves to enemy killable : don't move there, remove from array
+//enemy killable moves to player : don't move there, remove from array
+//enemy moves to player : GO HERE AND KILL THEM
+
+//PLAYER MOVES
+//w, W, uparrow : if cell available go up
+//d, D, right arrow: if cell available go right
+//s, S, down arrow: if cell available go down
+//a, A, left arrow: if cell available go left
 
 
 
@@ -548,34 +547,36 @@ window.addEventListener('DOMContentLoaded', pacnam)
 
 
 
-  // Loop through this array and do the followong
-
-  // Get classes and I'd of cells around me and me
-  // Make move to array of movable cells
-  // - if my cell has wall too, remove top cell I'd from move to array
-
-  // Check cells around me
-  // - if I am [class type] and there is [class type] in next cell remove from move to array
-
-  // Now I have array of moveable cells
-
-  // //determine if enemy wants to hit player or run away
-  // If enemy cell has a player in move to array
-  // Then if enemy deadly move to that cell
-  // Else if enemy killable remove that cell from array
-  // If enemy and no cells available in move to array then do not move
-  // Else randomly pick cell and move to it
 
 
-  // Get player keypress move direction
-  // If not in move to array do nothing
-  // If is in move to array then
-  // Is there a class in next cell
-  // - if yes take actuon
-  // -- killable enemu
-  // -- treasure
-  // -- weapon
-  // -- enemy
-  // And move player accordingly
+// Loop through this array and do the followong
+
+// Get classes and I'd of cells around me and me
+// Make move to array of movable cells
+// - if my cell has wall too, remove top cell I'd from move to array
+
+// Check cells around me
+// - if I am [class type] and there is [class type] in next cell remove from move to array
+
+// Now I have array of moveable cells
+
+// //determine if enemy wants to hit player or run away
+// If enemy cell has a player in move to array
+// Then if enemy deadly move to that cell
+// Else if enemy killable remove that cell from array
+// If enemy and no cells available in move to array then do not move
+// Else randomly pick cell and move to it
+
+
+// Get player keypress move direction
+// If not in move to array do nothing
+// If is in move to array then
+// Is there a class in next cell
+// - if yes take actuon
+// -- killable enemu
+// -- treasure
+// -- weapon
+// -- enemy
+// And move player accordingly
 
 

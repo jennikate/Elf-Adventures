@@ -119,13 +119,18 @@ button {
   margin-bottom: 20px;
 }
 
-.player-lives {
-  background-image: url('../assets/heart.png');
+#player-lives span {
   background-size: 32px;
   background-repeat: no-repeat;
   height: 32px;
   font-size: 32px;
   padding-left: 42px;
+}
+.heart {
+  background-image: url('../assets/heart.png');
+}
+.empty-heart {
+  background-image: url('../assets/heart-empty.png');
 }
 
 .alert {
