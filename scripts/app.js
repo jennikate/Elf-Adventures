@@ -563,7 +563,6 @@ function pacnam() {
       const enemyCells = document.querySelectorAll('.enemy-killable')
       enemyCells.forEach(elem => {
         elem.classList.remove('enemy-killable')
-        elem.classList.add('flash')
         elem.classList.add('enemy')
       })
       const playerCell = document.querySelector('.player-weapon').classList
@@ -571,12 +570,9 @@ function pacnam() {
       playerCell.add('player')
       enemyState = 'deadly'
       document.querySelector('#alert').innerHTML = ''
-      classListNotification.add('hide')
-      classListNotification.remove('fade')
       // console.log('Im running addweapons')
       //start weapon timer again
       addWeapons()
-      // console.log('deadlyenemy ran')
     }, 5000)
 
   }
