@@ -13,20 +13,32 @@ function pacnam() {
   let playerLives = 3
   let playerScore = 0
   let level = 4
-  let maxLevels = 4
-
+  const maxLevels = 4
 
   let cellIdRef
   let cellElement
 
-  const treasure = [12, 39, 75, 90] //this can be randomised later
-  const weapons = [42, 66] //this can be randomised later
-
+  const enemies = [54, 44, 45, 55]
   let enemyState = 'deadly'
   const enemyHome = 54
 
   let intervalId
   let deadlyTimeout
+
+  //these are viable locations that weapons or treasures drop in. Would be good to make this part of the collision array but that's a future thing
+  //maybe make them the cells they should not appear in (not appear where enemies or player do, or next to player start cell)
+  const treasure = [2, 3]
+  const weapons = [7, 9]
+  const assignedCells = []
+  assignedCells.push(playerHome)
+  //include cells directly around player so nothing drops there
+  assignedCells.push(playerHome - 10)
+  assignedCells.push(playerHome + 1)
+  assignedCells.push(playerHome + 10)
+  assignedCells.push(playerHome - 1)
+  enemies.forEach(elem => {
+    assignedCells.push(elem)
+  })
 
 
 
@@ -54,34 +66,34 @@ function pacnam() {
     { cellId: 0, top: true, right: false, bottom: false, left: true },
     { cellId: 1, top: true, right: false, bottom: true, left: false },
     { cellId: 2, top: true, right: false, bottom: false, left: false },
-    { cellId: 3, top: true, right: false, bottom: true, left: false },
+    { cellId: 3, top: true, right: false, bottom: false, left: false },
     { cellId: 4, top: true, right: true, bottom: false, left: false },
     { cellId: 5, top: true, right: false, bottom: false, left: true },
-    { cellId: 6, top: true, right: false, bottom: true, left: false },
+    { cellId: 6, top: true, right: false, bottom: false, left: false },
     { cellId: 7, top: true, right: false, bottom: false, left: false },
     { cellId: 8, top: true, right: false, bottom: true, left: false },
     { cellId: 9, top: true, right: true, bottom: false, left: false },
 
     { cellId: 10, top: false, right: true, bottom: false, left: true },
-    { cellId: 11, top: true, right: true, bottom: true, left: true },
+    { cellId: 11, top: true, right: true, bottom: false, left: true },
     { cellId: 12, top: false, right: true, bottom: false, left: true },
-    { cellId: 13, top: true, right: true, bottom: true, left: true },
+    { cellId: 13, top: false, right: true, bottom: true, left: true },
     { cellId: 14, top: false, right: true, bottom: false, left: true },
     { cellId: 15, top: false, right: true, bottom: false, left: true },
-    { cellId: 16, top: true, right: true, bottom: true, left: true },
+    { cellId: 16, top: false, right: true, bottom: true, left: true },
     { cellId: 17, top: false, right: true, bottom: false, left: true },
-    { cellId: 18, top: true, right: true, bottom: true, left: true },
+    { cellId: 18, top: true, right: true, bottom: false, left: true },
     { cellId: 19, top: false, right: true, bottom: false, left: true },
 
     { cellId: 20, top: false, right: false, bottom: false, left: true },
-    { cellId: 21, top: true, right: false, bottom: true, left: false },
+    { cellId: 21, top: false, right: false, bottom: true, left: false },
     { cellId: 22, top: false, right: false, bottom: false, left: false },
     { cellId: 23, top: true, right: false, bottom: false, left: false },
     { cellId: 24, top: false, right: false, bottom: true, left: false },
     { cellId: 25, top: false, right: false, bottom: true, left: false },
     { cellId: 26, top: true, right: false, bottom: false, left: false },
     { cellId: 27, top: false, right: false, bottom: false, left: false },
-    { cellId: 28, top: true, right: false, bottom: true, left: false },
+    { cellId: 28, top: false, right: false, bottom: true, left: false },
     { cellId: 29, top: false, right: true, bottom: false, left: false },
 
     { cellId: 30, top: false, right: false, bottom: true, left: true },
@@ -196,11 +208,48 @@ function pacnam() {
   }
 
   // SET INITIAL POSITIONS
+
+
+  // function addTreasureChests() {
+  //   //called by start game 
+  //   for (let i = 0; i < treasure.length; i++) {
+  //     getCellElement(treasure[i])
+  //     cellElement.classList.add('treasure-chest')
+  //   }
+  // }
   function addTreasureChests() {
-    //called by start game 
-    for (let i = 0; i < treasure.length; i++) {
-      getCellElement(treasure[i])
-      cellElement.classList.add('treasure-chest')
+    //decide on number of chests for level (initially, always 4)
+    const numberOfChests = 4
+    const maxChestLocationArray = numberOfChests*(numberOfChests+1)
+    console.log(maxChestLocationArray)
+    //clear existing treasure locations
+    //track location of treasure so can avoid duplication
+    const treasureLocations = []
+    //remove exist treasure chests
+    const treasureCells = document.querySelectorAll('.treasure-chest')
+    treasureCells.forEach(elem => {
+      elem.classList.remove('treasure-chest')
+    })
+    while (treasureLocations.length < maxChestLocationArray) {
+      //get a random number 
+      const randomNumber = Math.floor(Math.random() * 100)
+      // const randomCell = `#cell-${randomNumber}`
+      //check if that's allowable (if not in array of 'assignedCells')
+      if (assignedCells.includes(randomNumber) || treasureLocations.includes(randomNumber)) {
+        console.log('nono')
+      } else {
+        getCellElement(randomNumber)
+        cellElement.classList.add('treasure-chest')
+        treasureLocations.push(randomNumber)
+        //also push cells directly around me so two don't end up next to each other
+        treasureLocations.push(randomNumber - 10)
+        treasureLocations.push(randomNumber + 1)
+        treasureLocations.push(randomNumber + 10)
+        treasureLocations.push(randomNumber - 1)
+      }
+      //decide on size (small, medium, large)
+      //add box
+      //if level 4 add a mega box
     }
   }
 
@@ -212,7 +261,7 @@ function pacnam() {
         cellElement.classList.add('weapon')
       }
       removeWeapons()
-      console.log('addweapons ran')
+      // console.log('addweapons ran')
     }, 3000)
   }
 
@@ -222,7 +271,7 @@ function pacnam() {
       weaponCells.forEach(elem => {
         elem.classList.remove('weapon')
       })
-      console.log('removeweapons ran')
+      // console.log('removeweapons ran')
     }, 1000)
   }
 
@@ -240,20 +289,30 @@ function pacnam() {
       currentEnemy.remove('enemy-killable')
     })
     //create number of enemies
-    const enemies = [54]
-    if (level === 2) { enemies.push(44) }
+    const setEnemies = []
+    // console.log(enemies)
+    // console.log(setEnemies)
+    if (level === 1) {
+      setEnemies.push(enemies[0])
+    }
+    if (level === 2) {
+      setEnemies.push(enemies[0])
+      setEnemies.push(enemies[1])
+    }
     if (level === 3) {
-      enemies.push(44)
-      enemies.push(55)
+      setEnemies.push(enemies[0])
+      setEnemies.push(enemies[1])
+      setEnemies.push(enemies[2])
     }
     if (level === 4) {
-      enemies.push(44)
-      enemies.push(55)
-      enemies.push(45)
+      setEnemies.push(enemies[0])
+      setEnemies.push(enemies[1])
+      setEnemies.push(enemies[2])
+      setEnemies.push(enemies[3])
     }
     //add enemies to cells
-    for (let i = 0; i < enemies.length; i++) {
-      getCellElement(enemies[i])
+    for (let i = 0; i < setEnemies.length; i++) {
+      getCellElement(setEnemies[i])
       cellElement.classList.add('enemy')
     }
   }

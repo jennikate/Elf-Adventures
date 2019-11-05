@@ -1,13 +1,19 @@
 
 
 [x] fix bug where after dragon killable timeouts it leaves a player token on screen with player-weapon
+[x] make hearts correct at each level reset (persist? get new ones?)
 
-[] make hearts correct at each level reset (persist? get new ones?)
 
-
-[] create an end game state with final big treasure to collect
 [] randomise weapon locations
+[] create different treasure sizes worth different amounts
 [] randomise treasure locations
+[] make things flash on the change from killable to non killable and reverse so they're more obvious
+[] hide sword message at game end
+[] style of notification
+
+[] refactor
+
+[] can I make enemy move on interval
 
 [] sounds?
 [] responsive?
