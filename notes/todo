@@ -4,7 +4,7 @@
 [x] make hearts correct at each level reset (persist? get new ones?)
 
 
-[] randomise weapon locations
+[x] randomise weapon locations
 [] create different treasure sizes worth different amounts
 [x] randomise treasure locations
 [] make things flash on the change from killable to non killable and reverse so they're more obvious

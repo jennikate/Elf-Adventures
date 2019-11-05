@@ -8,7 +8,12 @@ function pacnam() {
   const boardWidth = 10
   const boardSize = boardWidth ** 2
   const playerHome = Math.max(boardSize) - 1
+
   const treasureValue = 1000
+  const treasureSmallValue = 500
+  const treasureTinyValue = 100
+  const treasureMax = 2000
+
   const enemyValue = 20
   let playerLives = 3
   let playerScore = 0
@@ -31,7 +36,7 @@ function pacnam() {
   // const treasure = [2, 3]
   // const weapons = [7, 9]
   //track location of treasure so can avoid duplication
-  const treasureLocations = [] //have to track so can avoid dropping weapons there
+  let treasureLocations = [] //have to track so can avoid dropping weapons there
   const assignedCells = []
   assignedCells.push(playerHome)
   //include cells directly around player so nothing drops there
@@ -221,45 +226,70 @@ function pacnam() {
   //   }
   // }
   function addTreasureChests() {
+    console.log('called add treasure')
     //decide on number of chests for level (initially, always 4)
     const numberOfChests = 4
     const maxChestLocationArray = numberOfChests * (numberOfChests + 1) //sets me a length to loop until so I can prevent adding to cells next to each other
-    // console.log(maxChestLocationArray)
-    //clear existing treasure locations
-    //remove exist treasure chests
+    //clear my tracking array
+    treasureLocations = []
+    console.log('looking for existing treasure chests')
     const treasureCells = document.querySelectorAll('.treasure-chest')
     treasureCells.forEach(elem => {
       elem.classList.remove('treasure-chest')
     })
+    console.log(`removed ${treasureCells.length}`)
+    // //remove existing treasure chest sizes
+    // const treasureCellsSmall = document.querySelectorAll('.treasure-small')
+    // treasureCells.forEach(elem => {
+    //   elem.classList.remove('treasure-small')
+    // }) 
+    // const treasureCellsTiny = document.querySelectorAll('.treasure-tiny')
+    // treasureCells.forEach(elem => {
+    //   elem.classList.remove('treasure-tiny')
+    // })
+    // const treasureCellsMax = document.querySelectorAll('.treasure-max')
+    // treasureCells.forEach(elem => {
+    //   elem.classList.remove('treasure-max')
+    // })
+    console.log(`${treasureLocations.length} long vs ${maxChestLocationArray}`)
     while (treasureLocations.length < maxChestLocationArray) {
+      console.log('started treasure while loop')
       //get a random number 
       const randomNumber = Math.floor(Math.random() * 100)
       // const randomCell = `#cell-${randomNumber}`
       //check if that's allowable (if not in array of 'assignedCells')
       if (!assignedCells.includes(randomNumber) && !treasureLocations.includes(randomNumber)) {
-         getCellElement(randomNumber)
+        getCellElement(randomNumber)
         cellElement.classList.add('treasure-chest')
+        //decide on size (small, medium, large) & add class
+        //if level one, add one tiny, one small, two normal
+        //how many chests are on the board
+        // console.log((maxChestLocationArray - treasureLocations.length)/(numberOfChests+1))
+
+
+        //push to location array so know where not to place next box
         treasureLocations.push(randomNumber)
         //also push cells directly around me so two don't end up next to each other
         treasureLocations.push(randomNumber - 10)
         treasureLocations.push(randomNumber + 1)
         treasureLocations.push(randomNumber + 10)
         treasureLocations.push(randomNumber - 1)
+        //decide on size (small, medium, large)
+        //add box
+        //if level 4 add a mega box
       }
-      //decide on size (small, medium, large)
-      //add box
-      //if level 4 add a mega box
+      
     }
   }
 
 
   function addWeapons() {
-    console.log(`starting add timer ${(new Date).getHours()}:${(new Date).getMinutes()}:${(new Date).getSeconds()}`)
+    // console.log(`starting add timer ${(new Date).getHours()}:${(new Date).getMinutes()}:${(new Date).getSeconds()}`)
     //make sure remove timer isn't running
     // console.log('calling addweapon')
     addWeaponId = setTimeout(() => {
       clearTimeout(removeWeaponTimeout)
-      
+
       // console.log('adding weapon')
       //decide on number of weapons
       const numberOfWeapons = 2
@@ -294,7 +324,7 @@ function pacnam() {
 
 
   function removeWeapons() {
-    console.log(`starting remove timer ${(new Date).getHours()}:${(new Date).getMinutes()}:${(new Date).getSeconds()}`)
+    // console.log(`starting remove timer ${(new Date).getHours()}:${(new Date).getMinutes()}:${(new Date).getSeconds()}`)
     //clear weapon interval so it stops counting
     // clearInterval(intervalId)
     clearTimeout(addWeaponId)
@@ -306,8 +336,8 @@ function pacnam() {
       // console.log('removeweapons ran')
       //start weapon timer again
       addWeapons()
-    console.log(`ending remove timer ${(new Date).getHours()}:${(new Date).getMinutes()}:${(new Date).getSeconds()}`)
-    console.log('weapons down')
+      // console.log(`ending remove timer ${(new Date).getHours()}:${(new Date).getMinutes()}:${(new Date).getSeconds()}`)
+      // console.log('weapons down')
     }, 10000)
   }
 
