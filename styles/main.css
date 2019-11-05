@@ -22,6 +22,10 @@ h1 {
   margin-bottom: 20px;
 }
 
+main {
+  position: relative;
+}
+
 section {
   display: flex;
   align-content: center;
@@ -146,7 +150,7 @@ button {
   background-image: url('../assets/heart-empty.png');
 }
 
-.notification {
+.banner {
   background-color: rgba(231, 244, 228, 0.3);
   margin-top: 20px;
   padding: 10px;
@@ -155,23 +159,24 @@ button {
   font-weight: 700;
   color: #ffffcc;
   text-align: center;
+  position: absolute;
+  top: 25%;
 }
+
 
 .hide {
   display:none; 
 }
 
 
-/* ANIMATIONS - not happy with these */
-/* 
-.flash {
-  animation: flash 1s linear 0.25;
+/* Animations */
+.fade {
+  opacity: 0;
+  animation: fade 3s linear;
 }
 
-
-
-@keyframes flash  {
-  50% {
-    background-color: white;
-  }
-} */
+@keyframes fade {
+  0% { opacity: 0 }
+  50% { opacity: 1 }
+  100% { opacity: 0 }
+}

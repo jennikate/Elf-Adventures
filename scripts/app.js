@@ -17,7 +17,7 @@ function pacnam() {
   const enemyValue = 20
   let playerLives = 3
   let playerScore = 0
-  let level = 4
+  let level = 1
   const maxLevels = 4
 
   let cellIdRef
@@ -62,6 +62,7 @@ function pacnam() {
     return cellElement
   }
 
+  const classListNotification = document.querySelector('#notification').classList
 
 
   // ==================================================
@@ -514,8 +515,8 @@ function pacnam() {
       elem.classList.add('enemy-killable')
       elem.classList.add('flash')
       //show kill enemy message
-      const notificationUpdate = document.querySelector('#notification').classList
-      notificationUpdate.remove('hide')
+      classListNotification.remove('hide')
+      classListNotification.add('fade')
       document.querySelector('#alert').innerHTML = 'You have a sword, kill the dragons!'
     })
     //stop remove weapon timer
@@ -570,7 +571,8 @@ function pacnam() {
       playerCell.add('player')
       enemyState = 'deadly'
       document.querySelector('#alert').innerHTML = ''
-      document.querySelector('#notification').classList.add('hide')
+      classListNotification.add('hide')
+      classListNotification.remove('fade')
       // console.log('Im running addweapons')
       //start weapon timer again
       addWeapons()
@@ -804,9 +806,9 @@ function pacnam() {
 
   function start() {
     document.querySelector('#start').addEventListener('click', () => {
-      const notificationUpdate = document.querySelector('#notification').classList
       const endNote = document.querySelector('#end-note').classList
-      notificationUpdate.add('hide')
+      classListNotification.add('hide')
+      classListNotification.remove('fade')
       endNote.add('hide')
       document.querySelector('#alert').innerHTML = ''
       document.querySelector('#game-result').innerHTML = ''
@@ -830,9 +832,9 @@ function pacnam() {
   function nextLevel() {
     document.querySelector('#next-level').addEventListener('click', () => {
       level = level + 1
-      const notificationUpdate = document.querySelector('#notification').classList
       const endNote = document.querySelector('#end-note').classList
-      notificationUpdate.add('hide')
+      classListNotification.add('hide')
+      classListNotification.remove('fade')
       endNote.add('hide')
       document.querySelector('#alert').innerHTML = ''
       document.querySelector('#game-result').innerHTML = ''
@@ -849,11 +851,10 @@ function pacnam() {
     // clearInterval(intervalId)
     clearTimeout(addWeaponId)
     clearTimeout(deadlyTimeout)
-    const notificationUpdate = document.querySelector('#notification').classList
+    clearTimeout(removeWeaponTimeout)
     const endNote = document.querySelector('#end-note').classList
     const nextLevelButton = document.querySelector('#next-level').classList
     const newGameButton = document.querySelector('#new-game').classList
-    notificationUpdate.remove('hide')
     endNote.remove('hide')
     nextLevelButton.add('hide')
     newGameButton.remove('hide')
@@ -866,11 +867,11 @@ function pacnam() {
       // clearInterval(intervalId)
       clearTimeout(addWeaponId)
       clearTimeout(deadlyTimeout)
-      const notificationUpdate = document.querySelector('#notification').classList
+      clearTimeout(removeWeaponTimeout)
       const endNote = document.querySelector('#end-note').classList
       const nextLevelButton = document.querySelector('#next-level').classList
       const newGameButton = document.querySelector('#new-game').classList
-      notificationUpdate.remove('hide')
+      // notificationUpdate.remove('hide')
       endNote.remove('hide')
       nextLevelButton.add('hide') // hidden when no more levels
       newGameButton.remove('hide') //show new game button
@@ -881,11 +882,12 @@ function pacnam() {
       // clearInterval(intervalId)
       clearTimeout(addWeaponId)
       clearTimeout(deadlyTimeout)
-      const notificationUpdate = document.querySelector('#notification').classList
+      clearTimeout(removeWeaponTimeout)
+      // const notificationUpdate = document.querySelector('#notification').classList
       const endNote = document.querySelector('#end-note').classList
       const nextLevelButton = document.querySelector('#next-level').classList
       const newGameButton = document.querySelector('#new-game').classList
-      notificationUpdate.remove('hide')
+      // notificationUpdate.remove('hide')
       endNote.remove('hide')
       nextLevelButton.remove('hide')
       newGameButton.add('hide')
