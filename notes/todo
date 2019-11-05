@@ -6,7 +6,7 @@
 
 [] randomise weapon locations
 [] create different treasure sizes worth different amounts
-[] randomise treasure locations
+[x] randomise treasure locations
 [] make things flash on the change from killable to non killable and reverse so they're more obvious
 [] hide sword message at game end
 [] style of notification

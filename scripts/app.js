@@ -12,7 +12,7 @@ function pacnam() {
   const enemyValue = 20
   let playerLives = 3
   let playerScore = 0
-  let level = 4
+  let level = 1
   const maxLevels = 4
 
   let cellIdRef
@@ -22,13 +22,16 @@ function pacnam() {
   let enemyState = 'deadly'
   const enemyHome = 54
 
-  let intervalId
+  let addWeaponId
   let deadlyTimeout
+  let removeWeaponTimeout
 
   //these are viable locations that weapons or treasures drop in. Would be good to make this part of the collision array but that's a future thing
   //maybe make them the cells they should not appear in (not appear where enemies or player do, or next to player start cell)
-  const treasure = [2, 3]
-  const weapons = [7, 9]
+  // const treasure = [2, 3]
+  // const weapons = [7, 9]
+  //track location of treasure so can avoid duplication
+  const treasureLocations = [] //have to track so can avoid dropping weapons there
   const assignedCells = []
   assignedCells.push(playerHome)
   //include cells directly around player so nothing drops there
@@ -220,11 +223,9 @@ function pacnam() {
   function addTreasureChests() {
     //decide on number of chests for level (initially, always 4)
     const numberOfChests = 4
-    const maxChestLocationArray = numberOfChests*(numberOfChests+1)
-    console.log(maxChestLocationArray)
+    const maxChestLocationArray = numberOfChests * (numberOfChests + 1) //sets me a length to loop until so I can prevent adding to cells next to each other
+    // console.log(maxChestLocationArray)
     //clear existing treasure locations
-    //track location of treasure so can avoid duplication
-    const treasureLocations = []
     //remove exist treasure chests
     const treasureCells = document.querySelectorAll('.treasure-chest')
     treasureCells.forEach(elem => {
@@ -235,10 +236,8 @@ function pacnam() {
       const randomNumber = Math.floor(Math.random() * 100)
       // const randomCell = `#cell-${randomNumber}`
       //check if that's allowable (if not in array of 'assignedCells')
-      if (assignedCells.includes(randomNumber) || treasureLocations.includes(randomNumber)) {
-        console.log('nono')
-      } else {
-        getCellElement(randomNumber)
+      if (!assignedCells.includes(randomNumber) && !treasureLocations.includes(randomNumber)) {
+         getCellElement(randomNumber)
         cellElement.classList.add('treasure-chest')
         treasureLocations.push(randomNumber)
         //also push cells directly around me so two don't end up next to each other
@@ -255,24 +254,61 @@ function pacnam() {
 
 
   function addWeapons() {
-    intervalId = setInterval(() => {
-      for (let i = 0; i < weapons.length; i++) {
-        getCellElement(weapons[i])
-        cellElement.classList.add('weapon')
+    console.log(`starting add timer ${(new Date).getHours()}:${(new Date).getMinutes()}:${(new Date).getSeconds()}`)
+    //make sure remove timer isn't running
+    // console.log('calling addweapon')
+    addWeaponId = setTimeout(() => {
+      clearTimeout(removeWeaponTimeout)
+      
+      // console.log('adding weapon')
+      //decide on number of weapons
+      const numberOfWeapons = 2
+      const maxWeaponsLocationArray = numberOfWeapons * (numberOfWeapons + 1)
+      //clear existing weapon locations
+      const weaponLocations = []
+      const weaponCells = document.querySelectorAll('.weapon')
+      weaponCells.forEach(elem => {
+        elem.classList.remove('weapon')
+      })
+      while (weaponLocations.length < maxWeaponsLocationArray) {
+        const weaponRandomNumber = Math.floor(Math.random() * 100)
+        if (!assignedCells.includes(weaponRandomNumber) && !weaponLocations.includes(weaponRandomNumber) && !treasureLocations.includes(weaponRandomNumber)) {
+          // console.log(`addingclass to ${weaponRandomNumber}`)
+          getCellElement(weaponRandomNumber)
+          const cellClassList = cellElement.classList
+          // console.log(cellClassList)
+          cellClassList.add('weapon')
+          // console.log(cellClassList.contains('weapon'))
+          weaponLocations.push(weaponRandomNumber)
+          //also push cells directly around me so two don't end up next to each other
+          weaponLocations.push(weaponRandomNumber - 10)
+          weaponLocations.push(weaponRandomNumber + 1)
+          weaponLocations.push(weaponRandomNumber + 10)
+          weaponLocations.push(weaponRandomNumber - 1)
+        }
       }
       removeWeapons()
-      // console.log('addweapons ran')
+      console.log('weapons up')
     }, 3000)
   }
 
+
   function removeWeapons() {
-    setTimeout(() => {
+    console.log(`starting remove timer ${(new Date).getHours()}:${(new Date).getMinutes()}:${(new Date).getSeconds()}`)
+    //clear weapon interval so it stops counting
+    // clearInterval(intervalId)
+    clearTimeout(addWeaponId)
+    removeWeaponTimeout = setTimeout(() => {
       const weaponCells = document.querySelectorAll('.weapon')
       weaponCells.forEach(elem => {
         elem.classList.remove('weapon')
       })
       // console.log('removeweapons ran')
-    }, 1000)
+      //start weapon timer again
+      addWeapons()
+    console.log(`ending remove timer ${(new Date).getHours()}:${(new Date).getMinutes()}:${(new Date).getSeconds()}`)
+    console.log('weapons down')
+    }, 10000)
   }
 
 
@@ -407,8 +443,12 @@ function pacnam() {
 
 
   function getWeapon() {
-    //stop weapon creation timer
-    clearInterval(intervalId)
+    console.log('weapon picked up')
+    //stop weapon creation & removal timers
+    // clearInterval(intervalId)
+    clearTimeout(addWeaponId)
+    clearTimeout(removeWeaponTimeout)
+    console.log('clear weapon timers')
     //change state to killable
     enemyState = 'killable'
     //hide all weapons
@@ -431,6 +471,7 @@ function pacnam() {
       notificationUpdate.remove('hide')
       document.querySelector('#alert').innerHTML = 'You have a sword, kill the dragons!'
     })
+    //stop remove weapon timer
     //start enemies back to deadly timer
     deadlyEnemies()
   }
@@ -455,7 +496,7 @@ function pacnam() {
 
   function deadlyEnemies() {
     deadlyTimeout = setTimeout(() => {
-      console.log('Im making things deadly soon')
+      // console.log('Im making things deadly soon')
       // console.log('enemies deadly')
       const enemyCells = document.querySelectorAll('.enemy-killable')
       enemyCells.forEach(elem => {
@@ -468,9 +509,10 @@ function pacnam() {
       enemyState = 'deadly'
       document.querySelector('#alert').innerHTML = ''
       document.querySelector('#notification').classList.add('hide')
-      console.log('Im running addweapons')
+      // console.log('Im running addweapons')
+      //start weapon timer again
       addWeapons()
-      console.log('deadlyenemy ran')
+      // console.log('deadlyenemy ran')
     }, 5000)
 
   }
@@ -740,7 +782,8 @@ function pacnam() {
   }
 
   function gameover() {
-    clearInterval(intervalId)
+    // clearInterval(intervalId)
+    clearTimeout(addWeaponId)
     clearTimeout(deadlyTimeout)
     const notificationUpdate = document.querySelector('#notification').classList
     const endNote = document.querySelector('#end-note').classList
@@ -756,7 +799,8 @@ function pacnam() {
 
   function levelWon() {
     if (level === maxLevels) {
-      clearInterval(intervalId)
+      // clearInterval(intervalId)
+      clearTimeout(addWeaponId)
       clearTimeout(deadlyTimeout)
       const notificationUpdate = document.querySelector('#notification').classList
       const endNote = document.querySelector('#end-note').classList
@@ -769,7 +813,8 @@ function pacnam() {
       document.querySelector('#game-result').innerHTML = 'Level Complete'
       document.querySelector('#final-score ').innerHTML = `Your score ${playerScore}`
     } else {
-      clearInterval(intervalId)
+      // clearInterval(intervalId)
+      clearTimeout(addWeaponId)
       clearTimeout(deadlyTimeout)
       const notificationUpdate = document.querySelector('#notification').classList
       const endNote = document.querySelector('#end-note').classList
