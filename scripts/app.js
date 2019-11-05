@@ -12,7 +12,7 @@ function pacnam() {
   const treasureValue = 1000
   const treasureSmallValue = 500
   const treasureTinyValue = 100
-  const treasureMax = 2000
+  const treasureMaxValue = 2000
 
   const enemyValue = 20
   let playerLives = 3
@@ -226,18 +226,18 @@ function pacnam() {
   //   }
   // }
   function addTreasureChests() {
-    console.log('called add treasure')
+    // console.log('called add treasure')
     //decide on number of chests for level (initially, always 4)
     const numberOfChests = 4
     const maxChestLocationArray = numberOfChests * (numberOfChests + 1) //sets me a length to loop until so I can prevent adding to cells next to each other
     //clear my tracking array
     treasureLocations = []
-    console.log('looking for existing treasure chests')
+    // console.log('looking for existing treasure chests')
     const treasureCells = document.querySelectorAll('.treasure-chest')
     treasureCells.forEach(elem => {
       elem.classList.remove('treasure-chest')
     })
-    console.log(`removed ${treasureCells.length}`)
+    // console.log(`removed ${treasureCells.length}`)
     // //remove existing treasure chest sizes
     // const treasureCellsSmall = document.querySelectorAll('.treasure-small')
     // treasureCells.forEach(elem => {
@@ -251,9 +251,9 @@ function pacnam() {
     // treasureCells.forEach(elem => {
     //   elem.classList.remove('treasure-max')
     // })
-    console.log(`${treasureLocations.length} long vs ${maxChestLocationArray}`)
+    // console.log(`${treasureLocations.length} long vs ${maxChestLocationArray}`)
     while (treasureLocations.length < maxChestLocationArray) {
-      console.log('started treasure while loop')
+      // console.log('started treasure while loop')
       //get a random number 
       const randomNumber = Math.floor(Math.random() * 100)
       // const randomCell = `#cell-${randomNumber}`
@@ -264,8 +264,19 @@ function pacnam() {
         //decide on size (small, medium, large) & add class
         //if level one, add one tiny, one small, two normal
         //how many chests are on the board
-        // console.log((maxChestLocationArray - treasureLocations.length)/(numberOfChests+1))
-
+        let thisCell = (maxChestLocationArray - treasureLocations.length) / (numberOfChests + 1)
+        // console.log(thisCell)
+        if (level === 4) {
+          cellElement.classList.add('treasure-chest')
+          cellElement.classList.add('treasure-max')
+        } else {
+          switch (thisCell) {
+            case 4: cellElement.classList.add('treasure-chest'); break;
+            case 3: cellElement.classList.add('treasure-chest'); break;
+            case 2: cellElement.classList.add('treasure-small'); break;
+            case 1: cellElement.classList.add('treasure-tiny'); break;
+          }
+        }
 
         //push to location array so know where not to place next box
         treasureLocations.push(randomNumber)
@@ -278,15 +289,15 @@ function pacnam() {
         //add box
         //if level 4 add a mega box
       }
-      
+
     }
   }
 
 
   function addWeapons() {
-    // console.log(`starting add timer ${(new Date).getHours()}:${(new Date).getMinutes()}:${(new Date).getSeconds()}`)
+    console.log(`starting add timer ${(new Date).getHours()}:${(new Date).getMinutes()}:${(new Date).getSeconds()}`)
     //make sure remove timer isn't running
-    // console.log('calling addweapon')
+    console.log('calling addweapon')
     addWeaponId = setTimeout(() => {
       clearTimeout(removeWeaponTimeout)
 
@@ -303,7 +314,7 @@ function pacnam() {
       while (weaponLocations.length < maxWeaponsLocationArray) {
         const weaponRandomNumber = Math.floor(Math.random() * 100)
         if (!assignedCells.includes(weaponRandomNumber) && !weaponLocations.includes(weaponRandomNumber) && !treasureLocations.includes(weaponRandomNumber)) {
-          // console.log(`addingclass to ${weaponRandomNumber}`)
+          console.log(`addingclass to ${weaponRandomNumber}`)
           getCellElement(weaponRandomNumber)
           const cellClassList = cellElement.classList
           // console.log(cellClassList)
@@ -324,7 +335,7 @@ function pacnam() {
 
 
   function removeWeapons() {
-    // console.log(`starting remove timer ${(new Date).getHours()}:${(new Date).getMinutes()}:${(new Date).getSeconds()}`)
+    console.log(`starting remove timer ${(new Date).getHours()}:${(new Date).getMinutes()}:${(new Date).getSeconds()}`)
     //clear weapon interval so it stops counting
     // clearInterval(intervalId)
     clearTimeout(addWeaponId)
@@ -333,11 +344,11 @@ function pacnam() {
       weaponCells.forEach(elem => {
         elem.classList.remove('weapon')
       })
-      // console.log('removeweapons ran')
+      console.log('removeweapons ran')
       //start weapon timer again
       addWeapons()
-      // console.log(`ending remove timer ${(new Date).getHours()}:${(new Date).getMinutes()}:${(new Date).getSeconds()}`)
-      // console.log('weapons down')
+      console.log(`ending remove timer ${(new Date).getHours()}:${(new Date).getMinutes()}:${(new Date).getSeconds()}`)
+      console.log('weapons down')
     }, 10000)
   }
 
@@ -509,13 +520,27 @@ function pacnam() {
 
 
   function lootTreasure(thisCell) {
+
     //remove that treasure cell class
     const thisTreasureLocation = document.querySelector(`#cell-${thisCell}`)
-    thisTreasureLocation.classList.remove('treasure-chest')
-    //give user points
-    playerScore = playerScore + treasureValue
-    document.querySelector('#player-score span').innerHTML = playerScore
 
+    //give user points
+    if (thisTreasureLocation.classList.contains('treasure-small')) {
+      playerScore = playerScore + treasureSmallValue
+    } else if (thisTreasureLocation.classList.contains('treasure-tiny')) {
+      playerScore = playerScore + treasureTinyValue
+    } else if (thisTreasureLocation.classList.contains('treasure-max')) {
+      playerScore = playerScore + treasureMaxValue
+    } else {
+      playerScore = playerScore + treasureValue
+    }
+    //show points
+    document.querySelector('#player-score span').innerHTML = playerScore
+    //clear chest classes
+    thisTreasureLocation.classList.remove('treasure-chest')
+    thisTreasureLocation.classList.remove('treasure-small')
+    thisTreasureLocation.classList.remove('treasure-tiny')
+    thisTreasureLocation.classList.remove('treasure-max')
     //last treasure collected means level won
     if (document.querySelectorAll('.treasure-chest').length === 0) {
       levelWon()

@@ -72,6 +72,18 @@ section {
   background-size: 100%;
   background-repeat: no-repeat;
 }
+.treasure-small {
+  background-size: 70%;
+  background-position: center;
+}
+.treasure-tiny {
+  background-size: 50%;
+  background-position: center;
+}
+.treasure-max {
+  background-size: 100%;
+  background-color: red;
+}
 .weapon {
   background-image: url('../assets/sword.png');
   background-size: 100%;
