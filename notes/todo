@@ -7,13 +7,17 @@
 [x] randomise weapon locations
 [x] create different treasure sizes worth different amounts
 [x] randomise treasure locations
-[] make things flash on the change from killable to non killable and reverse so they're more obvious
-[] hide sword message at game end
-[] style of notification
+[o] make things flash on the change from killable to non killable and reverse so they're more obvious //didn't like how this looked
+[x] hide sword message at game end
+[x] style of notification
 
 [] refactor
+-> find my walls
+-> make enemy move
+-> make player move
 
-[] can I make enemy move on interval
+[] can I make enemy move on interval :: needs to be extracted out before possible
+[] enemy more smart about chasing player
 
 [] sounds?
 [] responsive?
@@ -51,28 +55,25 @@
 [x] add lives
 [x] add level end
 [x] add game end
-[] hide start button when game starts
-[] show and handle reset/next game button
+[x] hide start button when game starts
+[x] show and handle reset/next game button
 
 //MVP STYLING
-[] end game notification
-[] next game button
+[x] end game notification
+[x] next game button
 
 //CODE FOR MANY
 [x] make multiple enemies move
 [x] stop enemies eating each other
-[] make multiple levels
+[x] make multiple levels
 
 //MAKE THINGS DYNAMIC
-[] make a second weapon drop after x time
-[] randomise treasure chest positions
-[] make it so arrows let you move
-[] change player token to token with sword when killing
+[x] make a second weapon drop after x time
+[x] randomise treasure chest positions
+[x] make it so arrows let you move
+[x] change player token to token with sword when killing
 
 
 //BUGS
-[] killable ghosts don't always die
-[] game end doesn't clear all cell tokens
-
-
-IF ENEMY ON PLAYER HOME DO NOT LET PLAYER SPAWN THERE
+[x] killable ghosts don't always die
+[x] game end doesn't clear all cell tokens

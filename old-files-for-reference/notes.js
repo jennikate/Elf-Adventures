@@ -1,5 +1,7 @@
 // Pac Man
 
+//V2 PSEUDO CODE
+
 // ====== GAME BOARD =====
 // create an initial 'easy' board
 // when a board has been 'won' create next level board that is x% bigger

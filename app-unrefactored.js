@@ -24,9 +24,9 @@ function pacnam() {
   let cellIdRef
   let cellElement
   let moveToCellId
-  let myWalls
-  let arrLocation = []
   let moveTo = []
+  let arrLocation
+  let myWalls
 
   const enemies = [54, 44, 45, 55]
   let enemyState = 'deadly'
