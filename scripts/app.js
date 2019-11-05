@@ -12,7 +12,8 @@ function pacnam() {
   const enemyValue = 20
   let playerLives = 3
   let playerScore = 0
-  let level = 1
+  let level = 4
+  let maxLevels = 4
 
 
   let cellIdRef
@@ -244,6 +245,11 @@ function pacnam() {
     if (level === 3) {
       enemies.push(44)
       enemies.push(55)
+    }
+    if (level === 4) {
+      enemies.push(44)
+      enemies.push(55)
+      enemies.push(45)
     }
     //add enemies to cells
     for (let i = 0; i < enemies.length; i++) {
@@ -616,10 +622,10 @@ function pacnam() {
   // PLAYER MOVEMENT
   // ==================================================
   document.addEventListener('keyup', (e) => {
-    if (e.key === 'w' || e.key === 'W') { playerDirection = 'top' }
-    else if (e.key === 'd' || e.key === 'D') { playerDirection = 'right' }
-    else if (e.key === 's' || e.key === 'S') { playerDirection = 'bottom' }
-    else if (e.key === 'a' || e.key === 'A') { playerDirection = 'left' }
+    if (e.key === 'w' || e.key === 'W' || e.keyCode === 38) { playerDirection = 'top' }
+    else if (e.key === 'd' || e.key === 'D' || e.keyCode === 39) { playerDirection = 'right' }
+    else if (e.key === 's' || e.key === 'S' || e.keyCode === 40) { playerDirection = 'bottom' }
+    else if (e.key === 'a' || e.key === 'A' || e.keyCode === 37) { playerDirection = 'left' }
     else {
       return
     }
@@ -690,18 +696,33 @@ function pacnam() {
   }
 
   function levelWon() {
-    clearInterval(intervalId)
-    clearTimeout(deadlyTimeout)
-    const notificationUpdate = document.querySelector('#notification').classList
-    const endNote = document.querySelector('#end-note').classList
-    const nextLevelButton = document.querySelector('#next-level').classList
-    const newGameButton = document.querySelector('#new-game').classList
-    notificationUpdate.remove('hide')
-    endNote.remove('hide')
-    nextLevelButton.remove('hide')
-    newGameButton.add('hide')
-    document.querySelector('#game-result').innerHTML = 'Level Complete'
-    document.querySelector('#final-score ').innerHTML = `Your score ${playerScore}`
+    if (level === maxLevels) {
+      clearInterval(intervalId)
+      clearTimeout(deadlyTimeout)
+      const notificationUpdate = document.querySelector('#notification').classList
+      const endNote = document.querySelector('#end-note').classList
+      const nextLevelButton = document.querySelector('#next-level').classList
+      const newGameButton = document.querySelector('#new-game').classList
+      notificationUpdate.remove('hide')
+      endNote.remove('hide')
+      nextLevelButton.add('hide') // hidden when no more levels
+      newGameButton.remove('hide') //show new game button
+      document.querySelector('#game-result').innerHTML = 'Level Complete'
+      document.querySelector('#final-score ').innerHTML = `Your score ${playerScore}`
+    } else {
+      clearInterval(intervalId)
+      clearTimeout(deadlyTimeout)
+      const notificationUpdate = document.querySelector('#notification').classList
+      const endNote = document.querySelector('#end-note').classList
+      const nextLevelButton = document.querySelector('#next-level').classList
+      const newGameButton = document.querySelector('#new-game').classList
+      notificationUpdate.remove('hide')
+      endNote.remove('hide')
+      nextLevelButton.remove('hide')
+      newGameButton.add('hide')
+      document.querySelector('#game-result').innerHTML = 'Level Complete'
+      document.querySelector('#final-score ').innerHTML = `Your score ${playerScore}`
+    }
   }
 
   document.querySelector('#new-game').addEventListener('click', () => {
