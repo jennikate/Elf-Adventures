@@ -160,3 +160,18 @@ button {
 .hide {
   display:none; 
 }
+
+
+/* ANIMATIONS - not happy with these */
+/* 
+.flash {
+  animation: flash 1s linear 0.25;
+}
+
+
+
+@keyframes flash  {
+  50% {
+    background-color: white;
+  }
+} */

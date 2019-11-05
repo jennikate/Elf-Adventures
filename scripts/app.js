@@ -17,7 +17,7 @@ function pacnam() {
   const enemyValue = 20
   let playerLives = 3
   let playerScore = 0
-  let level = 1
+  let level = 4
   const maxLevels = 4
 
   let cellIdRef
@@ -192,6 +192,9 @@ function pacnam() {
     }
     //add walls based on the wall array
     makeWalls()
+    //add start button
+    const startButton = document.querySelector('#start').classList
+    startButton.remove('hide')
   }
 
   // MAKE WALLS
@@ -310,6 +313,7 @@ function pacnam() {
       const weaponCells = document.querySelectorAll('.weapon')
       weaponCells.forEach(elem => {
         elem.classList.remove('weapon')
+        cellClassList.remove('flash')
       })
       while (weaponLocations.length < maxWeaponsLocationArray) {
         const weaponRandomNumber = Math.floor(Math.random() * 100)
@@ -319,6 +323,7 @@ function pacnam() {
           const cellClassList = cellElement.classList
           // console.log(cellClassList)
           cellClassList.add('weapon')
+          cellClassList.add('flash')
           // console.log(cellClassList.contains('weapon'))
           weaponLocations.push(weaponRandomNumber)
           //also push cells directly around me so two don't end up next to each other
@@ -507,6 +512,7 @@ function pacnam() {
     enemyLocations.forEach(elem => {
       elem.classList.remove('enemy')
       elem.classList.add('enemy-killable')
+      elem.classList.add('flash')
       //show kill enemy message
       const notificationUpdate = document.querySelector('#notification').classList
       notificationUpdate.remove('hide')
@@ -556,6 +562,7 @@ function pacnam() {
       const enemyCells = document.querySelectorAll('.enemy-killable')
       enemyCells.forEach(elem => {
         elem.classList.remove('enemy-killable')
+        elem.classList.add('flash')
         elem.classList.add('enemy')
       })
       const playerCell = document.querySelector('.player-weapon').classList
@@ -810,12 +817,14 @@ function pacnam() {
       addEnemies()
       addPlayer()
       enemyState = 'deadly'
-      myHeart = document.querySelector('.heart-one')
+      let myHeart = document.querySelector('.heart-one')
       myHeart.classList.add('heart')
       myHeart = document.querySelector('.heart-two')
       myHeart.classList.add('heart')
       myHeart = document.querySelector('.heart-three')
       myHeart.classList.add('heart')
+      const startButton = document.querySelector('#start').classList
+      startButton.add('hide')
     })
   }
   function nextLevel() {
@@ -865,7 +874,8 @@ function pacnam() {
       endNote.remove('hide')
       nextLevelButton.add('hide') // hidden when no more levels
       newGameButton.remove('hide') //show new game button
-      document.querySelector('#game-result').innerHTML = 'Level Complete'
+      document.querySelector('#alert').innerHTML = ''
+      document.querySelector('#game-result').innerHTML = 'Congratulations, you have completed the final level!'
       document.querySelector('#final-score ').innerHTML = `Your score ${playerScore}`
     } else {
       // clearInterval(intervalId)
@@ -879,6 +889,7 @@ function pacnam() {
       endNote.remove('hide')
       nextLevelButton.remove('hide')
       newGameButton.add('hide')
+      document.querySelector('#alert').innerHTML = ''
       document.querySelector('#game-result').innerHTML = 'Level Complete'
       document.querySelector('#final-score ').innerHTML = `Your score ${playerScore}`
     }
