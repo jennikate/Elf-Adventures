@@ -1,46 +1,109 @@
 /* eslint-disable brace-style */
-<<<<<<< HEAD
-//needs refactor
-// MAKING A CHANGE
-=======
- //needs refactor
- //needs audiogit
->>>>>>> 0662ba310a3974732f69e741a738db052b24d0c4
+//refactoring
+//test audio again
 
-function pacnam() {
+function elfAdventures() {
 
-  // ===== CREATE STARTING VALUES =====
+  // =================================
+  // SECTIONS IN HERE
+
+  // ===== GLOBAL ITEMS =====
+  // Global variables & starting values
+  // Global DOM elements used
+
+  // ===== CONTROLS =====
+  // Audio 
+  // Player keypresses
+  // Buttons
+
+  // ===== GAME BOARD =====
+  // Wall array
+  // Enemy array
+  // Create board
+  // Random/Timed Token Functions
+
+  // ===== COLLISIONS =====
+  // tbd breakdown of functions here
+
+  // ===== GAME END =====
+  // Level won
+  // Game won
+  // Game lost
+
+  // =================================
+
+
+
+  // =================================
+  // GLOBAL ITEMS
+  // =================================
+
+  // Global variables & starting values
 
   const boardWidth = 10
   const boardSize = boardWidth ** 2
-  const playerHome = Math.max(boardSize) - 1
+  const maxLevels = 4
+  let level = 1
+
+  let addWeaponTimeout 
+  let deadlyTimeout
+  let removeWeaponTimeout
 
   const treasureValue = 1000
   const treasureSmallValue = 500
   const treasureTinyValue = 100
   const treasureMaxValue = 2000
-
   const enemyValue = 20
+
+  const playerHome = Math.max(boardSize) - 1
   let playerLives = 3
   let playerScore = 0
-  let level = 1
-  const maxLevels = 4
-  let playerDirection
 
-  let cellIdRef
-  let cellElement
-  let moveToCellId
-  let myWalls
-  let arrLocation = []
-  let moveTo = []
-
-  const enemies = [54, 44, 45, 55]
+  const enemies = [54, 44, 45, 55] //these are cell ID's
   let enemyState = 'deadly'
   const enemyHome = 54
 
-  let addWeaponId
-  let deadlyTimeout
-  let removeWeaponTimeout
+  let cellIdRef
+  let cellElement
+  let cellClassList
+  let arrLocation = [] //finds the cells with tokens
+  let myWalls //figures out which cells have walls for 'me'
+  let moveTo = [] //used to determine available cells to move into for 'me'
+  let moveToCellId //holds the cell I've decided to move into
+  let playerDirection //set by player keypress function
+
+  // Global DOM elements used
+
+  const grid = document.querySelector('#grid') //position on html to create the cells
+
+  //get cell element from numRef : frequently need to get the cell element from a cellId to then adjust classes/innerHTML/other
+  function getCellElement(numRef) {
+    cellIdRef = '#cell-' + numRef
+    cellElement = document.querySelector(cellIdRef)
+    return cellElement
+  }
+
+  //get cell classlist from a cellElement : frequently need to get a class list to adjust classes
+  function getElementClassList(cellElement) {
+    cellClassList = document.querySelector(cellElement).classList
+    return cellClassList
+  }
+
+
+
+  const classListNotification = getElementClassList('#notification')
+  console.log(classListNotification)
+
+
+
+
+
+
+
+
+
+
+  
 
   //these are viable locations that weapons or treasures drop in. Would be good to make this part of the collision array but that's a future thing
   //maybe make them the cells they should not appear in (not appear where enemies or player do, or next to player start cell)
@@ -62,18 +125,6 @@ function pacnam() {
 
 
 
-  // ==== GET ELEMENTS NEEDED ====
-
-  const grid = document.querySelector('#grid') //position on html to create the cells
-
-  //get cell element from refNumber
-  function getCellElement(numRef) {
-    cellIdRef = '#cell-' + numRef
-    cellElement = document.querySelector(cellIdRef)
-    return cellElement
-  }
-
-  const classListNotification = document.querySelector('#notification').classList
 
 
   //AUDIO
@@ -344,7 +395,7 @@ function pacnam() {
     console.log(`starting add timer ${(new Date).getHours()}:${(new Date).getMinutes()}:${(new Date).getSeconds()}`)
     //make sure remove timer isn't running
     console.log('calling addweapon')
-    addWeaponId = setTimeout(() => {
+    addWeaponTimeout = setTimeout(() => {
       clearTimeout(removeWeaponTimeout)
       //playsound
       soundEffect('./assets/sword.mp3')
@@ -386,7 +437,7 @@ function pacnam() {
     console.log(`starting remove timer ${(new Date).getHours()}:${(new Date).getMinutes()}:${(new Date).getSeconds()}`)
     //clear weapon interval so it stops counting
     // clearInterval(intervalId)
-    clearTimeout(addWeaponId)
+    clearTimeout(addWeaponTimeout)
     removeWeaponTimeout = setTimeout(() => {
       const weaponCells = document.querySelectorAll('.weapon')
       weaponCells.forEach(elem => {
@@ -535,7 +586,7 @@ function pacnam() {
     console.log('weapon picked up')
     //stop weapon creation & removal timers
     // clearInterval(intervalId)
-    clearTimeout(addWeaponId)
+    clearTimeout(addWeaponTimeout)
     clearTimeout(removeWeaponTimeout)
     console.log('clear weapon timers')
     //change state to killable
@@ -902,7 +953,7 @@ function pacnam() {
 
   function gameover() {
     // clearInterval(intervalId)
-    clearTimeout(addWeaponId)
+    clearTimeout(addWeaponTimeout)
     clearTimeout(deadlyTimeout)
     clearTimeout(removeWeaponTimeout)
     const endNote = document.querySelector('#end-note').classList
@@ -918,7 +969,7 @@ function pacnam() {
   function levelWon() {
     if (level === maxLevels) {
       // clearInterval(intervalId)
-      clearTimeout(addWeaponId)
+      clearTimeout(addWeaponTimeout)
       clearTimeout(deadlyTimeout)
       clearTimeout(removeWeaponTimeout)
       const endNote = document.querySelector('#end-note').classList
@@ -933,7 +984,7 @@ function pacnam() {
       document.querySelector('#final-score ').innerHTML = `Your score ${playerScore}`
     } else {
       // clearInterval(intervalId)
-      clearTimeout(addWeaponId)
+      clearTimeout(addWeaponTimeout)
       clearTimeout(deadlyTimeout)
       clearTimeout(removeWeaponTimeout)
       // const notificationUpdate = document.querySelector('#notification').classList
@@ -957,4 +1008,4 @@ function pacnam() {
 
 }
 
-window.addEventListener('DOMContentLoaded', pacnam) 
+window.addEventListener('DOMContentLoaded', elfAdventures) 

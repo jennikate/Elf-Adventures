@@ -126,13 +126,9 @@ button:hover {
   justify-content: space-between;
   padding: 0 20px;
 }
-<<<<<<< HEAD
+
 #control-panel button {
   width: 200px;
-=======
-.control-panel button {
-  width: 150px;
->>>>>>> 0662ba310a3974732f69e741a738db052b24d0c4
 }
 .control-panel p {
   font-size: 20px;
