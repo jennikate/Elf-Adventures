@@ -24,7 +24,8 @@ function elfAdventures() {
   // ===== COLLISIONS =====
   // Token movement
   // Deaths
-  // Weapon picked up
+  // Weapon picked up (enemies killable)
+  // Enemies return to deadly
   // Treasure picked up
 
   // ===== GAME END =====
@@ -463,6 +464,18 @@ function elfAdventures() {
     cellElement.classList.add(className)
   }
 
+  // ==== Enemy movement randomisation  =====
+  //if enemy has options of where to go next, this is the randomisation code (does this need to be a function really?)
+  function moveEnemyCalculation(moveTo, replaceWithLoopVar) {
+    if (moveTo.length === 0) { moveToCellId = replaceWithLoopVar.myCellId } //I have no viable options so I stay here
+    else if (typeof moveTo === 'number') { moveToCellId = moveTo } //I have only one option (or I am next to a player) so I want to move there
+    else {
+      //get a random location to move to
+      moveToCellId = moveTo[Math.floor(Math.random() * moveTo.length)]
+    }
+    // console.log(`I am in cell ${replaceWithLoopVar.myCellId} and I will move to ${moveToCellId}`)
+  }
+
   // ===== Deaths =====
   //Enemy
   function enemyDeath(enemyCellId) {
@@ -508,17 +521,7 @@ function elfAdventures() {
     }
   }
 
-  // ==== Enemy movement randomisation  =====
-  //if enemy has options of where to go next, this is the randomisation code (does this need to be a function really?)
-  function moveEnemyCalculation(moveTo, replaceWithLoopVar) {
-    if (moveTo.length === 0) { moveToCellId = replaceWithLoopVar.myCellId } //I have no viable options so I stay here
-    else if (typeof moveTo === 'number') { moveToCellId = moveTo } //I have only one option (or I am next to a player) so I want to move there
-    else {
-      //get a random location to move to
-      moveToCellId = moveTo[Math.floor(Math.random() * moveTo.length)]
-    }
-    // console.log(`I am in cell ${replaceWithLoopVar.myCellId} and I will move to ${moveToCellId}`)
-  }
+  
 
 
 
@@ -540,7 +543,20 @@ function elfAdventures() {
     const notifyFade = document.querySelector('#notification').classList
     notifyFade.add('fade')
     //start the timer to turn enemies deadly again
-    deadlyEnemies()
+    makeEnemiesDeadly()
+  }
+
+  // ===== Return enemies to deadly =====
+  function makeEnemiesDeadly() {
+    deadlyTimeout = setTimeout(() => {
+      soundEffect('./assets/dragon.mp3')
+      changeTokenState('enemy-killable', 'enemy')
+      changeTokenState('player-weapon', 'player')
+      enemyState = 'deadly'
+      document.querySelector('#alert').innerHTML = ''
+      //start weapon timer again
+      addWeapons()
+    }, 5000)
   }
 
 
@@ -576,7 +592,7 @@ function elfAdventures() {
     }
   }
 
-
+ 
 
 
 
@@ -599,27 +615,7 @@ function elfAdventures() {
 
   
 
-  function deadlyEnemies() {
-    deadlyTimeout = setTimeout(() => {
-      soundEffect('./assets/dragon.mp3')
-      // console.log('Im making things deadly soon')
-      // console.log('enemies deadly')
-      const enemyCells = document.querySelectorAll('.enemy-killable')
-      enemyCells.forEach(elem => {
-        elem.classList.remove('enemy-killable')
-        elem.classList.add('enemy')
-      })
-      const playerCell = document.querySelector('.player-weapon').classList
-      playerCell.remove('player-weapon')
-      playerCell.add('player')
-      enemyState = 'deadly'
-      document.querySelector('#alert').innerHTML = ''
-      // console.log('Im running addweapons')
-      //start weapon timer again
-      addWeapons()
-    }, 5000)
-
-  }
+  
 
 
   // ==================================================
