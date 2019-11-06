@@ -11,6 +11,9 @@
 [x] hide sword message at game end
 [x] style of notification
 
+[] add background music and toggle button
+[] fix instructions moving when start button hides
+
 [] refactor
 -> find my walls
 -> make enemy move

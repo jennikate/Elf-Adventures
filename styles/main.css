@@ -117,19 +117,29 @@ button:hover {
 }
 
 
-#control-panel {
+.control-panel {
   min-width: 200px;
+  max-width: 200px;
   display: flex;
   flex-direction: column;
   height: auto;
   justify-content: space-between;
   padding: 0 20px;
 }
+<<<<<<< HEAD
 #control-panel button {
   width: 200px;
+=======
+.control-panel button {
+  width: 150px;
+>>>>>>> 0662ba310a3974732f69e741a738db052b24d0c4
+}
+.control-panel p {
+  font-size: 20px;
+  margin-bottom: 30px;
 }
 
-.player-score {
+.player-score span {
   background-image: url('../assets/gold.png');
   background-size: 32px;
   background-repeat: no-repeat;

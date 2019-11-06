@@ -1,6 +1,11 @@
 /* eslint-disable brace-style */
+<<<<<<< HEAD
 //needs refactor
 // MAKING A CHANGE
+=======
+ //needs refactor
+ //needs audiogit
+>>>>>>> 0662ba310a3974732f69e741a738db052b24d0c4
 
 function pacnam() {
 
