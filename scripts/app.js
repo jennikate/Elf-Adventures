@@ -23,6 +23,9 @@ function elfAdventures() {
 
   // ===== COLLISIONS =====
   // Token movement
+  // Deaths
+  // Weapon picked up
+  // Treasure picked up
 
   // ===== GAME END =====
   // Start
@@ -92,6 +95,17 @@ function elfAdventures() {
       elem.classList.remove(className)
     })
   }
+
+  //change token state(s)
+  function changeTokenState(classFrom, classTo) {
+    const tokens = document.querySelectorAll(`.${classFrom}`)
+    tokens.forEach(elem => {
+      const tokenLocation = elem.classList
+      tokenLocation.remove(classFrom)
+      tokenLocation.add(classTo)
+    })
+  }
+  
 
   //hide elements
   function hideElement(elementRef) {
@@ -337,7 +351,6 @@ function elfAdventures() {
     }
   }
 
-
   // =====Random/Timed Token Functions ===== 
   // Find any cells with declared default positions and store them as assigned (so we don't add anything to them)
   const assignedCells = []
@@ -450,44 +463,21 @@ function elfAdventures() {
     cellElement.classList.add(className)
   }
 
-
-
-
-
-
-
-
-
-
-  // ==================================================
-  // FUNCTIONS FOR TOKEN MOVEMENT
-  // ==================================================
-
-
-
-  function killEnemy(enemyCellId) {
+  // ===== Deaths =====
+  //Enemy
+  function enemyDeath(enemyCellId) {
     playerScore = playerScore + enemyValue
     document.querySelector('#player-score span').innerHTML = playerScore
     //enemy goes home
     moveTokens(enemyCellId, 'enemy-killable', enemyHome)
   }
 
-  function moveEnemyCalculation(moveTo, replaceWithLoopVar) {
-    if (moveTo.length === 0) { moveToCellId = replaceWithLoopVar.myCellId } //I have no viable options so I stay here
-    else if (typeof moveTo === 'number') { moveToCellId = moveTo } //I have only one option (or I am next to a player) so I want to move there
-    else {
-      //get a random location to move to
-      moveToCellId = moveTo[Math.floor(Math.random() * moveTo.length)]
-    }
-    // console.log(`I am in cell ${replaceWithLoopVar.myCellId} and I will move to ${moveToCellId}`)
-  }
-
-  function enemyKill(moveToCellId) {
+  //Player
+  function playerDeath(moveToCellId) {
     //return player home
     moveTokens(moveToCellId, 'player', playerHome)
     playerLives = playerLives - 1
     let myHeart
-    // console.log(playerLives)
     switch (playerLives) {
       case 2: {
         myHeart = document.querySelector('.heart-three')
@@ -516,50 +506,47 @@ function elfAdventures() {
     if (playerLives === 0) {
       gameover()
     }
-    // document.querySelector('#player-lives span').innerHTML = `<img src='assets/heart.png />`
+  }
+
+  // ==== Enemy movement randomisation  =====
+  //if enemy has options of where to go next, this is the randomisation code (does this need to be a function really?)
+  function moveEnemyCalculation(moveTo, replaceWithLoopVar) {
+    if (moveTo.length === 0) { moveToCellId = replaceWithLoopVar.myCellId } //I have no viable options so I stay here
+    else if (typeof moveTo === 'number') { moveToCellId = moveTo } //I have only one option (or I am next to a player) so I want to move there
+    else {
+      //get a random location to move to
+      moveToCellId = moveTo[Math.floor(Math.random() * moveTo.length)]
+    }
+    // console.log(`I am in cell ${replaceWithLoopVar.myCellId} and I will move to ${moveToCellId}`)
   }
 
 
+
+  // ===== Weapon picked up =====
   function getWeapon() {
-    console.log('weapon picked up')
-    //stop weapon creation & removal timers
-    // clearInterval(intervalId)
+    //change enemy state to killable
+    enemyState = 'killable'
+    //hide other weapons from board and stop generating them
+    clearTokens('weapon')
     clearTimeout(addWeaponTimeout)
     clearTimeout(removeWeaponTimeout)
-    console.log('clear weapon timers')
-    //change state to killable
-    enemyState = 'killable'
-    //hide all weapons
-    const weaponLocations = document.querySelectorAll('.weapon')
-    weaponLocations.forEach(elem => {
-      elem.classList.remove('weapon')
-    })
     //change player class to player-weapon
-    const playerLocation = document.querySelector('.player')
-    const playerLocationClassList = playerLocation.classList
-    playerLocationClassList.add('player-weapon')
-    playerLocationClassList.remove('player')
-    //change enemy class to enemy-killable
-    const enemyLocations = document.querySelectorAll('.enemy')
-    enemyLocations.forEach(elem => {
-      elem.classList.remove('enemy')
-      elem.classList.add('enemy-killable')
-      elem.classList.add('flash')
-      //show kill enemy message
-      classListNotification.remove('hide')
-      classListNotification.add('fade')
-      document.querySelector('#alert').innerHTML = 'You have a sword, kill the dragons!'
-    })
-    //stop remove weapon timer
-    //start enemies back to deadly timer
+    changeTokenState('player', 'player-weapon')
+    //change enemy class to killable
+    changeTokenState('enemy', 'enemy-killable')
+    //show alter of state change with a cool transition and text
+    showElement('#notification')
+    document.querySelector('#alert').innerHTML = 'You have a sword, kill the dragons!'
+    const notifyFade = document.querySelector('#notification').classList
+    notifyFade.add('fade')
+    //start the timer to turn enemies deadly again
     deadlyEnemies()
   }
 
 
-
+  // ===== Treasure picked up =====
   function lootTreasure(thisCell) {
-
-    //remove that treasure cell class
+    //set this specific cell element into local variable
     const thisTreasureLocation = document.querySelector(`#cell-${thisCell}`)
 
     //give user points
@@ -574,18 +561,43 @@ function elfAdventures() {
     }
     //show points
     document.querySelector('#player-score span').innerHTML = playerScore
+
     //clear chest classes
     thisTreasureLocation.classList.remove('treasure-chest')
     thisTreasureLocation.classList.remove('treasure-small')
     thisTreasureLocation.classList.remove('treasure-tiny')
     thisTreasureLocation.classList.remove('treasure-max')
-    //last treasure collected means level won
+
+    //if this was the last treasure then this level has been won
     if (document.querySelectorAll('.treasure-chest').length === 0) {
       levelWon()
     } else {
       return
     }
   }
+
+
+
+
+
+  // ==================================================
+  // FUNCTIONS FOR TOKEN MOVEMENT
+  // ==================================================
+
+
+
+  
+
+  
+
+  
+
+
+  
+
+
+
+  
 
   function deadlyEnemies() {
     deadlyTimeout = setTimeout(() => {
@@ -741,7 +753,7 @@ function elfAdventures() {
         //if player in that location kill them
         // console.log(document.querySelector(`#cell-${moveToCellId}`))
         if ((document.querySelector(`#cell-${moveToCellId}`)).classList.contains('player')) {
-          enemyKill(moveToCellId)
+          playerDeath(moveToCellId)
           break // no more moves this round
         }
       }
@@ -767,7 +779,7 @@ function elfAdventures() {
 
           //is there a killable enemy?
           if ((cellElement.classList).contains('enemy-killable')) {
-            killEnemy(moveToCellId)
+            enemyDeath(moveToCellId)
             moveTokens(replaceWithLoopVar.myCellId, replaceWithLoopVar.myRef, moveToCellId)
             break //stop the loop if player kills an enemy!
           } else if ((cellElement.classList).contains('treasure-chest')) {
