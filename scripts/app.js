@@ -329,6 +329,9 @@ function elfAdventures() {
     treasureLocations = []
     //find any existing treasure chest classes and clear them (incase a remove failed at any point)
     clearTokens('treasure-chest')
+    clearTokens('treasure-small')
+    clearTokens('treasure-tiny')
+    clearTokens('treasure-max')
     //add chests until we reach our max number
     while (treasureLocations.length < maxChest) {
       //get a random number 
@@ -627,6 +630,7 @@ function elfAdventures() {
             break
           } else if ((cellElement.classList).contains('enemy')) {
             // if a player actually walks into an enemy then the enemy move check handles it
+            playerDeath(moveToCellId)
             console.log('player dumb')
           } else {
             //player can move to cell
@@ -661,7 +665,6 @@ function elfAdventures() {
   function createGame() {
     hideElement('#notification')
     hideElement('#end-note')
-    showElement('#start')
     document.querySelector('#alert').innerHTML = ''
     document.querySelector('#game-result').innerHTML = ''
     document.querySelector('#final-score ').innerHTML = ''
@@ -690,7 +693,6 @@ function elfAdventures() {
   //start game (on button click)
   document.querySelector('#start').addEventListener('click', () => {
     hideElement('#start')
-    // createGame()
     //set my hearts
     let myHeart = document.querySelector('.heart-one').classList
     myHeart.add('heart')
@@ -734,6 +736,7 @@ function elfAdventures() {
     //reset level
     level = 1
     createGame()
+    showElement('#start')
     //reset my hearts
     let myHeart = document.querySelector('.heart-one').classList
     myHeart.remove('empty-heart')
