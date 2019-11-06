@@ -28,6 +28,9 @@ function elfAdventures() {
   // Enemies return to deadly
   // Treasure picked up
 
+  // ==== MOVEMENT =====
+
+
   // ===== GAME END =====
   // Start
   // Level won in next level
@@ -106,7 +109,7 @@ function elfAdventures() {
       tokenLocation.add(classTo)
     })
   }
-  
+
 
   //hide elements
   function hideElement(elementRef) {
@@ -521,10 +524,6 @@ function elfAdventures() {
     }
   }
 
-  
-
-
-
   // ===== Weapon picked up =====
   function getWeapon() {
     //change enemy state to killable
@@ -592,104 +591,52 @@ function elfAdventures() {
     }
   }
 
- 
 
 
-
-  // ==================================================
-  // FUNCTIONS FOR TOKEN MOVEMENT
-  // ==================================================
-
-
-
-  
-
-  
-
-  
-
-
-  
-
-
-
-  
-
-  
 
 
   // ==================================================
-  // COLLISION LOGIC
+  // MOVEMENT LOGIC
   // ==================================================
 
-  // Function(trigger) 
-  // - player move
-  // - weapon drop
-  // - treasure drop
-  // - start game 
+
+  function pushItemToLocationArray(className) {
+    const myRefArray = document.querySelectorAll(`.${className}`)
+    if (myRefArray !== 0) {
+      myRefArray.forEach(elem => {
+        const myRef = elem
+        const myId = parseInt(myRef.id.split('-')[1])
+        arrLocation.push({ 'myRef': className, 'myCellId': myId, 'myClassList': myRef })
+      })
+    }
+    return arrLocation
+  }
 
 
 
 
   function collision(playerDirection) {
-    // console.log(playerDirection)
 
-    //set variables for this function
-    let myRefArray
-    let myRef
-    let myId
 
-    // console.log(arrLocation)
-    // ===== FIND EVERYTHING & STORE LOCATION =====
-    //PLAYER AND ENEMY (if deadly uses one class, if killable uses a different class)
-    //make sure location array is empty for the loop
     arrLocation = [{ myRef: '', myCellId: 0, myClassList: '' }]
 
-    //find everything and put in array
-    if (enemyState === 'deadly') {
-      myRef = document.querySelector('.player')
-      myId = parseInt((myRef.id).split('-')[1])
-      arrLocation.push({ 'myRef': 'player', 'myCellId': myId, 'myClassList': myRef })
+    pushItemToLocationArray('enemy')
+    pushItemToLocationArray('enemy-killable')
+    pushItemToLocationArray('player')
+    pushItemToLocationArray('player-weapon')
+    pushItemToLocationArray('treasure-chest')
+    pushItemToLocationArray('weapon')
 
-      myRefArray = document.querySelectorAll('.enemy')
-      // console.log(myRefArray)
-      myRefArray.forEach(elem => {
-        myRef = elem
-        myId = parseInt((myRef.id).split('-')[1])
-        arrLocation.push({ 'myRef': 'enemy', 'myCellId': myId, 'myClassList': myRef })
-      })
-    } else if (enemyState === 'killable') {
-      myRef = document.querySelector('.player-weapon')
-      myId = parseInt((myRef.id).split('-')[1])
-      arrLocation.push({ 'myRef': 'player-weapon', 'myCellId': myId, 'myClassList': myRef })
 
-      const myRefArray = document.querySelectorAll('.enemy-killable')
-      myRefArray.forEach(elem => {
-        myRef = elem
-        myId = parseInt((myRef.id).split('-')[1])
-        arrLocation.push({ 'myRef': 'enemy-killable', 'myCellId': myId, 'myClassList': myRef })
-      })
-    }
-    //TREASURE AND WEAPON
-    myRefArray = document.querySelectorAll('.treasure-chest')
-    myRefArray.forEach(elem => {
-      myRef = elem
-      myId = parseInt((myRef.id).split('-')[1])
-      arrLocation.push({ 'myRef': 'treasure-chest', 'myCellId': myId, 'myClassList': myRef })
-    })
-    myRefArray = document.querySelectorAll('.weapon')
-    myRefArray.forEach(elem => {
-      myRef = elem
-      myId = parseInt((myRef.id).split('-')[1])
-      arrLocation.push({ 'myRef': 'weapon', 'myCellId': myId, 'myClassList': myRef })
-    })
+
 
 
     // ===== DETERMINE WHERE I CAN MOVE TO =====
     //for each myCellId in arrLocation
-    // console.log(arrLocation)
+    console.log(arrLocation)
 
     for (let loc = 0; loc < arrLocation.length; loc++) {
+
       const replaceWithLoopVar = arrLocation[loc]
       // console.log(arrLocation[loc])
       // console.log(`I am arrLocation position ${loc}, myCellId is ${replaceWithLoopVar.myCellId}, myRef is ${replaceWithLoopVar.myRef}`)
