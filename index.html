@@ -8,7 +8,7 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <link rel="stylesheet" href="styles/reset.css">
   <link href="https://fonts.googleapis.com/css?family=Cormorant+Upright:400,700&display=swap" rel="stylesheet">
-  <script src="https://kit.fontawesome.com/83453068a2.js" crossorigin="anonymous"></script>
+  <!-- <script src="https://kit.fontawesome.com/83453068a2.js" crossorigin="anonymous"></script> -->
   <link rel="stylesheet" href="styles/main.css">
   <script src="scripts/app.js"></script>
 
@@ -23,7 +23,7 @@
     <p>Enter the dark forest to capture it's treasures. But beware the dragons that lurk within.</p>
   </header>
   <main>
-    <section id='landing'>
+    <section id='landing' class='landing'>
       <h2>Welcome to Elf Adventures</h2>
       <p>Guide your elf through the forest using the arrow keys (or wsad) to collect all the treasures.</p>
       <p>Find weapons to help you along the way.</p>
@@ -32,7 +32,7 @@
       <button id='load-game'>Let's play!</button>
     </section>
 
-    <section id='game' class='hide'>
+    <section id='game' class='game hide'>
       <div id='grid'></div>
       <div id='control-panel' class='control-panel'>
         <div class='scores'>
@@ -46,7 +46,10 @@
         <div id='controls'>
           <audio loop class='background-audio'></audio>
           <audio class='audio'></audio>
-          <button id='player'><i class="fas fa-volume-up"></i><i class="fas fa-volume-mute hide"></i></button>
+          <button id='audio-player' class='audio-on'>
+            <!-- <i class="fas fa-volume-up"></i><i class="fas fa-volume-mute hide"></i> -->
+            <!-- font awesome is throwing errors too often atm -->
+          </button>
         </div>
         <button id='start'>Start</button>
       </div>

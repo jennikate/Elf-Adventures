@@ -16,6 +16,8 @@ function elfAdventures() {
   let deadlyTimeout
   let removeWeaponTimeout
 
+  let audioState = 'audioOn'
+
   const treasureValue = 1000
   const treasureSmallValue = 500
   const treasureTinyValue = 100
@@ -92,15 +94,26 @@ function elfAdventures() {
 
   //sound effects : triggered by events
   function soundEffect(soundFile) {
-    const soundEffectAudio = document.querySelector('.audio')
-    soundEffectAudio.src = soundFile
-    soundEffectAudio.play()
+    if (audioState === 'audioOn') {
+      const soundEffectAudio = document.querySelector('.audio')
+      soundEffectAudio.src = soundFile
+      soundEffectAudio.play()
+    } else {
+      return
+    }
   }
 
   //stop sounds
-  document.querySelector('#player').addEventListener('click', () => {
-    document.querySelector('.background-audio').pause()
-    document.querySelector('.audio').pause()
+  document.querySelector('#audio-player').addEventListener('click', () => {
+    if (audioState === 'audioOn') {
+      document.querySelector('.background-audio').pause()
+      changeTokenState('audio-off', 'audio-on')
+      audioState = 'audioOff'
+    } else {
+      audioState = 'audioOn'
+      document.querySelector('.background-audio').play()
+      changeTokenState('audio-on', 'audio-off')
+    }
   })
 
   // ===== Player keypresses =====

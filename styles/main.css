@@ -26,11 +26,22 @@ main {
   position: relative;
 }
 
-section {
+.game {
   display: flex;
   align-content: center;
   justify-content: center;
   position: relative;
+}
+
+.landing {
+  text-align: center;
+  font-size: 20px;
+  line-height: 2;
+}
+
+h2 {
+  color: green;
+  font-size: 30px;
 }
 
 #grid {
@@ -157,6 +168,13 @@ button:hover {
 }
 .empty-heart {
   background-image: url('../assets/heart-empty.png');
+}
+
+.audio-off {
+  background-color: red;
+}
+.audio-on {
+  background-color: green;
 }
 
 .alert-banner, .end-banner{
