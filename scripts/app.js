@@ -474,6 +474,7 @@ function elfAdventures() {
     //change enemy class to killable
     changeTokenState('enemy', 'enemy-killable')
     //show alter of state change with a cool transition and text
+    soundEffect('./assets/sword.mp3')
     showElement('#notification')
     document.querySelector('#alert').innerHTML = 'You have a sword, kill the dragons!'
     const notifyFade = document.querySelector('#notification').classList
@@ -668,10 +669,6 @@ function elfAdventures() {
     document.querySelector('#alert').innerHTML = ''
     document.querySelector('#game-result').innerHTML = ''
     document.querySelector('#final-score ').innerHTML = ''
-    addTreasureChests()
-    addWeapons()
-    addEnemies()
-    addPlayer()
   }
 
   //end a game or level
@@ -700,12 +697,20 @@ function elfAdventures() {
     myHeart.add('heart')
     myHeart = document.querySelector('.heart-three').classList
     myHeart.add('heart')
+    addTreasureChests()
+    addWeapons()
+    addEnemies()
+    addPlayer()
   })
 
   //start next level (on button click)
   document.querySelector('#next-level').addEventListener('click', () => {
     level = level + 1
     createGame()
+    addTreasureChests()
+    addWeapons()
+    addEnemies()
+    addPlayer()
   })
 
   //end level or game if won
