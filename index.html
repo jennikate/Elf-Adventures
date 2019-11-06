@@ -11,17 +11,15 @@
   <!-- <script src="https://kit.fontawesome.com/83453068a2.js" crossorigin="anonymous"></script> -->
   <link rel="stylesheet" href="styles/main.css">
   <script src="scripts/app.js"></script>
-
-
   <title>Project 1 JKW</title>
 </head>
 
 <body>
-
   <header class='header hide'>
     <h1>Elf Adventures</h1>
     <p>Enter the dark forest to capture it's treasures. But beware the dragons that lurk within.</p>
   </header>
+
   <main>
     <section id='landing' class='landing'>
       <h2>Elf Adventures</h2>
@@ -38,8 +36,11 @@
       </div>
       <button id='load-game'>Let's play!</button>
     </section>
+
     <section id='game' class='game hide'>
+      <p class='mobile hide'>Sadly the game does not yet work on mobile</p>
       <div id='grid'></div>
+      
       <div id='control-panel' class='control-panel'>
         <div class='scores'>
           <p id='player-score' class='player-score'><span>0</span></p>
@@ -49,6 +50,7 @@
             <span class="heart heart-three"></span>
           </p>
         </div>
+
         <div id='controls'>
           <audio loop class='background-audio'></audio>
           <audio class='audio'></audio>
@@ -57,6 +59,7 @@
             <!-- font awesome is throwing errors too often atm -->
           </button>
         </div>
+
         <button id='start'>Start</button>
       </div>
     </section>
@@ -64,6 +67,7 @@
     <div id='notification' class='hide fade'>
       <p id='alert' class='alert-banner'></p>
     </div>
+
     <div id='end-note' class='end-banner hide'>
       <p id='game-result'></p>
       <p id='final-score'></p>
@@ -74,11 +78,5 @@
 
   <footer></footer>
 
-
-
-
-
-
 </body>
-
 </html>

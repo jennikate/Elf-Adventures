@@ -33,9 +33,9 @@ FUTURE
 [] can I make enemy move on interval :: needs to be extracted out before possible
 [] enemy more smart about chasing player
 
-[x] sounds?
+[x] sounds
 [] responsive?
-[] local host save?
+[] local host scoreboard?
 
 
 
