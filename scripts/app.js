@@ -63,6 +63,7 @@ function elfAdventures() {
 
   let enemyState = 'deadly'
   const enemyHome = 54
+  const numberEnemyPerLevel = 1
 
   let cellIdRef
   let cellElement
@@ -86,10 +87,10 @@ function elfAdventures() {
 
   //clear tokens from a cell
   function clearTokens(className) {
-    if (document.querySelector(`.${className}`)) {
-      const getClassList= document.querySelector(`.${className}`).classList
-      getClassList.remove(className)
-    }
+    const tokens = document.querySelectorAll(`.${className}`)
+    tokens.forEach(elem => {
+      elem.classList.remove(className)
+    })
   }
 
   //hide elements
@@ -102,7 +103,7 @@ function elfAdventures() {
     const elementClassList = document.querySelector(elementRef).classList
     elementClassList.remove('hide')
   }
-  
+
 
   //This needs removing ***********
   const classListNotification = document.querySelector('#notification').classList
@@ -274,7 +275,7 @@ function elfAdventures() {
   ]
 
   // =====Enemy array =====
-  const enemies = [54, 44, 45, 55] //these are cell ID's
+  const enemies = [54, 44, 45, 55, 34, 35, 64, 65, 24, 25, 74, 75] //these are cell ID's
 
   // =====Create board =====
   //create cells and thier IDs
@@ -317,6 +318,25 @@ function elfAdventures() {
     setPlayer.add('player')
   }
 
+  function addEnemies() {
+    //remove any existing enemies
+    clearTokens('enemy')
+    clearTokens('enemy-killable')
+    //declare/clear local array to store level positions to add in
+    const setEnemies = []
+    //get max levels & loop until reached, adding extra enemies to array each time
+    for (let i = 1; i <= level; i++) {
+      for (let j = 1; j <= (numberEnemyPerLevel * i); j++) {
+        setEnemies.push(enemies[j - 1]) //-1 as pulling from array but our count starts at 1 as we're checking against a number variable
+      }
+      //add enemies to cells
+      for (let i = 0; i < setEnemies.length; i++) {
+        getCellElement(setEnemies[i])
+        cellElement.classList.add('enemy')
+      }
+    }
+  }
+
 
   // =====Random/Timed Token Functions ===== 
   // Find any cells with declared default positions and store them as assigned (so we don't add anything to them)
@@ -340,10 +360,7 @@ function elfAdventures() {
     //clear my tracking array
     treasureLocations = []
     //find any existing treasure chest classes and clear them (incase a remove failed at any point)
-    const treasureCells = document.querySelectorAll('.treasure-chest')
-    treasureCells.forEach(elem => {
-      elem.classList.remove('treasure-chest')
-    })
+    clearTokens('treasure-chest')
     //add chests until we reach our max number
     while (treasureLocations.length < maxChest) {
       //get a random number 
@@ -385,10 +402,7 @@ function elfAdventures() {
       clearTimeout(removeWeaponTimeout)  //stop the removeWeaponTimeout if it's running
       const maxWeapons = numberOfWeapons * 5
       const weaponLocations = []
-      const weaponCells = document.querySelectorAll('.weapon')
-      weaponCells.forEach(elem => {
-        elem.classList.remove('weapon')
-      })
+      clearTokens('weapon')
       while (weaponLocations.length < maxWeapons) {
         const weaponRandomNumber = Math.floor(Math.random() * 100)
         if (!assignedCells.includes(weaponRandomNumber) && !weaponLocations.includes(weaponRandomNumber) && !treasureLocations.includes(weaponRandomNumber)) {
@@ -413,10 +427,7 @@ function elfAdventures() {
     //clear the addWeapon timeout so it doesn't add more until we're ready to
     clearTimeout(addWeaponTimeout)
     removeWeaponTimeout = setTimeout(() => {
-      const weaponCells = document.querySelectorAll('.weapon')
-      weaponCells.forEach(elem => {
-        elem.classList.remove('weapon')
-      })
+      clearTokens('weapon')
       //start weapon timer again
       addWeapons()
     }, 10000)
@@ -444,45 +455,7 @@ function elfAdventures() {
 
 
 
-  function addEnemies() {
-    //remove any existing enemies
-    document.querySelectorAll('.enemy').forEach(elem => {
-      const currentEnemy = elem.classList
-      currentEnemy.remove('enemy')
-    })
-    document.querySelectorAll('.enemy-killable').forEach(elem => {
-      //currentEnemies.push(elem)
-      const currentEnemy = elem.classList
-      currentEnemy.remove('enemy-killable')
-    })
-    //create number of enemies
-    const setEnemies = []
-    // console.log(enemies)
-    // console.log(setEnemies)
-    if (level === 1) {
-      setEnemies.push(enemies[0])
-    }
-    if (level === 2) {
-      setEnemies.push(enemies[0])
-      setEnemies.push(enemies[1])
-    }
-    if (level === 3) {
-      setEnemies.push(enemies[0])
-      setEnemies.push(enemies[1])
-      setEnemies.push(enemies[2])
-    }
-    if (level === 4) {
-      setEnemies.push(enemies[0])
-      setEnemies.push(enemies[1])
-      setEnemies.push(enemies[2])
-      setEnemies.push(enemies[3])
-    }
-    //add enemies to cells
-    for (let i = 0; i < setEnemies.length; i++) {
-      getCellElement(setEnemies[i])
-      cellElement.classList.add('enemy')
-    }
-  }
+
 
 
 
