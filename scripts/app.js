@@ -91,7 +91,7 @@ function elfAdventures() {
     return cellElement
   }
 
-  //clear tokens from a cell
+  //clear all tokens for that class
   function clearTokens(className) {
     const tokens = document.querySelectorAll(`.${className}`)
     tokens.forEach(elem => {
@@ -710,143 +710,98 @@ function elfAdventures() {
   // ==================================================
 
 
-  // ===== GAME END =====
-  // Start
-  // Level won in next level
-  // Game won
-  // Game lost
-
-
-
-  // ==================================================
-  // INITIALISE
-  // ==================================================
-
-  start()
-  nextLevel()
-
-
-
-
-  // ==================================================
-  // PLAYER MOVEMENT
-  // ==================================================
-
-
-  // ==================================================
-  // START AND END THINGS
-  // ==================================================
-
-
   //First load from splash screen
   document.querySelector('#load-game').addEventListener(('click'), () => {
-    //hide landing page
-    document.querySelector('#landing').classList.add('hide')
-    //create board
+    hideElement('#landing')
     createBoard()
-    //show grid page
-    document.querySelector('#game').classList.remove('hide')
+    showElement('#game')
   })
 
-  function start() {
-    document.querySelector('#start').addEventListener('click', () => {
-      const endNote = document.querySelector('#end-note').classList
-      classListNotification.add('hide')
-      classListNotification.remove('fade')
-      endNote.add('hide')
-      document.querySelector('#alert').innerHTML = ''
-      document.querySelector('#game-result').innerHTML = ''
-      document.querySelector('#final-score ').innerHTML = ''
-      // console.log('clickedstart')
-      addTreasureChests()
-      addWeapons()
-      addEnemies()
-      addPlayer()
-      enemyState = 'deadly'
-      let myHeart = document.querySelector('.heart-one')
-      myHeart.classList.add('heart')
-      myHeart = document.querySelector('.heart-two')
-      myHeart.classList.add('heart')
-      myHeart = document.querySelector('.heart-three')
-      myHeart.classList.add('heart')
-      const startButton = document.querySelector('#start').classList
-      startButton.add('hide')
-    })
+
+  //create a new game
+  function createGame() {
+    hideElement('#notification')
+    hideElement('#end-note')
+    showElement('#start')
+    document.querySelector('#alert').innerHTML = ''
+    document.querySelector('#game-result').innerHTML = ''
+    document.querySelector('#final-score ').innerHTML = ''
+    addTreasureChests()
+    addWeapons()
+    addEnemies()
+    addPlayer()
   }
 
-  function nextLevel() {
-    document.querySelector('#next-level').addEventListener('click', () => {
-      level = level + 1
-      const endNote = document.querySelector('#end-note').classList
-      classListNotification.add('hide')
-      classListNotification.remove('fade')
-      endNote.add('hide')
-      document.querySelector('#alert').innerHTML = ''
-      document.querySelector('#game-result').innerHTML = ''
-      document.querySelector('#final-score ').innerHTML = ''
-      addTreasureChests()
-      addWeapons()
-      addEnemies()
-      addPlayer()
-      enemyState = 'deadly'
-    })
-  }
-
-  function gameover() {
-    // clearInterval(intervalId)
+  //end a game or level
+  function endGame() {
     clearTimeout(addWeaponTimeout)
     clearTimeout(deadlyTimeout)
     clearTimeout(removeWeaponTimeout)
-    const endNote = document.querySelector('#end-note').classList
-    const nextLevelButton = document.querySelector('#next-level').classList
-    const newGameButton = document.querySelector('#new-game').classList
-    endNote.remove('hide')
-    nextLevelButton.add('hide')
-    newGameButton.remove('hide')
-    document.querySelector('#game-result').innerHTML = 'Game Over'
+    showElement('#end-note')
     document.querySelector('#final-score ').innerHTML = `Your score ${playerScore}`
+    //clear any existing tokens
+    clearTokens('player')
+    clearTokens('player-weapon')
+    clearTokens('enemy')
+    clearTokens('enemy-killable')
+    clearTokens('treasure-chest')
+    clearTokens('weapon')
   }
 
+  //start game (on button click)
+  document.querySelector('#start').addEventListener('click', () => {
+    hideElement('#start')
+    createGame()
+    //set my hearts
+    let myHeart = document.querySelector('.heart-one').classList
+    myHeart.add('heart')
+    myHeart = document.querySelector('.heart-two').classList
+    myHeart.add('heart')
+    myHeart = document.querySelector('.heart-three').classList
+    myHeart.add('heart')
+  })
+
+
+  //start next level (on button click)
+  document.querySelector('#next-level').addEventListener('click', () => {
+    level = level + 1
+    createGame()
+  })
+
+  //end level or game if won
   function levelWon() {
     if (level === maxLevels) {
-      // clearInterval(intervalId)
-      clearTimeout(addWeaponTimeout)
-      clearTimeout(deadlyTimeout)
-      clearTimeout(removeWeaponTimeout)
-      const endNote = document.querySelector('#end-note').classList
-      const nextLevelButton = document.querySelector('#next-level').classList
-      const newGameButton = document.querySelector('#new-game').classList
-      // notificationUpdate.remove('hide')
-      endNote.remove('hide')
-      nextLevelButton.add('hide') // hidden when no more levels
-      newGameButton.remove('hide') //show new game button
-      document.querySelector('#alert').innerHTML = ''
-      document.querySelector('#game-result').innerHTML = 'Congratulations, you have completed the final level!'
-      document.querySelector('#final-score ').innerHTML = `Your score ${playerScore}`
+      endGame()
+      document.querySelector('#game-result').innerHTML = 'Congratulations! You beat all the levels'
+      hideElement('#next-level')
+      showElement('#new-game')
     } else {
-      // clearInterval(intervalId)
-      clearTimeout(addWeaponTimeout)
-      clearTimeout(deadlyTimeout)
-      clearTimeout(removeWeaponTimeout)
-      // const notificationUpdate = document.querySelector('#notification').classList
-      const endNote = document.querySelector('#end-note').classList
-      const nextLevelButton = document.querySelector('#next-level').classList
-      const newGameButton = document.querySelector('#new-game').classList
-      // notificationUpdate.remove('hide')
-      endNote.remove('hide')
-      nextLevelButton.remove('hide')
-      newGameButton.add('hide')
-      document.querySelector('#alert').innerHTML = ''
+      endGame()
+      showElement('#next-level')
+      hideElement('#new-game')
       document.querySelector('#game-result').innerHTML = 'Level Complete'
-      document.querySelector('#final-score ').innerHTML = `Your score ${playerScore}`
     }
   }
 
-  document.querySelector('#new-game').addEventListener('click', () => {
-    //probably a better way exists to do this
-    location.reload()
-  })
+  //end game if lost
+  function gameover() {
+    endGame()
+    hideElement('#next-level')
+    showElement('#new-game')
+    document.querySelector('#game-result').innerHTML = 'Game Over'
+  }
 
+  //start new game
+  document.querySelector('#new-game').addEventListener('click', () => {
+    createGame()
+    //reset my hearts
+    let myHeart = document.querySelector('.heart-one').classList
+    myHeart.remove('empty-heart')
+    myHeart = document.querySelector('.heart-two').classList
+    myHeart.remove('empty-heart')
+    myHeart = document.querySelector('.heart-three').classList
+    myHeart.remove('empty-heart')
+  })
 }
 
 window.addEventListener('DOMContentLoaded', elfAdventures) 
