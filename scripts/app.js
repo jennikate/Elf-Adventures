@@ -1,50 +1,12 @@
 /* eslint-disable brace-style */
 
-
 function elfAdventures() {
-
-  // =================================
-  // SECTIONS IN HERE
-
-  // ===== GLOBAL ITEMS =====
-  // Global variables & starting values
-  // Global DOM elements used
-
-  // ===== CONTROLS =====
-  // Audio 
-  // Player keypresses
-
-  // ===== GAME BOARD =====
-  // Wall array
-  // Enemy array
-  // Create board
-  // Random/Timed Token Functions
-
-  // ===== COLLISIONS =====
-  // Token movement
-  // Deaths
-  // Weapon picked up (enemies killable)
-  // Enemies return to deadly
-  // Treasure picked up
-
-  // ==== MOVEMENT =====
-
-
-  // ===== GAME END =====
-  // Start
-  // Level won in next level
-  // Game won
-  // Game lost
-  // =================================
-
-
 
   // =================================
   // GLOBAL ITEMS
   // =================================
 
   // ===== Global variables & starting values =====
-
   const boardWidth = 10
   const boardSize = boardWidth ** 2
   const maxLevels = 4
@@ -66,24 +28,19 @@ function elfAdventures() {
   let playerLives = 3
   let playerScore = 0
 
-  // let enemyState = 'deadly'
   const enemyHome = 54
   const numberEnemyPerLevel = 1
 
   let cellIdRef
   let cellElement
-  // let elementClassList
   let arrLocation = [] //finds the cells with tokens
   let myWalls //figures out which cells have walls for 'me'
   let moveTo = [] //used to determine available cells to move into for 'me'
   let moveToCellId //holds the cell I've decided to move into
   let playerDirection //set by player keypress function
-  let locationVar
 
   // ===== Global DOM elements used =====
-
   const grid = document.querySelector('#grid') //position on html to create the cells
-
   //get cell element from numRef : frequently need to get the cell element from a cellId to then adjust classes/innerHTML/other
   function getCellElement(numRef) {
     cellIdRef = '#cell-' + numRef
@@ -109,7 +66,6 @@ function elfAdventures() {
     })
   }
 
-
   //hide elements
   function hideElement(elementRef) {
     const elementClassList = document.querySelector(elementRef).classList
@@ -120,14 +76,6 @@ function elfAdventures() {
     const elementClassList = document.querySelector(elementRef).classList
     elementClassList.remove('hide')
   }
-
-
-  //This needs removing ***********
-  const classListNotification = document.querySelector('#notification').classList
-  // console.log(classListNotification)
-
-
-
 
   // =================================
   // CONTROLS
@@ -155,7 +103,6 @@ function elfAdventures() {
     document.querySelector('.audio').pause()
   })
 
-
   // ===== Player keypresses =====
   document.addEventListener('keyup', (e) => {
     if (e.key === 'w' || e.key === 'W' || e.keyCode === 38) { playerDirection = 'top' }
@@ -168,7 +115,6 @@ function elfAdventures() {
     collision(playerDirection)
     return playerDirection
   })
-
 
   // =================================
   // GAME BOARD
@@ -300,13 +246,10 @@ function elfAdventures() {
       //set it's values
       cell.classList.add('cell')
       cell.setAttribute('id', 'cell-' + [i])
-      //add it to the grid
-      grid.appendChild(cell)
+      grid.appendChild(cell) //add it to the grid
     }
-    //add walls based on the wall array
-    makeWalls()
-    //show start button
-    showElement('#start')
+    makeWalls() //add walls based on the wall array
+    showElement('#start') //show start button
   }
 
   // MAKE WALLS
@@ -362,7 +305,6 @@ function elfAdventures() {
   enemies.forEach(elem => {
     assignedCells.push(elem)
   })
-
 
   //Add treasure chests
   let treasureLocations = [] //have to declare outside function so addWeapon can use it
@@ -446,9 +388,6 @@ function elfAdventures() {
     }, 10000)
   }
 
-
-
-
   // =================================
   // COLLISIONS
   // =================================
@@ -462,8 +401,6 @@ function elfAdventures() {
     getCellElement(nextCellId)
     cellElement.classList.add(className)
   }
-
-
 
   // ===== Deaths =====
   //Enemy
@@ -542,7 +479,6 @@ function elfAdventures() {
     }, 5000)
   }
 
-
   // ===== Treasure picked up =====
   function lootTreasure(thisCell) {
     //set this specific cell element into local variable
@@ -575,14 +511,9 @@ function elfAdventures() {
     }
   }
 
-
-
-
-
   // ==================================================
   // MOVEMENT LOGIC
   // ==================================================
-
 
   function pushItemToLocationArray(className) {
     const myRefArray = document.querySelectorAll(`.${className}`)
@@ -604,10 +535,7 @@ function elfAdventures() {
     pushItemToLocationArray('enemy-killable')
     pushItemToLocationArray('player')
     pushItemToLocationArray('player-weapon')
-
-
     //loop through the location array and take relevant action
-
     for (let loc = 0; loc < arrLocation.length; loc++) {
       const locationVar = arrLocation[loc]
       //clear the moveTo array (cells I can move to) before looping again
@@ -620,8 +548,7 @@ function elfAdventures() {
       if (!myWalls.contains('wall-right')) { moveTo.push(locationVar.myCellId + 1) } //I can move right
       if (!myWalls.contains('wall-bottom')) { moveTo.push(locationVar.myCellId + 10) } //I can move down
       if (!myWalls.contains('wall-left')) { moveTo.push(locationVar.myCellId - 1) } //I can move left
-      //clear myWalls array ready for next loop
-      myWalls = []
+      myWalls = [] //clear myWalls array ready for next loop
 
       //get next cell to move to for enemies (of all types)
       if (locationVar.myRef === 'enemy' || locationVar.myRef === 'enemy-killable') {
@@ -704,19 +631,17 @@ function elfAdventures() {
     }
   }
 
-
   // ==================================================
   // GAME START AND END
   // ==================================================
-
 
   //First load from splash screen
   document.querySelector('#load-game').addEventListener(('click'), () => {
     hideElement('#landing')
     createBoard()
     showElement('#game')
+    createGame()
   })
-
 
   //create a new game
   function createGame() {
@@ -751,7 +676,7 @@ function elfAdventures() {
   //start game (on button click)
   document.querySelector('#start').addEventListener('click', () => {
     hideElement('#start')
-    createGame()
+    // createGame()
     //set my hearts
     let myHeart = document.querySelector('.heart-one').classList
     myHeart.add('heart')
@@ -760,7 +685,6 @@ function elfAdventures() {
     myHeart = document.querySelector('.heart-three').classList
     myHeart.add('heart')
   })
-
 
   //start next level (on button click)
   document.querySelector('#next-level').addEventListener('click', () => {
@@ -793,6 +717,8 @@ function elfAdventures() {
 
   //start new game
   document.querySelector('#new-game').addEventListener('click', () => {
+    //reset level
+    level = 1
     createGame()
     //reset my hearts
     let myHeart = document.querySelector('.heart-one').classList
