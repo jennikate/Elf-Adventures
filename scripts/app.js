@@ -68,18 +68,19 @@ function elfAdventures() {
   let playerLives = 3
   let playerScore = 0
 
-  let enemyState = 'deadly'
+  // let enemyState = 'deadly'
   const enemyHome = 54
   const numberEnemyPerLevel = 1
 
   let cellIdRef
   let cellElement
-  let elementClassList
+  // let elementClassList
   let arrLocation = [] //finds the cells with tokens
   let myWalls //figures out which cells have walls for 'me'
   let moveTo = [] //used to determine available cells to move into for 'me'
   let moveToCellId //holds the cell I've decided to move into
   let playerDirection //set by player keypress function
+  let myLocation
 
   // ===== Global DOM elements used =====
 
@@ -461,22 +462,25 @@ function elfAdventures() {
   function moveTokens(currentCellId, className, nextCellId) {
     //get the element of the current cell & remove the token
     const currentCellElement = document.querySelector(`#cell-${currentCellId}`)
+    console.log(currentCellElement.classList)
     currentCellElement.classList.remove(className)
+    console.log(currentCellElement.classList)
     //get the ID of the next cell & add the token
     getCellElement(nextCellId)
     cellElement.classList.add(className)
+    console.log(cellElement.classList)
   }
 
   // ==== Enemy movement randomisation  =====
   //if enemy has options of where to go next, this is the randomisation code (does this need to be a function really?)
-  function moveEnemyCalculation(moveTo, replaceWithLoopVar) {
-    if (moveTo.length === 0) { moveToCellId = replaceWithLoopVar.myCellId } //I have no viable options so I stay here
+  function moveEnemyCalculation(moveTo, myLocation) {
+    if (moveTo.length === 0) { moveToCellId = myLocation.myCellId } //I have no viable options so I stay here
     else if (typeof moveTo === 'number') { moveToCellId = moveTo } //I have only one option (or I am next to a player) so I want to move there
     else {
       //get a random location to move to
       moveToCellId = moveTo[Math.floor(Math.random() * moveTo.length)]
     }
-    // console.log(`I am in cell ${replaceWithLoopVar.myCellId} and I will move to ${moveToCellId}`)
+    // console.log(`I am in cell ${myLocation.myCellId} and I will move to ${moveToCellId}`)
   }
 
   // ===== Deaths =====
@@ -489,9 +493,9 @@ function elfAdventures() {
   }
 
   //Player
-  function playerDeath(moveToCellId) {
+  function playerDeath(currentCellId) {
     //return player home
-    moveTokens(moveToCellId, 'player', playerHome)
+    moveTokens(currentCellId, 'player', playerHome)
     playerLives = playerLives - 1
     let myHeart
     switch (playerLives) {
@@ -612,146 +616,138 @@ function elfAdventures() {
     return arrLocation
   }
 
-
+  function checkForWalls() {
+    //loop through location array and find my walls
+    for (let loc = 0; loc < arrLocation.length; loc++) {
+      myLocation = arrLocation[loc]
+      //clear the arrays needed here
+      moveTo = [] //is global
+      myWalls = [] //I think is local, will try declaring locally later
+      //Check cells for walls, if there is no wall in that direction then add cell ID to my array as a cell I can move to
+      myWalls = document.querySelector(('#cell-' + myLocation.myCellId)).classList
+      //if there is no wall, then push the available cellIDs to my moveTo array
+      if (!myWalls.contains('wall-top')) { moveTo.push(myLocation.myCellId - 10) } //I can move up
+      if (!myWalls.contains('wall-right')) { moveTo.push(myLocation.myCellId + 1) } //I can move right
+      if (!myWalls.contains('wall-bottom')) { moveTo.push(myLocation.myCellId + 10) } //I can move down
+      if (!myWalls.contains('wall-left')) { moveTo.push(myLocation.myCellId - 1) } //I can move left
+    }
+  }
 
 
   function collision(playerDirection) {
-
-
     arrLocation = [{ myRef: '', myCellId: 0, myClassList: '' }]
 
     pushItemToLocationArray('enemy')
     pushItemToLocationArray('enemy-killable')
     pushItemToLocationArray('player')
     pushItemToLocationArray('player-weapon')
-    pushItemToLocationArray('treasure-chest')
-    pushItemToLocationArray('weapon')
+    // pushItemToLocationArray('treasure-chest')
+    // pushItemToLocationArray('weapon')
 
+    console.log(arrLocation)
 
-
+    checkForWalls()
+    console.log(moveTo)
 
 
     // ===== DETERMINE WHERE I CAN MOVE TO =====
-    //for each myCellId in arrLocation
-    console.log(arrLocation)
-
-    for (let loc = 0; loc < arrLocation.length; loc++) {
-
-      const replaceWithLoopVar = arrLocation[loc]
-      // console.log(arrLocation[loc])
-      // console.log(`I am arrLocation position ${loc}, myCellId is ${replaceWithLoopVar.myCellId}, myRef is ${replaceWithLoopVar.myRef}`)
-      //may sure moveTo array is empty and ready for this loop
-      moveTo = []
-      // console.log(moveTo)
-
-      //get the walls of my cell
-      myWalls = document.querySelector(('#cell-' + replaceWithLoopVar.myCellId)).classList
-      //if there is no wall, then push the available cellIDs to my moveTo array
-      if (!myWalls.contains('wall-top')) { moveTo.push(replaceWithLoopVar.myCellId - 10) } //I can move up
-      if (!myWalls.contains('wall-right')) { moveTo.push(replaceWithLoopVar.myCellId + 1) } //I can move right
-      if (!myWalls.contains('wall-bottom')) { moveTo.push(replaceWithLoopVar.myCellId + 10) } //I can move down
-      if (!myWalls.contains('wall-left')) { moveTo.push(replaceWithLoopVar.myCellId - 1) } //I can move left
-
-      // console.log(`my classes are ${myWalls}`)
-      // console.log(`I can move to ${moveTo}`)
-
-      //clear myWalls array ready for next loop
-      myWalls = []
-
-      // console.log(`my array location is ${arrLocation[loc]}, my walls are at ${myWalls}`)
-      //loop through my new available cells for enemy move
-
-      // console.log(replaceWithLoopVar.myRef)
-
-      if (replaceWithLoopVar.myRef === 'enemy' || replaceWithLoopVar.myRef === 'enemy-killable') {
-        for (let i = moveTo.length - 1; i >= 0; i--) {
-          getCellElement(moveTo[i])
-          const nextCellClasses = cellElement.classList
-          // if cell contains an enemy & I am enemy : remove from array as I won't move there
-          if ((replaceWithLoopVar.myRef === 'enemy' || replaceWithLoopVar.myRef === 'enemy-killable') &&
-            (nextCellClasses.contains('enemy') || nextCellClasses.contains('enemy-killable'))) {
-            moveTo.splice([i], 1)
-          }
-          //if cell contains a player and I am enemy and I am killable : I won't move there
-          if (replaceWithLoopVar.myRef === 'enemy-killable' && nextCellClasses.contains('player-weapon')) {
-            moveTo.splice([i], 1)
-          }
-          //if cell contains a player and I am enemy and I am deadly : I WANT TO move there
-          if (replaceWithLoopVar.myRef === 'enemy' && nextCellClasses.contains('player')) {
-            moveTo = moveTo[i]
-            break //stop looping, I've found my direction
-          }
-        }
-        //move enemies
-        if (moveTo.length === 0) { moveToCellId = replaceWithLoopVar.myCellId } //I have no viable options so I stay here
-        else if (typeof moveTo === 'number') { moveToCellId = moveTo } //I have only one option (or I am next to a player) so I want to move there
-        else {
-          //get a random location to move to
-          moveToCellId = moveTo[Math.floor(Math.random() * moveTo.length)]
-          moveEnemyCalculation(moveToCellId, replaceWithLoopVar.myRef)
-        }
-        if (replaceWithLoopVar.myRef === 'enemy') {
-          moveTokens(replaceWithLoopVar.myCellId, replaceWithLoopVar.myRef, moveToCellId)
-        } //deadly enemy moves first
-        //if player in that location kill them
-        // console.log(document.querySelector(`#cell-${moveToCellId}`))
-        if ((document.querySelector(`#cell-${moveToCellId}`)).classList.contains('player')) {
-          playerDeath(moveToCellId)
-          break // no more moves this round
-        }
-      }
 
 
-      //now loop for player move
-      // console.log(replaceWithLoopVar.myRef)
+    // console.log(`my array location is ${arrLocation[loc]}, my walls are at ${myWalls}`)
+    //loop through my new available cells for enemy move
 
-      if (replaceWithLoopVar.myRef === 'player' || replaceWithLoopVar.myRef === 'player-weapon') {
-        //get the cell ID I want to move to
-        if (playerDirection === 'top') { moveToCellId = replaceWithLoopVar.myCellId - 10 }
-        if (playerDirection === 'right') { moveToCellId = replaceWithLoopVar.myCellId + 1 }
-        if (playerDirection === 'bottom') { moveToCellId = replaceWithLoopVar.myCellId + 10 }
-        if (playerDirection === 'left') { moveToCellId = replaceWithLoopVar.myCellId - 1 }
-        // console.log(`I am a player with a weapon, I am in cell ${replaceWithLoopVar.myCellId}, I want to move to ${playerDirection} ${moveToCellId}, I can move to ${moveTo}`)
+    // console.log(myLocation.myRef)
 
-        //can I move to the cell I want to move to?
-        if (moveTo.includes(moveToCellId)) {
-          // console.log('I can go there')
-          //whats in that cell?
-          getCellElement(moveToCellId)
-          // console.log(`I am in cell ${replaceWithLoopVar.myCellId} I am looking at cell ${moveToCellId}. The class list for that cell is ${cellElement.classList}`)
+    // if (myLocation.myRef === 'enemy' || myLocation.myRef === 'enemy-killable') {
+    //   for (let i = moveTo.length - 1; i >= 0; i--) {
+    //     getCellElement(moveTo[i])
+    //     const nextCellClasses = cellElement.classList
+    //     // if cell contains an enemy & I am enemy : remove from array as I won't move there
+    //     if ((myLocation.myRef === 'enemy' || myLocation.myRef === 'enemy-killable') &&
+    //       (nextCellClasses.contains('enemy') || nextCellClasses.contains('enemy-killable'))) {
+    //       moveTo.splice([i], 1)
+    //     }
+    //     //if cell contains a player and I am enemy and I am killable : I won't move there
+    //     if (myLocation.myRef === 'enemy-killable' && nextCellClasses.contains('player-weapon')) {
+    //       moveTo.splice([i], 1)
+    //     }
+    //     //if cell contains a player and I am enemy and I am deadly : I WANT TO move there
+    //     if (myLocation.myRef === 'enemy' && nextCellClasses.contains('player')) {
+    //       moveTo = moveTo[i]
+    //       // break //stop looping, I've found my direction
+    //     }
+    //   }
+    //   //move enemies
+    //   if (moveTo.length === 0) { moveToCellId = myLocation.myCellId } //I have no viable options so I stay here
+    //   else if (typeof moveTo === 'number') { moveToCellId = moveTo } //I have only one option (or I am next to a player) so I want to move there
+    //   else {
+    //     //get a random location to move to
+    //     moveToCellId = moveTo[Math.floor(Math.random() * moveTo.length)]
+    //     moveEnemyCalculation(moveToCellId, myLocation.myRef)
+    //   }
+    //   if (myLocation.myRef === 'enemy') {
+    //     moveTokens(myLocation.myCellId, myLocation.myRef, moveToCellId)
+    //   } //deadly enemy moves first
+    //   //if player in that location kill them
+    //   // console.log(document.querySelector(`#cell-${moveToCellId}`))
+    //   if ((document.querySelector(`#cell-${moveToCellId}`)).classList.contains('player')) {
+    //     playerDeath(moveToCellId)
+    //     // break // no more moves this round
+    //   }
+    // }
 
-          //is there a killable enemy?
-          if ((cellElement.classList).contains('enemy-killable')) {
-            enemyDeath(moveToCellId)
-            moveTokens(replaceWithLoopVar.myCellId, replaceWithLoopVar.myRef, moveToCellId)
-            break //stop the loop if player kills an enemy!
-          } else if ((cellElement.classList).contains('treasure-chest')) {
-            lootTreasure(moveToCellId)
-            moveTokens(replaceWithLoopVar.myCellId, replaceWithLoopVar.myRef, moveToCellId)
-          } else if ((cellElement.classList).contains('weapon')) {
-            getWeapon()
-            moveTokens(replaceWithLoopVar.myCellId, 'player-weapon', moveToCellId)
-            break
-          } else if ((cellElement.classList).contains('enemy')) {
-            // enemyKill(moveToCellId)
-            console.log('player dumb')
-          } else {
-            //player can move to cell
-            moveTokens(replaceWithLoopVar.myCellId, replaceWithLoopVar.myRef, moveToCellId)
-          }
+
+    //now loop for player move
+    // console.log(myLocation.myRef)
+
+    if (myLocation.myRef === 'player' || myLocation.myRef === 'player-weapon') {
+
+      //get the cell ID I want to move to
+      if (playerDirection === 'top') { moveToCellId = myLocation.myCellId - 10 }
+      if (playerDirection === 'right') { moveToCellId = myLocation.myCellId + 1 }
+      if (playerDirection === 'bottom') { moveToCellId = myLocation.myCellId + 10 }
+      if (playerDirection === 'left') { moveToCellId = myLocation.myCellId - 1 }
+      // console.log(`I am a player with a weapon, I am in cell ${myLocation.myCellId}, I want to move to ${playerDirection} ${moveToCellId}, I can move to ${moveTo}`)
+
+      //can I move to the cell I want to move to?
+      if (moveTo.includes(moveToCellId)) {
+        // console.log('I can go there')
+        //whats in that cell?
+        getCellElement(moveToCellId)
+        // console.log(`I am in cell ${myLocation.myCellId} I am looking at cell ${moveToCellId}. The class list for that cell is ${cellElement.classList}`)
+
+        //is there a killable enemy?
+        if ((cellElement.classList).contains('enemy-killable')) {
+          enemyDeath(moveToCellId)
+          moveTokens(myLocation.myCellId, myLocation.myRef, moveToCellId)
+          // break //stop the loop if player kills an enemy!
+        } else if ((cellElement.classList).contains('treasure-chest')) {
+          lootTreasure(moveToCellId)
+          moveTokens(myLocation.myCellId, myLocation.myRef, moveToCellId)
+        } else if ((cellElement.classList).contains('weapon')) {
+          getWeapon()
+          moveTokens(myLocation.myCellId, 'player-weapon', moveToCellId)
+          // break
+        } else if ((cellElement.classList).contains('enemy')) {
+          playerDeath(myLocation.myCellId)
+          console.log('player dumb but add an enemy kill call')
         } else {
-          // console.log('no no ')
-          //player tried to move into a wall
-          return
+          //player can move to cell
+          moveTokens(myLocation.myCellId, myLocation.myRef, moveToCellId)
         }
-      } //player moves second
-      if (replaceWithLoopVar.myRef === 'enemy-killable') {
-        moveTokens(replaceWithLoopVar.myCellId, replaceWithLoopVar.myRef, moveToCellId)
-      } //killable enemy moves last
-    }
-
-
+      } else {
+        // console.log('no no ')
+        //player tried to move into a wall
+        return
+      }
+    } //player moves second
+    if (myLocation.myRef === 'enemy-killable') {
+      moveTokens(myLocation.myCellId, myLocation.myRef, moveToCellId)
+    } //killable enemy moves last
   }
+
+
+
 
 
   // ==================================================
