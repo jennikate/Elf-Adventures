@@ -1,7 +1,5 @@
 /* eslint-disable brace-style */
 
-// FUNCTIONING JS THAT NEEDS REFACTORING
-
 
 function pacnam() {
 
@@ -26,6 +24,9 @@ function pacnam() {
   let cellIdRef
   let cellElement
   let moveToCellId
+  let moveTo = []
+  let arrLocation
+  let myWalls
 
   const enemies = [54, 44, 45, 55]
   let enemyState = 'deadly'
@@ -272,17 +273,17 @@ function pacnam() {
         //decide on size (small, medium, large) & add class
         //if level one, add one tiny, one small, two normal
         //how many chests are on the board
-        let thisCell = (maxChestLocationArray - treasureLocations.length) / (numberOfChests + 1)
+        const thisCell = (maxChestLocationArray - treasureLocations.length) / (numberOfChests + 1)
         // console.log(thisCell)
         if (level === 4) {
           cellElement.classList.add('treasure-chest')
           cellElement.classList.add('treasure-max')
         } else {
           switch (thisCell) {
-            case 4: cellElement.classList.add('treasure-chest'); break;
-            case 3: cellElement.classList.add('treasure-chest'); break;
-            case 2: cellElement.classList.add('treasure-small'); break;
-            case 1: cellElement.classList.add('treasure-tiny'); break;
+            case 4: cellElement.classList.add('treasure-chest'); break
+            case 3: cellElement.classList.add('treasure-chest'); break
+            case 2: cellElement.classList.add('treasure-small'); break
+            case 1: cellElement.classList.add('treasure-tiny'); break
           }
         }
 
@@ -318,7 +319,6 @@ function pacnam() {
       const weaponCells = document.querySelectorAll('.weapon')
       weaponCells.forEach(elem => {
         elem.classList.remove('weapon')
-        cellClassList.remove('flash')
       })
       while (weaponLocations.length < maxWeaponsLocationArray) {
         const weaponRandomNumber = Math.floor(Math.random() * 100)
@@ -466,19 +466,19 @@ function pacnam() {
         myHeart = document.querySelector('.heart-three')
         myHeart.classList.add('empty-heart')
         myHeart.classList.remove('heart')
-        break;
+        break
       }
       case 1: {
         myHeart = document.querySelector('.heart-two')
         myHeart.classList.add('empty-heart')
         myHeart.classList.remove('heart')
-        break;
+        break
       }
       case 0: {
         myHeart = document.querySelector('.heart-one')
         myHeart.classList.add('empty-heart')
         myHeart.classList.remove('heart')
-        break;
+        break
       }
       default: {
         document.querySelector('.heart-one').classList = 'heart heart-one'
