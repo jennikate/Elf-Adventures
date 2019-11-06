@@ -1,4 +1,4 @@
-#Project 1: Elf Adventures
+# Project 1: Elf Adventures
 
 ##Overview
 Elf Adventures is a browser based maze style game. Move your elf through the maze collecting the treasure and avoiding the dragons. Along the way you may find weapons which will allow you to kill the dragons... until the weapons break!
@@ -10,7 +10,7 @@ Check out the GitHub Repo here.
 
 <mini video of game in action>
 
-##Brief
+## Brief
 
 - Render a game in the browser
 - Switch turns between two players
@@ -26,7 +26,7 @@ There was a choice of starting game styles to work with, and then customise to b
 - The player should be able to clear at least one board
 - The player's score should be displayed at the end of the game
 
-#Technologies Used
+# Technologies Used
 
 - HTML5
 - CSS3 with animation
@@ -35,8 +35,8 @@ There was a choice of starting game styles to work with, and then customise to b
 - GitHub
 - Google Fonts
 
-#Approach Taken
-###Grid Layout
+# Approach Taken
+###G rid Layout
 
 I decided early on that I would limit v1 to a 100 cell grid, and that the walls of my maze would be added by using border-top, border-right, border-bottom, border-left.
 
@@ -47,7 +47,7 @@ This allowed me to build up the game board maze by creating each cell as a div, 
 
 <insert snapshot of walls array>
 
-###HardCoded vs Variable
+### HardCoded vs Variable
 
 Although I'd decided to make a static 100 cell grid with a non-changing maze design, I wanted the rest of my code to be able to handle any size grid being created.
 
@@ -60,7 +60,7 @@ In the end I have left some other elements as hard coded for now
 <image of values that can be declared>
 
 
-###Objects
+### Objects
 
 For the MVP I wanted
 - a player token : which would have a home location that was always the bottom right corner of the grid
@@ -75,9 +75,9 @@ To extend on that I added
 - the treasure chests are of differing sizes with relative point values- the weapons spawn on a timer and disappear if not collected within [x] second (they respawn in a different location after [x] more seconds)
 - treasure chests and weapons have almost random spawn points, the caveat being they cannot spawn on or in the cells directly around a player, on a cell occupied by an enemy, or on a cell already occupied by a treasure of weapon
 
-###Functionality
+### Functionality
 
-####Board Creation
+#### Board Creation
 
 When to add the objects!?
 I didn't want players seeing all the tokens before they were ready to start. 
@@ -88,7 +88,7 @@ Objects are spawned onto the board on 'Start game' being clicked.
 
 <insert image of board creation code>
 
-####Movement
+#### Movement
 
 - Player tokens will move on wsda, WSDA, or the arrow keys
 - Enemy tokens will move when the player clicks a key, however their movement occurs before the players from a process point of view
@@ -99,9 +99,9 @@ Objects are spawned onto the board on 'Start game' being clicked.
 
 <insert image of keypress code>
 
-####Collision
+#### Collision
 
-#####Walls
+##### Walls
 
 Using CSS borders for walls presented an interesting problem.
 I needed to know for the player and every enemy whether there was a wall blocking them.
@@ -112,7 +112,7 @@ I now have a list of cells it's possible to move to.
 
 <image of wall function>
 
-#####Players
+##### Players
 
 I collect the keypress of the player and know which way they want to move.
 I then check what's around them
@@ -124,7 +124,7 @@ I then check what's around them
 
 <image of player collision function>
 
-#####Enemies
+##### Enemies
 
 For the MVP enemies move on a player keypress
 I collect the location of enemies, check their walls, then check what else is around them
@@ -146,10 +146,10 @@ If there is no player, then a check is done on the array and the first of these 
 Then the enemy moves
 
 
-####Other Elements
+#### Other Elements
 
 
-#####Timers
+##### Timers
 
 Weapons
 - at game start, a timer is set to create weapon tokens every [x] second
@@ -160,7 +160,7 @@ Enemies
 - when enemies are switched back, the create weapon timer is started again
 
 
-#####Level Won / Game Won / Game Lost
+##### Level Won / Game Won / Game Lost
 
 When all the chests are collected then a level is considered won and a message is shown with the players score, and a button to continue
 
@@ -171,14 +171,14 @@ This repeats until the player has completed all available levels (Game Won), or 
 In either of those cases a game result message is shown as well as the player score.
 
 
-####Featured Code
+#### Featured Code
 
-#####Featured piece of code 1
-#####Featured piece of code 2
+##### Featured piece of code 1
+##### Featured piece of code 2
 
-###Screenshots
+### Screenshots
 
-###Bugs
+### Bugs
 
 ###Wins and Blockers
 One of the choice I almost regretted was using border for the walls. I had to find the walls for the cell I (player or enemy) was in by looking at what classes were assigned to it. 
@@ -198,7 +198,7 @@ I've had the opportunity to apply my new learnings with JavaScript in a real pro
 
 
 
-###Future Content
+### Future Content
 There are a few features I would like to add, such as 
 
 - enemies are smarter about chasing a player
