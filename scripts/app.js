@@ -14,7 +14,6 @@ function elfAdventures() {
   // ===== CONTROLS =====
   // Audio 
   // Player keypresses
-  // Buttons
 
   // ===== GAME BOARD =====
   // Wall array
@@ -23,10 +22,12 @@ function elfAdventures() {
   // Random/Timed Token Functions
 
   // ===== COLLISIONS =====
+  // movement
   // tbd breakdown of functions here
 
   // ===== GAME END =====
-  // Level won
+  // Start
+  // Level won in next level
   // Game won
   // Game lost
 
@@ -38,14 +39,14 @@ function elfAdventures() {
   // GLOBAL ITEMS
   // =================================
 
-  // Global variables & starting values
+  // ===== Global variables & starting values =====
 
   const boardWidth = 10
   const boardSize = boardWidth ** 2
   const maxLevels = 4
-  let level = 1
+  let level = 4
 
-  let addWeaponTimeout 
+  let addWeaponTimeout
   let deadlyTimeout
   let removeWeaponTimeout
 
@@ -54,12 +55,12 @@ function elfAdventures() {
   const treasureTinyValue = 100
   const treasureMaxValue = 2000
   const enemyValue = 20
+  const numberOfChests = 4
 
   const playerHome = Math.max(boardSize) - 1
   let playerLives = 3
   let playerScore = 0
 
-  const enemies = [54, 44, 45, 55] //these are cell ID's
   let enemyState = 'deadly'
   const enemyHome = 54
 
@@ -72,7 +73,7 @@ function elfAdventures() {
   let moveToCellId //holds the cell I've decided to move into
   let playerDirection //set by player keypress function
 
-  // Global DOM elements used
+  // ===== Global DOM elements used =====
 
   const grid = document.querySelector('#grid') //position on html to create the cells
 
@@ -90,48 +91,19 @@ function elfAdventures() {
   }
 
 
-
+  //This needs removing ***********
   const classListNotification = getElementClassList('#notification')
   console.log(classListNotification)
 
 
 
 
+  // =================================
+  // CONTROLS
+  // =================================
 
-
-
-
-
-
-  
-
-  //these are viable locations that weapons or treasures drop in. Would be good to make this part of the collision array but that's a future thing
-  //maybe make them the cells they should not appear in (not appear where enemies or player do, or next to player start cell)
-  // const treasure = [2, 3]
-  // const weapons = [7, 9]
-  //track location of treasure so can avoid duplication
-  let treasureLocations = [] //have to track so can avoid dropping weapons there
-  const assignedCells = []
-  assignedCells.push(playerHome)
-  //include cells directly around player so nothing drops there
-  assignedCells.push(playerHome - 10)
-  assignedCells.push(playerHome + 1)
-  assignedCells.push(playerHome + 10)
-  assignedCells.push(playerHome - 1)
-  enemies.forEach(elem => {
-    assignedCells.push(elem)
-  })
-
-
-
-
-
-
-  //AUDIO
-  /* audio structure */
-
-
-  //ambient
+  // ===== Audio ===== 
+  //ambient : triggered on load game button click
   const player = document.querySelector('#load-game')
   const backgroundAudio = document.querySelector('.background-audio')
   backgroundAudio.src = './assets/forest.mp3'
@@ -140,6 +112,7 @@ function elfAdventures() {
     console.log('playing ambient')
   })
 
+  //sound effects : triggered by events
   function soundEffect(soundFile) {
     const soundEffectAudio = document.querySelector('.audio')
     soundEffectAudio.src = soundFile
@@ -147,8 +120,7 @@ function elfAdventures() {
     console.log('playing' + soundFile)
   }
 
-
-
+  //stop sounds
   document.querySelector('#player').addEventListener('click', () => {
     document.querySelector('.background-audio').pause()
     document.querySelector('.audio').pause()
@@ -156,13 +128,26 @@ function elfAdventures() {
   })
 
 
+  // ===== Player keypresses =====
+  document.addEventListener('keyup', (e) => {
+    if (e.key === 'w' || e.key === 'W' || e.keyCode === 38) { playerDirection = 'top' }
+    else if (e.key === 'd' || e.key === 'D' || e.keyCode === 39) { playerDirection = 'right' }
+    else if (e.key === 's' || e.key === 'S' || e.keyCode === 40) { playerDirection = 'bottom' }
+    else if (e.key === 'a' || e.key === 'A' || e.keyCode === 37) { playerDirection = 'left' }
+    else {
+      return
+    }
+    collision(playerDirection)
+    return playerDirection
+  })
 
-  // ==================================================
-  // CREATE GAME BOARD
-  // ==================================================
 
-  // DECLARE WALL POSITIONS
-  //create array of objects to say which borders have walls
+  // =================================
+  // GAME BOARD
+  // =================================
+
+  // ===== Wall array =====
+  // array of cell objects to say which borders have walls
   const walls = [
     { cellId: 0, top: true, right: false, bottom: false, left: true },
     { cellId: 1, top: true, right: false, bottom: true, left: false },
@@ -275,18 +260,24 @@ function elfAdventures() {
     { cellId: 99, top: false, right: true, bottom: true, left: false }
   ]
 
-  // GAME BOARD 
+  // =====Enemy array =====
+  const enemies = [54, 44, 45, 55] //these are cell ID's
 
+  // =====Create board =====
+  //create cells and thier IDs
   function createBoard() {
     for (let i = 0; i < boardSize; i++) {
+      //create element
       const cell = document.createElement('div')
+      //set it's values
       cell.classList.add('cell')
       cell.setAttribute('id', 'cell-' + [i])
+      //add it to the grid
       grid.appendChild(cell)
     }
     //add walls based on the wall array
     makeWalls()
-    //add start button
+    //show start button
     const startButton = document.querySelector('#start').classList
     startButton.remove('hide')
   }
@@ -312,56 +303,44 @@ function elfAdventures() {
     }
   }
 
-  // SET INITIAL POSITIONS
+
+  // =====Random/Timed Token Functions ===== 
+  // Find any cells with declared default positions and store them as assigned (so we don't add anything to them)
+  const assignedCells = []
+  assignedCells.push(playerHome)
+  assignedCells.push(playerHome - 10)
+  assignedCells.push(playerHome + 1)
+  assignedCells.push(playerHome + 10)
+  assignedCells.push(playerHome - 1)
+  enemies.forEach(elem => {
+    assignedCells.push(elem)
+  })
 
 
-  // function addTreasureChests() {
-  //   //called by start game 
-  //   for (let i = 0; i < treasure.length; i++) {
-  //     getCellElement(treasure[i])
-  //     cellElement.classList.add('treasure-chest')
-  //   }
-  // }
+  //Add treasure chests
+  let treasureLocations = [] //have to track so can avoid dropping weapons there
   function addTreasureChests() {
-    // console.log('called add treasure')
-    //decide on number of chests for level (initially, always 4)
-    const numberOfChests = 4
-    const maxChestLocationArray = numberOfChests * (numberOfChests + 1) //sets me a length to loop until so I can prevent adding to cells next to each other
+    //calculate how long the loop should run to prevent adding items next to each other
+    //number of chests is declared in the global variables, multiply it by 5 (cell with item + 4 around it) 
+    const maxChest = numberOfChests * 5
     //clear my tracking array
     treasureLocations = []
-    // console.log('looking for existing treasure chests')
+    //find any existing treasure chest classes and clear them (incase a remove failed at any point)
     const treasureCells = document.querySelectorAll('.treasure-chest')
     treasureCells.forEach(elem => {
       elem.classList.remove('treasure-chest')
     })
-    // console.log(`removed ${treasureCells.length}`)
-    // //remove existing treasure chest sizes
-    // const treasureCellsSmall = document.querySelectorAll('.treasure-small')
-    // treasureCells.forEach(elem => {
-    //   elem.classList.remove('treasure-small')
-    // }) 
-    // const treasureCellsTiny = document.querySelectorAll('.treasure-tiny')
-    // treasureCells.forEach(elem => {
-    //   elem.classList.remove('treasure-tiny')
-    // })
-    // const treasureCellsMax = document.querySelectorAll('.treasure-max')
-    // treasureCells.forEach(elem => {
-    //   elem.classList.remove('treasure-max')
-    // })
-    // console.log(`${treasureLocations.length} long vs ${maxChestLocationArray}`)
-    while (treasureLocations.length < maxChestLocationArray) {
-      // console.log('started treasure while loop')
+    //add chests until we reach our max number
+    while (treasureLocations.length < maxChest) {
       //get a random number 
       const randomNumber = Math.floor(Math.random() * 100)
-      // const randomCell = `#cell-${randomNumber}`
-      //check if that's allowable (if not in array of 'assignedCells')
+      //check if that's allowable (if not in our arrays of assignedCells or treasureLocations
       if (!assignedCells.includes(randomNumber) && !treasureLocations.includes(randomNumber)) {
+        //get the cell element
         getCellElement(randomNumber)
         cellElement.classList.add('treasure-chest')
-        //decide on size (small, medium, large) & add class
-        //if level one, add one tiny, one small, two normal
-        //how many chests are on the board
-        const thisCell = (maxChestLocationArray - treasureLocations.length) / (numberOfChests + 1)
+        //THIS IS DECLARED ABSOLUTELY - WOULD BE GOOD TO MAKE IT DYNAMIC
+        const thisCell = (maxChest - treasureLocations.length) / (numberOfChests + 1)
         // console.log(thisCell)
         if (level === 4) {
           cellElement.classList.add('treasure-chest')
@@ -372,6 +351,7 @@ function elfAdventures() {
             case 3: cellElement.classList.add('treasure-chest'); break
             case 2: cellElement.classList.add('treasure-small'); break
             case 1: cellElement.classList.add('treasure-tiny'); break
+            default: cellElement.classList.add('treasure-chest')
           }
         }
 
@@ -876,19 +856,7 @@ function elfAdventures() {
   // ==================================================
   // PLAYER MOVEMENT
   // ==================================================
-  document.addEventListener('keyup', (e) => {
-    if (e.key === 'w' || e.key === 'W' || e.keyCode === 38) { playerDirection = 'top' }
-    else if (e.key === 'd' || e.key === 'D' || e.keyCode === 39) { playerDirection = 'right' }
-    else if (e.key === 's' || e.key === 'S' || e.keyCode === 40) { playerDirection = 'bottom' }
-    else if (e.key === 'a' || e.key === 'A' || e.keyCode === 37) { playerDirection = 'left' }
-    else {
-      return
-    }
 
-    // console.log(playerDirection)
-    collision(playerDirection)
-    return playerDirection
-  })
 
   // ==================================================
   // START AND END THINGS
