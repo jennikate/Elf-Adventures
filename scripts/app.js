@@ -107,12 +107,12 @@ function elfAdventures() {
   document.querySelector('#audio-player').addEventListener('click', () => {
     if (audioState === 'audioOn') {
       document.querySelector('.background-audio').pause()
-      changeTokenState('audio-off', 'audio-on')
+      changeTokenState('audio-on', 'audio-off')
       audioState = 'audioOff'
     } else {
       audioState = 'audioOn'
       document.querySelector('.background-audio').play()
-      changeTokenState('audio-on', 'audio-off')
+      changeTokenState('audio-off', 'audio-on')
     }
   })
 

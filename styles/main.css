@@ -145,7 +145,7 @@ h2 {
 
 button {
   background-color: purple;
-  height: 50px;
+  height: 45px;
   color: white;
   font-family: 'Cormorant Upright', serif;
   font-size: 32px;
@@ -166,9 +166,6 @@ button:hover {
   padding: 0 20px;
 }
 
-#control-panel button {
-  width: 200px;
-}
 .control-panel p {
   font-size: 20px;
   margin-bottom: 30px;
@@ -198,11 +195,23 @@ button:hover {
   background-image: url('../assets/heart-empty.png');
 }
 
+button.audio-on, button.audio-off {
+  width: 45px;
+  height: 45px;
+}
+.fas {
+  font-size: 25px; /* set font awesome size */
+}
+
+button.start {
+  width: 90px;
+}
+
 .audio-off {
-  background-color: red;
+  background-color: #800000;
 }
 .audio-on {
-  background-color: green;
+  background-color: #008000;
 }
 
 .alert-banner, .end-banner{
@@ -226,10 +235,10 @@ button:hover {
   margin-top: 20px;
   background-color: rgba(14, 28, 14,0.8);
 }
-
 .hide {
   display:none; 
 }
+
 
 /* Animations */
 .fade {
@@ -243,12 +252,29 @@ button:hover {
   100% { opacity: 0 }
 }
 
+/* footer specifics */
 footer {
-  border-top: 2px solid green;
+  border-top: 1px solid black;
   height: 50px;
-  background-image: url('../assets/footer.png')
+  padding: 20px;
+  text-align: center;
 }
 
+.terms {
+  font-size: 12px;
+  color: grey;
+}
+.terms a {
+  color: black;
+  text-decoration: underline;
+}
+.terms a:hover {
+  text-decoration: none;
+  color: grey;
+}
+
+
+/* not yet responsive */
 @media only screen and (max-width: 730px) { 
   .mobile {
     display: block;

@@ -23,9 +23,9 @@ BUGS
 [x] collecting a weapon is leaving a ghost again
 [x] one death ends game
 
-[] test sound
-[] make new icons for treasure sizes
-[] make a nice footer
+[x] test sound
+[o] make new icons for treasure sizes //decided not to
+[o] make a nice footer //decided to just put in the terms needed
 
 
 FUTURE
