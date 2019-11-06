@@ -22,8 +22,7 @@ function elfAdventures() {
   // Random/Timed Token Functions
 
   // ===== COLLISIONS =====
-  // movement
-  // tbd breakdown of functions here
+  // Token movement
 
   // ===== GAME END =====
   // Start
@@ -44,7 +43,7 @@ function elfAdventures() {
   const boardWidth = 10
   const boardSize = boardWidth ** 2
   const maxLevels = 4
-  let level = 4
+  let level = 1
 
   let addWeaponTimeout
   let deadlyTimeout
@@ -56,6 +55,7 @@ function elfAdventures() {
   const treasureMaxValue = 2000
   const enemyValue = 20
   const numberOfChests = 4
+  const numberOfWeapons = 2
 
   const playerHome = Math.max(boardSize) - 1
   let playerLives = 3
@@ -66,7 +66,7 @@ function elfAdventures() {
 
   let cellIdRef
   let cellElement
-  let cellClassList
+  let elementClassList
   let arrLocation = [] //finds the cells with tokens
   let myWalls //figures out which cells have walls for 'me'
   let moveTo = [] //used to determine available cells to move into for 'me'
@@ -84,16 +84,29 @@ function elfAdventures() {
     return cellElement
   }
 
-  //get cell classlist from a cellElement : frequently need to get a class list to adjust classes
-  function getElementClassList(cellElement) {
-    cellClassList = document.querySelector(cellElement).classList
-    return cellClassList
+  //clear tokens from a cell
+  function clearTokens(className) {
+    if (document.querySelector(`.${className}`)) {
+      const getClassList= document.querySelector(`.${className}`).classList
+      getClassList.remove(className)
+    }
   }
 
+  //hide elements
+  function hideElement(elementRef) {
+    const elementClassList = document.querySelector(elementRef).classList
+    elementClassList.add('hide')
+  }
+  //show elements
+  function showElement(elementRef) {
+    const elementClassList = document.querySelector(elementRef).classList
+    elementClassList.remove('hide')
+  }
+  
 
   //This needs removing ***********
-  const classListNotification = getElementClassList('#notification')
-  console.log(classListNotification)
+  const classListNotification = document.querySelector('#notification').classList
+  // console.log(classListNotification)
 
 
 
@@ -278,8 +291,7 @@ function elfAdventures() {
     //add walls based on the wall array
     makeWalls()
     //show start button
-    const startButton = document.querySelector('#start').classList
-    startButton.remove('hide')
+    showElement('#start')
   }
 
   // MAKE WALLS
@@ -288,19 +300,21 @@ function elfAdventures() {
       //get the cell that relates to this wall
       getCellElement(walls[i].cellId)
       //check the array to see what borders are needed and add them
-      if (walls[i].top === true) {
-        cellElement.classList.add('wall-top')
-      }
-      if (walls[i].right === true) {
-        cellElement.classList.add('wall-right')
-      }
-      if (walls[i].bottom === true) {
-        cellElement.classList.add('wall-bottom')
-      }
-      if (walls[i].left === true) {
-        cellElement.classList.add('wall-left')
-      }
+      if (walls[i].top === true) { cellElement.classList.add('wall-top') }
+      if (walls[i].right === true) { cellElement.classList.add('wall-right') }
+      if (walls[i].bottom === true) { cellElement.classList.add('wall-bottom') }
+      if (walls[i].left === true) { cellElement.classList.add('wall-left') }
     }
+  }
+
+  //ADD PLAYER
+  function addPlayer() {
+    //clear player in case its token remains somewhere, look for both normal player, and player with weapon tokens
+    clearTokens('player')
+    clearTokens('player-weapon')
+    //Add a standard player token
+    const setPlayer = document.querySelector(`#cell-${playerHome}`).classList
+    setPlayer.add('player')
   }
 
 
@@ -318,7 +332,7 @@ function elfAdventures() {
 
 
   //Add treasure chests
-  let treasureLocations = [] //have to track so can avoid dropping weapons there
+  let treasureLocations = [] //have to declare outside function so addWeapon can use it
   function addTreasureChests() {
     //calculate how long the loop should run to prevent adding items next to each other
     //number of chests is declared in the global variables, multiply it by 5 (cell with item + 4 around it) 
@@ -354,82 +368,79 @@ function elfAdventures() {
             default: cellElement.classList.add('treasure-chest')
           }
         }
-
-        //push to location array so know where not to place next box
+        //push the location of this treasure to location array so know not to try to place another treasure here
         treasureLocations.push(randomNumber)
         //also push cells directly around me so two don't end up next to each other
         treasureLocations.push(randomNumber - 10)
         treasureLocations.push(randomNumber + 1)
         treasureLocations.push(randomNumber + 10)
         treasureLocations.push(randomNumber - 1)
-        //decide on size (small, medium, large)
-        //add box
-        //if level 4 add a mega box
       }
-
     }
   }
 
-
+  //Add weapons : this operates similarly to addTreasure
   function addWeapons() {
-    console.log(`starting add timer ${(new Date).getHours()}:${(new Date).getMinutes()}:${(new Date).getSeconds()}`)
-    //make sure remove timer isn't running
-    console.log('calling addweapon')
     addWeaponTimeout = setTimeout(() => {
-      clearTimeout(removeWeaponTimeout)
-      //playsound
-      soundEffect('./assets/sword.mp3')
-      // console.log('adding weapon')
-      //decide on number of weapons
-      const numberOfWeapons = 2
-      const maxWeaponsLocationArray = numberOfWeapons * (numberOfWeapons + 1)
-      //clear existing weapon locations
+      clearTimeout(removeWeaponTimeout)  //stop the removeWeaponTimeout if it's running
+      const maxWeapons = numberOfWeapons * 5
       const weaponLocations = []
       const weaponCells = document.querySelectorAll('.weapon')
       weaponCells.forEach(elem => {
         elem.classList.remove('weapon')
       })
-      while (weaponLocations.length < maxWeaponsLocationArray) {
+      while (weaponLocations.length < maxWeapons) {
         const weaponRandomNumber = Math.floor(Math.random() * 100)
         if (!assignedCells.includes(weaponRandomNumber) && !weaponLocations.includes(weaponRandomNumber) && !treasureLocations.includes(weaponRandomNumber)) {
           console.log(`addingclass to ${weaponRandomNumber}`)
           getCellElement(weaponRandomNumber)
           const cellClassList = cellElement.classList
-          // console.log(cellClassList)
           cellClassList.add('weapon')
-          cellClassList.add('flash')
-          // console.log(cellClassList.contains('weapon'))
           weaponLocations.push(weaponRandomNumber)
-          //also push cells directly around me so two don't end up next to each other
           weaponLocations.push(weaponRandomNumber - 10)
           weaponLocations.push(weaponRandomNumber + 1)
           weaponLocations.push(weaponRandomNumber + 10)
           weaponLocations.push(weaponRandomNumber - 1)
         }
       }
+      //start the timer to remove weapons from visible
       removeWeapons()
-      console.log('weapons up')
-    }, 3000)
+    }, 3000) //show weapons 3 seconds after game load / enemies deadly / weapons removed due to not collected
   }
 
-
+  //Remove weapons : automatically runs [x] seconds after weapons are added to the board, if no weapon was collected
   function removeWeapons() {
-    console.log(`starting remove timer ${(new Date).getHours()}:${(new Date).getMinutes()}:${(new Date).getSeconds()}`)
-    //clear weapon interval so it stops counting
-    // clearInterval(intervalId)
+    //clear the addWeapon timeout so it doesn't add more until we're ready to
     clearTimeout(addWeaponTimeout)
     removeWeaponTimeout = setTimeout(() => {
       const weaponCells = document.querySelectorAll('.weapon')
       weaponCells.forEach(elem => {
         elem.classList.remove('weapon')
       })
-      console.log('removeweapons ran')
       //start weapon timer again
       addWeapons()
-      console.log(`ending remove timer ${(new Date).getHours()}:${(new Date).getMinutes()}:${(new Date).getSeconds()}`)
-      console.log('weapons down')
     }, 10000)
   }
+
+
+
+
+  // =================================
+  // COLLISIONS
+  // =================================
+
+  // ===== Token movement =====
+  function moveTokens(currentCellId, className, nextCellId) {
+    //get the element of the current cell & remove the token
+    const currentCellElement = document.querySelector(`#cell-${currentCellId}`)
+    currentCellElement.classList.remove(className)
+    //get the ID of the next cell & add the token
+    getCellElement(nextCellId)
+    cellElement.classList.add(className)
+  }
+
+
+
 
 
 
@@ -473,39 +484,13 @@ function elfAdventures() {
     }
   }
 
-  function addPlayer() {
-    //clear player
-    if (document.querySelector('.player') || document.querySelector('.player-weapon')) {
-      // console.log('player exists')
-      // console.log(document.querySelector('.player'))
-      // console.log(document.querySelector('.player-weapon'))
-      if (document.querySelector('.player')) {
-        const getPlayer = document.querySelector('.player').classList
-        getPlayer.remove('player')
-      }
-      if (document.querySelector('.player-weapon')) {
-        const getPlayer = document.querySelector('.player-weapon').classList
-        getPlayer.remove('player-weapon')
-      }
-    }
-    //add player
-    const setPlayer = document.querySelector(`#cell-${playerHome}`).classList
-    setPlayer.add('player')
-  }
+
 
   // ==================================================
   // FUNCTIONS FOR TOKEN MOVEMENT
   // ==================================================
 
-  function moveTokens(currentCellId, className, nextCellId) {
-    // console.log(currentCellId, className, nextCellId)
-    const currentCellElement = document.querySelector(`#cell-${currentCellId}`)
-    // console.log( currentCellElement)
-    currentCellElement.classList.remove(className)
-    getCellElement(nextCellId)
-    // console.log(cellElement)
-    cellElement.classList.add(className)
-  }
+
 
   function killEnemy(enemyCellId) {
     playerScore = playerScore + enemyValue
