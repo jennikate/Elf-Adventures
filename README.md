@@ -1,6 +1,6 @@
 # Project 1: Elf Adventures
 
-##Overview
+## Overview
 Elf Adventures is a browser based maze style game. Move your elf through the maze collecting the treasure and avoiding the dragons. Along the way you may find weapons which will allow you to kill the dragons... until the weapons break!
 
 This was my first project with General Assembly's Software Engineering Immersive. An individual project built over a week it focused on HTML, CSS, and mainly JavaScript.
@@ -36,7 +36,7 @@ There was a choice of starting game styles to work with, and then customise to b
 - Google Fonts
 
 # Approach Taken
-###G rid Layout
+### Grid Layout
 
 I decided early on that I would limit v1 to a 100 cell grid, and that the walls of my maze would be added by using border-top, border-right, border-bottom, border-left.
 
@@ -180,7 +180,7 @@ In either of those cases a game result message is shown as well as the player sc
 
 ### Bugs
 
-###Wins and Blockers
+### Wins and Blockers
 One of the choice I almost regretted was using border for the walls. I had to find the walls for the cell I (player or enemy) was in by looking at what classes were assigned to it. 
 
 In the end I'm glad I took that route as it was a challenge that was very satisfying to solve.
