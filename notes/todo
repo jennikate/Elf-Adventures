@@ -19,6 +19,10 @@
 -> make enemy move
 -> make player move
 
+BUGS
+[] collecting a weapon is leaving a ghost again
+[] one death ends game
+
 [] can I make enemy move on interval :: needs to be extracted out before possible
 [] enemy more smart about chasing player
 
