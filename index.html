@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
-  
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,56 +18,58 @@
 
 <body>
 
-  <header>
+  <header class='header hide'>
     <h1>Elf Adventures</h1>
     <p>Enter the dark forest to capture it's treasures. But beware the dragons that lurk within.</p>
   </header>
   <main>
-    <div>
-      <section id='landing' class='landing'>
-        <h2>Welcome to Elf Adventures</h2>
-        <p>Guide your elf through the forest using the arrow keys (or wsad) to collect all the treasures.</p>
-        <p>Find weapons to help you along the way.</p>
-        <p>Watch out for the dragons though, they'll kill you if you're unarmed!</p>
-
-        <button id='load-game'>Let's play!</button>
-      </section>
-
-      <section id='game' class='game hide'>
-        <div id='grid'></div>
-        <div id='control-panel' class='control-panel'>
-          <div class='scores'>
-            <p id='player-score' class='player-score'><span>0</span></p>
-            <p id='player-lives'>
-              <span class="heart heart-one"></span>
-              <span class="heart heart-two"></span>
-              <span class="heart heart-three"></span>
-            </p>
-          </div>
-          <div id='controls'>
-            <audio loop class='background-audio'></audio>
-            <audio class='audio'></audio>
-            <button id='audio-player' class='audio-on'>
-              <!-- <i class="fas fa-volume-up"></i><i class="fas fa-volume-mute hide"></i> -->
-              <!-- font awesome is throwing errors too often atm -->
-            </button>
-          </div>
-          <button id='start'>Start</button>
+    <section id='landing' class='landing'>
+      <h2>Elf Adventures</h2>
+      <p class='headline'>Collect all the treasure, avoid being eaten by a dragon</p>
+      <div class='directions'>
+        <div class='row'>
+          <p class='up'>w<br />&#8593;</p>
         </div>
-      </section>
-
-      <div id='notification' class='hide fade'>
-        <p id='alert' class='alert-banner'></p>
+        <div class='row'>
+          <p class='left'>a<br />&#8592;</p>
+          <p class='down'>s<br />&#8595;</p>
+          <p class='right'>d<br />&#8594;</p>
+        </div>
       </div>
-      <div id='end-note' class='end-banner hide'>
-        <p id='game-result'></p>
-        <p id='final-score'></p>
-        <button id='next-level'>Start next level</button>
-        <button id='new-game'>New game</button>
+      <button id='load-game'>Let's play!</button>
+    </section>
+    <section id='game' class='game hide'>
+      <div id='grid'></div>
+      <div id='control-panel' class='control-panel'>
+        <div class='scores'>
+          <p id='player-score' class='player-score'><span>0</span></p>
+          <p id='player-lives'>
+            <span class="heart heart-one"></span>
+            <span class="heart heart-two"></span>
+            <span class="heart heart-three"></span>
+          </p>
+        </div>
+        <div id='controls'>
+          <audio loop class='background-audio'></audio>
+          <audio class='audio'></audio>
+          <button id='audio-player' class='audio-on'>
+            <!-- <i class="fas fa-volume-up"></i><i class="fas fa-volume-mute hide"></i> -->
+            <!-- font awesome is throwing errors too often atm -->
+          </button>
+        </div>
+        <button id='start'>Start</button>
       </div>
-      </div>
+    </section>
 
-
+    <div id='notification' class='hide fade'>
+      <p id='alert' class='alert-banner'></p>
+    </div>
+    <div id='end-note' class='end-banner hide'>
+      <p id='game-result'></p>
+      <p id='final-score'></p>
+      <button id='next-level'>Start next level</button>
+      <button id='new-game'>New game</button>
+    </div>
   </main>
 
   <footer></footer>

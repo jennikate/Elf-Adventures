@@ -654,6 +654,7 @@ function elfAdventures() {
     createBoard()
     showElement('#game')
     createGame()
+    showElement('header')
   })
 
   //create a new game
