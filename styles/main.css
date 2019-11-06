@@ -10,6 +10,12 @@ html, body {
   color: rgb(231, 244, 228);
 }
 
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
 header {
   text-align: center;
   padding: 30px;
@@ -24,6 +30,7 @@ h1 {
 
 main {
   position: relative;
+  flex: auto;
 }
 
 .game {
@@ -199,16 +206,9 @@ button:hover {
   background-color: rgba(14, 28, 14,0.8);
 }
 
-
-
-
-
-
-
 .hide {
   display:none; 
 }
-
 
 /* Animations */
 .fade {
@@ -220,4 +220,10 @@ button:hover {
   0% { opacity: 0 }
   50% { opacity: 1 }
   100% { opacity: 0 }
+}
+
+footer {
+  border-top: 2px solid green;
+  height: 50px;
+  background-image: url('../assets/footer.png')
 }

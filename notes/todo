@@ -11,22 +11,29 @@
 [x] hide sword message at game end
 [x] style of notification
 
-[] add background music and toggle button
-[] fix instructions moving when start button hides
+[x] add background music and toggle button
+[x] fix instructions moving when start button hides
 
-[] refactor
+[x] refactor
 -> find my walls
 -> make enemy move
 -> make player move
 
 BUGS
-[] collecting a weapon is leaving a ghost again
-[] one death ends game
+[x] collecting a weapon is leaving a ghost again
+[x] one death ends game
+
+[] test sound
+[] make new icons for treasure sizes
+[] make a nice footer
+
+
+FUTURE
 
 [] can I make enemy move on interval :: needs to be extracted out before possible
 [] enemy more smart about chasing player
 
-[] sounds?
+[x] sounds?
 [] responsive?
 [] local host save?
 
