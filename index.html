@@ -6,12 +6,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <link href="https://fonts.googleapis.com/css?family=Cormorant+Upright:400,700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles/reset.css">
+  <link href="https://fonts.googleapis.com/css?family=Cormorant+Upright:400,700&display=swap" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/83453068a2.js" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="styles/main.css">
   <script src="scripts/app.js"></script>
 
-  
+
   <title>Project 1 JKW</title>
 </head>
 
@@ -22,7 +23,16 @@
     <p>Enter the dark forest to capture it's treasures. But beware the dragons that lurk within.</p>
   </header>
   <main>
-    <section>
+    <section id='landing'>
+      <h2>Welcome to Elf Adventures</h2>
+      <p>Guide your elf through the forest using the arrow keys (or wsad) to collect all the treasures.</p>
+      <p>Find weapons to help you along the way.</p>
+      <p>Watch out for the dragons though, they'll kill you if you're unarmed!</p>
+
+      <button id='load-game'>Let's play!</button>
+    </section>
+
+    <section id='game' class='hide'>
       <div id='grid'></div>
       <div id='control-panel'>
         <div class='scores'>
@@ -32,6 +42,11 @@
             <span class="heart heart-two"></span>
             <span class="heart heart-three"></span>
           </p>
+        </div>
+        <div id='controls'>
+          <audio loop class='background-audio'></audio>
+          <audio class='audio'></audio>
+          <button id='player'><i class="fas fa-volume-up"></i><i class="fas fa-volume-mute hide"></i></button>
         </div>
         <button id='start'>Start</button>
       </div>

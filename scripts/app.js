@@ -1,5 +1,6 @@
 /* eslint-disable brace-style */
- //needs refactor
+//needs refactor
+// MAKING A CHANGE
 
 function pacnam() {
 
@@ -68,6 +69,36 @@ function pacnam() {
   }
 
   const classListNotification = document.querySelector('#notification').classList
+
+
+  //AUDIO
+  /* audio structure */
+
+
+  //ambient
+  const player = document.querySelector('#load-game')
+  const backgroundAudio = document.querySelector('.background-audio')
+  backgroundAudio.src = './assets/forest.mp3'
+  player.addEventListener('click', () => {
+    backgroundAudio.play()
+    console.log('playing ambient')
+  })
+
+  function soundEffect(soundFile) {
+    const soundEffectAudio = document.querySelector('.audio')
+    soundEffectAudio.src = soundFile
+    soundEffectAudio.play()
+    console.log('playing' + soundFile)
+  }
+
+
+
+  document.querySelector('#player').addEventListener('click', () => {
+    document.querySelector('.background-audio').pause()
+    document.querySelector('.audio').pause()
+    console.log('sound stopped')
+  })
+
 
 
   // ==================================================
@@ -189,6 +220,7 @@ function pacnam() {
   ]
 
   // GAME BOARD 
+
   function createBoard() {
     for (let i = 0; i < boardSize; i++) {
       const cell = document.createElement('div')
@@ -309,7 +341,8 @@ function pacnam() {
     console.log('calling addweapon')
     addWeaponId = setTimeout(() => {
       clearTimeout(removeWeaponTimeout)
-
+      //playsound
+      soundEffect('./assets/sword.mp3')
       // console.log('adding weapon')
       //decide on number of weapons
       const numberOfWeapons = 2
@@ -562,6 +595,7 @@ function pacnam() {
 
   function deadlyEnemies() {
     deadlyTimeout = setTimeout(() => {
+      soundEffect('./assets/dragon.mp3')
       // console.log('Im making things deadly soon')
       // console.log('enemies deadly')
       const enemyCells = document.querySelectorAll('.enemy-killable')
@@ -776,7 +810,7 @@ function pacnam() {
   // ==================================================
 
 
-  createBoard()
+  // createBoard()
   start()
   nextLevel()
 
@@ -804,6 +838,19 @@ function pacnam() {
   // START AND END THINGS
   // ==================================================
 
+
+  //First load from splash screen
+  document.querySelector('#load-game').addEventListener(('click'), () => {
+    //hide landing page
+    document.querySelector('#landing').classList.add('hide')
+    //create board
+    console.log('create')
+    createBoard()
+    //show grid page
+    console.log('show grid')
+    document.querySelector('#game').classList.remove('hide')
+  })
+
   function start() {
     document.querySelector('#start').addEventListener('click', () => {
       const endNote = document.querySelector('#end-note').classList
@@ -829,6 +876,7 @@ function pacnam() {
       startButton.add('hide')
     })
   }
+
   function nextLevel() {
     document.querySelector('#next-level').addEventListener('click', () => {
       level = level + 1
