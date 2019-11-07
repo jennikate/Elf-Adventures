@@ -46,7 +46,7 @@ To achieve this I create an array of wall objects stating if there was a wall or
 
 This allowed me to build up the game board maze by creating each cell as a div, within a flex-box container, and giving each cell the appropriate border as well as a reference ID.
 
-![Code of wall array](https://github.com/jennikate/project-1/blob/master/reademe-assets/code-wallarray.png?raw=true)
+<img src="https://github.com/jennikate/project-1/blob/master/reademe-assets/code-wallarray.png" width=70% align=center>
 
 ### HardCoded vs Variable
 
@@ -58,7 +58,7 @@ In the end I have left some elements as hard coded for now
 - life icons
 - size variation of treasure chests on each level
 
-![Code of game parameters](https://github.com/jennikate/project-1/blob/master/reademe-assets/code-gameparameters.png?raw=true)
+<img src="https://github.com/jennikate/project-1/blob/master/reademe-assets/code-gameparameters.png" width=70% align=center>
 
 
 ### Objects
@@ -70,7 +70,8 @@ For the MVP I wanted
 - 2 weapons you can pick up
 - those same 3 enemies but now you can kill them : with a point value
 
-![Game tokens](https://github.com/jennikate/project-1/blob/master/reademe-assets/image-gametokens.png?raw=true)
+<img src="https://github.com/jennikate/project-1/blob/master/assets/elf.png" align=center><img src="https://github.com/jennikate/project-1/blob/master/assets/dragon.png" align=center><img src="https://github.com/jennikate/project-1/blob/master/assets/treasure.png" align=center><img src="https://github.com/jennikate/project-1/blob/master/assets/weapon.png" align=center><img src="https://github.com/jennikate/project-1/blob/master/assets/gold.png" align=center><img src="https://github.com/jennikate/project-1/blob/master/assets/heart.png" align=center><img src="https://github.com/jennikate/project-1/blob/master/assets/heart-empty.png" align=center><img src="https://github.com/jennikate/project-1/blob/master/assets/elf-weapon.png" align=center><img src="https://github.com/jennikate/project-1/blob/master/assets/dragon-killable.png" align=center>
+
 
 To extend on that I added
 - different sized treasure chests worth different points
@@ -184,17 +185,15 @@ A return to psuedo-code lead me to a new looping movement possibility check that
 
 Below are some examples of parts of that code, the full code can be seen at the
 
+```
   // ==================================================
   // MOVEMENT LOGIC
   // ==================================================
+```
 
 section of my [JavaScript](https://github.com/jennikate/project-1)
 
-![Move and collide example 1](https://github.com/jennikate/project-1/blob/master/reademe-assets/code-collision1.png?raw=true)
-
-
-![Move and collide example 2](https://github.com/jennikate/project-1/blob/master/reademe-assets/code-collision2.png?raw=true)
-
+<img src="https://github.com/jennikate/project-1/blob/master/reademe-assets/code-collision1.png" width=45% align=left><img src="https://github.com/jennikate/project-1/blob/master/reademe-assets/code-collision2.png" width=45% align=right>
 
 
 ##### Featured piece of code 2: Adding and removing weapons
@@ -218,8 +217,7 @@ So I switched to using setTimeouts and calling them at the right moments.
   - - is stopped if a weapon is picked up
   - - triggers the addWeapon function
 
-![Weapon spawning](https://github.com/jennikate/project-1/blob/master/reademe-assets/code-weapons.png | width=100)
-<img src="https://github.com/jennikate/project-1/blob/master/reademe-assets/code-weapons.png" width=50% align=center>
+<img src="https://github.com/jennikate/project-1/blob/master/reademe-assets/code-weapons.png" width=70% align=center>
 
 
 ### Screenshots
