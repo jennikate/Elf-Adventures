@@ -8,7 +8,7 @@ This was my first project with General Assembly's Software Engineering Immersive
 Open and play on GitHub Pages.
 Check out the GitHub Repo here.
 
-<mini video of game in action>
+![gif of Elf Adventures](./assets/elfAdventures-Demo.gif)
 
 ## Brief
 
