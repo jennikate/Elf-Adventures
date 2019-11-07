@@ -27,7 +27,7 @@ function elfAdventures() {
   const numberOfWeapons = 2
 
   const playerHome = Math.max(boardSize) - 1
-  let maxPlayerLives = 3
+  const maxPlayerLives = 3
   let playerLives = 3
   let playerScore = 0
 
