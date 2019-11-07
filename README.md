@@ -219,6 +219,7 @@ So I switched to using setTimeouts and calling them at the right moments.
   - - triggers the addWeapon function
 
 ![Weapon spawning](https://github.com/jennikate/project-1/blob/master/reademe-assets/code-weapons.png | width=100)
+<img src="https://github.com/jennikate/project-1/blob/master/reademe-assets/code-weapons.png" width=50% align=center>
 
 
 ### Screenshots
