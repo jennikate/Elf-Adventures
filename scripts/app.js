@@ -10,7 +10,7 @@ function elfAdventures() {
   const boardWidth = 10
   const boardSize = boardWidth ** 2
   const maxLevels = 4
-  let level = 1
+  let level = 4
 
   let addWeaponTimeout
   let deadlyTimeout
@@ -27,6 +27,7 @@ function elfAdventures() {
   const numberOfWeapons = 2
 
   const playerHome = Math.max(boardSize) - 1
+  let maxPlayerLives = 3
   let playerLives = 3
   let playerScore = 0
 
@@ -673,6 +674,7 @@ function elfAdventures() {
 
   //end a game or level
   function endGame() {
+    console.log('running end game')
     clearTimeout(addWeaponTimeout)
     clearTimeout(deadlyTimeout)
     clearTimeout(removeWeaponTimeout)
@@ -685,6 +687,9 @@ function elfAdventures() {
     clearTokens('enemy-killable')
     clearTokens('treasure-chest')
     clearTokens('weapon')
+    playerScore = 0
+    playerLives = maxPlayerLives
+    console.log(playerLives, playerScore)
   }
 
   //start game (on button click)
@@ -697,6 +702,7 @@ function elfAdventures() {
     myHeart.add('heart')
     myHeart = document.querySelector('.heart-three').classList
     myHeart.add('heart')
+    document.querySelector('#player-score span').innerHTML = 0 //must always reset to 0 at start click
     addTreasureChests()
     addWeapons()
     addEnemies()
@@ -730,10 +736,10 @@ function elfAdventures() {
 
   //end game if lost
   function gameover() {
-    endGame()
     hideElement('#next-level')
     showElement('#new-game')
     document.querySelector('#game-result').innerHTML = 'Game Over'
+    endGame()
   }
 
   //start new game
