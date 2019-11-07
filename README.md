@@ -232,6 +232,8 @@ So I switched to using setTimeouts and calling them at the right moments.
 ### Bugs
 If you find any bugs please let me know! jennikate @ gmail.com
 
+Occasionally when a player dies their token remains on the cell they died in (like a ghost!), as well as showing at their home location. When they move the 'ghost' disappears. 
+
 ### Wins and Blockers
 One of the choices I almost regretted was using border for the walls. I had to find the walls for the cell I (player or enemy) was in by looking at what classes were assigned to it. 
 
