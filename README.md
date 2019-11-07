@@ -3,12 +3,13 @@
 ## Overview
 Elf Adventures is a browser based maze style game. Move your elf through the maze collecting the treasure and avoiding the dragons. Along the way you may find weapons which will allow you to kill the dragons... until the weapons break!
 
-This was my first project with General Assembly's Software Engineering Immersive. An individual project built over a week it focused on HTML, CSS, and mainly JavaScript.
+This was my first project with General Assembly's Software Engineering Immersive. An individual project built over a week it focused on JavaScript, with HTML and CSS.
 
-Open and play on GitHub Pages.
-Check out the GitHub Repo here.
+[Open and play on GitHub Pages.](https://jennikate.github.io/project-1/)
+[Check out the GitHub Repo here.](https://github.com/jennikate/project-1)
 
-![gif of Elf Adventures](./assets/elfAdventures-Demo.gif)
+![gif of Elf Adventures](./readme-assets/elfAdventures-Demo.gif)
+
 
 ## Brief
 
@@ -28,12 +29,12 @@ There was a choice of starting game styles to work with, and then customise to b
 
 # Technologies Used
 
-- HTML5
+- HTML5 & audio
 - CSS3 with animation
 - JavaScript (ES6)
 - Git
 - GitHub
-- Google Fonts
+- Google Fonts & FontAwesome
 
 # Approach Taken
 ### Grid Layout
@@ -41,7 +42,7 @@ There was a choice of starting game styles to work with, and then customise to b
 I decided early on that I would limit v1 to a 100 cell grid, and that the walls of my maze would be added by using border-top, border-right, border-bottom, border-left.
 
 To achieve this I create an array of wall objects stating if there was a wall or not.
-<image of wall array>
+![Code of wall array](./readme-assets/code-wallarray.png)
 
 This allowed me to build up the game board maze by creating each cell as a div, within a flex-box container, and giving each cell the appropriate border as well as a reference ID.
 
