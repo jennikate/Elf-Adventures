@@ -9,7 +9,7 @@ This was my first project with General Assembly's Software Engineering Immersive
 
 [Check out the GitHub Repo here.](https://github.com/jennikate/project-1)
 
-![gif of Elf Adventures](/readme-assets/elfAdventures-Demo.gif)
+![gif of Elf Adventures](https://github.com/jennikate/project-1/blob/master/reademe-assets/elfAdvenutres-Demo.gif?raw=true)
 
 
 ## Brief
