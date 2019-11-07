@@ -218,7 +218,7 @@ So I switched to using setTimeouts and calling them at the right moments.
   - - is stopped if a weapon is picked up
   - - triggers the addWeapon function
 
-![Weapon spawning](https://github.com/jennikate/project-1/blob/master/reademe-assets/code-weapons-scaled.png?raw=true)
+![Weapon spawning](https://github.com/jennikate/project-1/blob/master/reademe-assets/code-weapons.png | width=100)
 
 
 ### Screenshots
