@@ -10,7 +10,7 @@ function elfAdventures() {
   const boardWidth = 10
   const boardSize = boardWidth ** 2
   const maxLevels = 4
-  let level = 4
+  let level = 1
 
   let addWeaponTimeout
   let deadlyTimeout
@@ -490,8 +490,10 @@ function elfAdventures() {
       soundEffect('./assets/dragon.mp3')
       changeTokenState('enemy-killable', 'enemy')
       changeTokenState('player-weapon', 'player')
-      // enemyState = 'deadly'
       document.querySelector('#alert').innerHTML = ''
+      const notifyFade = document.querySelector('#notification').classList
+      notifyFade.remove('fade')
+      hideElement('#notification')
       //start weapon timer again
       addWeapons()
     }, 5000)
@@ -687,8 +689,6 @@ function elfAdventures() {
     clearTokens('enemy-killable')
     clearTokens('treasure-chest')
     clearTokens('weapon')
-    playerScore = 0
-    playerLives = maxPlayerLives
     console.log(playerLives, playerScore)
   }
 
@@ -702,6 +702,7 @@ function elfAdventures() {
     myHeart.add('heart')
     myHeart = document.querySelector('.heart-three').classList
     myHeart.add('heart')
+    playerLives = maxPlayerLives
     document.querySelector('#player-score span').innerHTML = 0 //must always reset to 0 at start click
     addTreasureChests()
     addWeapons()
