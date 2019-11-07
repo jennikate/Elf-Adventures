@@ -28,7 +28,7 @@ There was a choice of starting game styles to work with, and then customise to b
 - The player should be able to clear at least one board
 - The player's score should be displayed at the end of the game
 
-# Technologies Used
+## Technologies Used
 
 - HTML5 & audio
 - CSS3 with animation
@@ -37,7 +37,7 @@ There was a choice of starting game styles to work with, and then customise to b
 - GitHub
 - Google Fonts & FontAwesome
 
-# Approach Taken
+## Approach Taken
 ### Grid Layout
 
 I decided early on that I would limit v1 to a 100 cell grid, and that the walls of my maze would be added by using border-top, border-right, border-bottom, border-left.
@@ -176,17 +176,18 @@ In either of those cases a game result message is shown as well as the player sc
 
 #### Featured Code
 
-##### Featured piece of code 1
-##### Movement logic. 
+##### Featured piece of code 1: Movement logic. 
 
 This was both the most frustrating and rewarding part of the project. Psuedo-coding it out first meant I had a good idea of how the logic needed to flow to handle collisions on move, but my initial attempt was built as individual functions that broke when I tried to combine them.
 
 A return to psuedo-code lead me to a new looping movement possibility check that was successful.
 
 Below are some examples of parts of that code, the full code can be seen at the
+
   // ==================================================
   // MOVEMENT LOGIC
   // ==================================================
+
 section of my [JavaScript](https://github.com/jennikate/project-1)
 
 ![Move and collide example 1](https://github.com/jennikate/project-1/blob/master/reademe-assets/code-collision1.png?raw=true)
@@ -196,9 +197,7 @@ section of my [JavaScript](https://github.com/jennikate/project-1)
 
 
 
-##### Featured piece of code 2
-
-##### Adding and removing weapons
+##### Featured piece of code 2: Adding and removing weapons
 
 I first had weapons appearing and disappearing based on setInterval. This resulted in weapons appearing when enemies were killable, when there were already weapons on the board, and sometimes just spawning weapons faster and faster.
 
@@ -219,7 +218,7 @@ So I switched to using setTimeouts and calling them at the right moments.
   - - is stopped if a weapon is picked up
   - - triggers the addWeapon function
 
-![Weapon spawning](https://github.com/jennikate/project-1/blob/master/reademe-assets/code-weapons.png?raw=true)
+![Weapon spawning](https://github.com/jennikate/project-1/blob/master/reademe-assets/code-weapons-scaled.png?raw=true)
 
 
 ### Screenshots
