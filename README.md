@@ -6,9 +6,10 @@ Elf Adventures is a browser based maze style game. Move your elf through the maz
 This was my first project with General Assembly's Software Engineering Immersive. An individual project built over a week it focused on JavaScript, with HTML and CSS.
 
 [Open and play on GitHub Pages.](https://jennikate.github.io/project-1/)
+
 [Check out the GitHub Repo here.](https://github.com/jennikate/project-1)
 
-![gif of Elf Adventures](./readme-assets/elfAdventures-Demo.gif)
+![gif of Elf Adventures](/readme-assets/elfAdventures-Demo.gif)
 
 
 ## Brief
@@ -42,7 +43,7 @@ There was a choice of starting game styles to work with, and then customise to b
 I decided early on that I would limit v1 to a 100 cell grid, and that the walls of my maze would be added by using border-top, border-right, border-bottom, border-left.
 
 To achieve this I create an array of wall objects stating if there was a wall or not.
-![Code of wall array](./readme-assets/code-wallarray.png)
+![Code of wall array](/readme-assets/code-wallarray.png)
 
 This allowed me to build up the game board maze by creating each cell as a div, within a flex-box container, and giving each cell the appropriate border as well as a reference ID.
 
