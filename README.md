@@ -46,7 +46,7 @@ To achieve this I create an array of wall objects stating if there was a wall or
 
 This allowed me to build up the game board maze by creating each cell as a div, within a flex-box container, and giving each cell the appropriate border as well as a reference ID.
 
-<img src="https://github.com/jennikate/project-1/blob/master/reademe-assets/code-wallarray.png" width=70% align=center>
+<img src="https://github.com/jennikate/project-1/blob/master/reademe-assets/code-wallarray.png" width=70%>
 
 ### HardCoded vs Variable
 
@@ -58,7 +58,7 @@ In the end I have left some elements as hard coded for now
 - life icons
 - size variation of treasure chests on each level
 
-<img src="https://github.com/jennikate/project-1/blob/master/reademe-assets/code-gameparameters.png" width=70% align=center>
+<img src="https://github.com/jennikate/project-1/blob/master/reademe-assets/code-gameparameters.png" width=50%>
 
 
 ### Objects
@@ -70,7 +70,7 @@ For the MVP I wanted
 - 2 weapons you can pick up
 - those same 3 enemies but now you can kill them : with a point value
 
-<img src="https://github.com/jennikate/project-1/blob/master/assets/elf.png" align=center><img src="https://github.com/jennikate/project-1/blob/master/assets/dragon.png" align=center><img src="https://github.com/jennikate/project-1/blob/master/assets/treasure.png" align=center><img src="https://github.com/jennikate/project-1/blob/master/assets/weapon.png" align=center><img src="https://github.com/jennikate/project-1/blob/master/assets/gold.png" align=center><img src="https://github.com/jennikate/project-1/blob/master/assets/heart.png" align=center><img src="https://github.com/jennikate/project-1/blob/master/assets/heart-empty.png" align=center><img src="https://github.com/jennikate/project-1/blob/master/assets/elf-weapon.png" align=center><img src="https://github.com/jennikate/project-1/blob/master/assets/dragon-killable.png" align=center>
+<img src="https://github.com/jennikate/project-1/blob/master/assets/elf.png"><img src="https://github.com/jennikate/project-1/blob/master/assets/dragon1.png"><img src="https://github.com/jennikate/project-1/blob/master/assets/treasure.png"><img src="https://github.com/jennikate/project-1/blob/master/assets/sword.png"><img src="https://github.com/jennikate/project-1/blob/master/assets/gold.png"><img src="https://github.com/jennikate/project-1/blob/master/assets/heart.png"><img src="https://github.com/jennikate/project-1/blob/master/assets/heart-empty.png"><img src="https://github.com/jennikate/project-1/blob/master/assets/elf-sword.png"><img src="https://github.com/jennikate/project-1/blob/master/assets/dragon-killable.png">
 
 
 To extend on that I added
@@ -193,7 +193,7 @@ Below are some examples of parts of that code, the full code can be seen at the
 
 section of my [JavaScript](https://github.com/jennikate/project-1)
 
-<img src="https://github.com/jennikate/project-1/blob/master/reademe-assets/code-collision1.png" width=45% align=left><img src="https://github.com/jennikate/project-1/blob/master/reademe-assets/code-collision2.png" width=45% align=right>
+<img src="https://github.com/jennikate/project-1/blob/master/reademe-assets/code-collision1.png" width=45%><img src="https://github.com/jennikate/project-1/blob/master/reademe-assets/code-collision2.png" width=45%>
 
 
 ##### Featured piece of code 2: Adding and removing weapons
@@ -217,7 +217,7 @@ So I switched to using setTimeouts and calling them at the right moments.
   - - is stopped if a weapon is picked up
   - - triggers the addWeapon function
 
-<img src="https://github.com/jennikate/project-1/blob/master/reademe-assets/code-weapons.png" width=70% align=center>
+<img src="https://github.com/jennikate/project-1/blob/master/reademe-assets/code-weapons.png" width=70%>
 
 
 ### Screenshots
