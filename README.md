@@ -70,14 +70,15 @@ For the MVP I wanted
 - 2 weapons you can pick up
 - those same 3 enemies but now you can kill them : with a point value
 
-<img src="https://github.com/jennikate/project-1/blob/master/assets/elf.png"><img src="https://github.com/jennikate/project-1/blob/master/assets/dragon1.png"><img src="https://github.com/jennikate/project-1/blob/master/assets/treasure.png"><img src="https://github.com/jennikate/project-1/blob/master/assets/sword.png"><img src="https://github.com/jennikate/project-1/blob/master/assets/gold.png"><img src="https://github.com/jennikate/project-1/blob/master/assets/heart.png"><img src="https://github.com/jennikate/project-1/blob/master/assets/heart-empty.png"><img src="https://github.com/jennikate/project-1/blob/master/assets/elf-sword.png"><img src="https://github.com/jennikate/project-1/blob/master/assets/dragon-killable.png">
-
-
 To extend on that I added
 - different sized treasure chests worth different points
 - weapons spawn on a timer and disappear if not collected within [x] second
 - weapons respawn on a timer in new locations
 - treasure chests and weapons have almost random spawn points, the caveat being they cannot spawn on or in the cells directly around a player, on a cell occupied by an enemy, or on a cell already occupied by a treasure of weapon
+
+
+
+<img src="https://github.com/jennikate/project-1/blob/master/assets/elf.png" width=32px><img src="https://github.com/jennikate/project-1/blob/master/assets/dragon1.png" width=32px><img src="https://github.com/jennikate/project-1/blob/master/assets/treasure.png" width=32px><img src="https://github.com/jennikate/project-1/blob/master/assets/sword.png" width=32px><img src="https://github.com/jennikate/project-1/blob/master/assets/gold.png" width=32px><img src="https://github.com/jennikate/project-1/blob/master/assets/heart.png" width=32px><img src="https://github.com/jennikate/project-1/blob/master/assets/heart-empty.png" width=32px><img src="https://github.com/jennikate/project-1/blob/master/assets/elf-sword.png" width=32px><img src="https://github.com/jennikate/project-1/blob/master/assets/dragon-killable.png" width=32px>
 
 ### Functionality
 
@@ -193,7 +194,7 @@ Below are some examples of parts of that code, the full code can be seen at the
 
 section of my [JavaScript](https://github.com/jennikate/project-1)
 
-<img src="https://github.com/jennikate/project-1/blob/master/reademe-assets/code-collision1.png" width=45%><img src="https://github.com/jennikate/project-1/blob/master/reademe-assets/code-collision2.png" width=45%>
+<img src="https://github.com/jennikate/project-1/blob/master/reademe-assets/code-collision1.png" width=45%> <img src="https://github.com/jennikate/project-1/blob/master/reademe-assets/code-collision2.png" width=45%>
 
 
 ##### Featured piece of code 2: Adding and removing weapons
@@ -221,6 +222,12 @@ So I switched to using setTimeouts and calling them at the right moments.
 
 
 ### Screenshots
+
+<img src="https://github.com/jennikate/project-1/blob/master/reademe-assets/screenshots/screenshot1.png" width=45%> <img src="https://github.com/jennikate/project-1/blob/master/reademe-assets/screenshots/screenshot2.png" width=45%>
+<img src="https://github.com/jennikate/project-1/blob/master/reademe-assets/screenshots/screenshot3.png" width=45%> <img src="https://github.com/jennikate/project-1/blob/master/reademe-assets/screenshots/screenshot4.png" width=45%>
+<img src="https://github.com/jennikate/project-1/blob/master/reademe-assets/screenshots/screenshot5.png" width=45%> <img src="https://github.com/jennikate/project-1/blob/master/reademe-assets/screenshots/screenshot6.png" width=45%>
+<img src="https://github.com/jennikate/project-1/blob/master/reademe-assets/screenshots/screenshot7.png" width=45%> <img src="https://github.com/jennikate/project-1/blob/master/reademe-assets/screenshots/screenshot8.png" width=45%>
+
 
 ### Bugs
 If you find any bugs please let me know! jennikate @ gmail.com
