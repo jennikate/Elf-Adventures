@@ -5,11 +5,11 @@ Elf Adventures is a browser based maze style game. Move your elf through the maz
 
 This was my first project with General Assembly's Software Engineering Immersive. An individual project built over a week it focused on JavaScript, with HTML and CSS.
 
-[Open and play on GitHub Pages.](https://jennikate.github.io/project-1/)
+[Open and play on GitHub Pages.](https://jennikate.github.io/Elf-Adventures/)
 
-[Check out the GitHub Repo here.](https://github.com/jennikate/project-1)
+[Check out the GitHub Repo here.](https://github.com/jennikate/Elf-Adventures)
 
-![gif of Elf Adventures](https://github.com/jennikate/project-1/blob/master/reademe-assets/elfAdvenutres-Demo.gif?raw=true)
+![gif of Elf Adventures](https://github.com/jennikate/Elf-Adventures/blob/master/reademe-assets/elfAdvenutres-Demo.gif?raw=true)
 
 
 ## Brief
@@ -253,7 +253,9 @@ I've had the opportunity to apply my new learnings with JavaScript in a real pro
 
 
 ### Future Content
-There are a few features I would like to add, such as 
+I want to go back over the code and make it accessible and more responsive.
+
+There are also a few features I would like to add, such as 
 
 - enemies are smarter about chasing a player
 - new maze designs on higher levels
